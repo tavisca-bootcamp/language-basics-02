@@ -2,7 +2,7 @@
 
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
-    public static class Program
+    public static class ForumPostEasy
     {
         static void Main(string[] args)
         {
@@ -24,6 +24,59 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
             // Add your code here.
+            DateTime PostTime, CurrentTime, result=DateTime.Parse("00:00:00");
+            String ShowTime;
+
+            for(int i=0; i<exactPostTime.Length-1; i++)
+            {
+                for(int j=i+1; j<exactPostTime.Length; j++)
+                {
+                    if(exactPostTime[i]==exactPostTime[j])
+                    {
+                        if(showPostTime[i]!=showPostTime[j])
+                        {
+                            return "impossible";
+                        }
+                    }
+                }
+            }
+
+            for(int i=0; i<exactPostTime.Length; i++)
+            {
+                PostTime = DateTime.Parse(exactPostTime[i]);
+                CurrentTime = PostTime;
+                ShowTime = showPostTime[i];
+                string[] split_ShowTime = ShowTime.Split(' ');
+
+                if(split_ShowTime[1].Equals("seconds"))
+                {
+                    CurrentTime = PostTime;
+                }
+                else if(split_ShowTime[1].Equals("minutes"))
+                {
+                    CurrentTime = PostTime.AddMinutes(double.Parse(split_ShowTime[0]));
+                }
+                else if(split_ShowTime[1].Equals("hours"))
+                {
+                    CurrentTime = PostTime.AddHours(double.Parse(split_ShowTime[0]));
+                }
+
+                if(DateTime.Compare(CurrentTime.Date,PostTime.Date) == 1)
+                {
+                   CurrentTime = CurrentTime.Add(new TimeSpan(-24, 00, 00));
+                }
+
+                if(i==0)
+                {
+                    result = CurrentTime;
+                }
+
+                if(TimeSpan.Compare(CurrentTime.TimeOfDay,result.TimeOfDay) > -1)
+                {
+                    result = CurrentTime;
+                }
+            }
+            return result.ToLongTimeString();
             throw new NotImplementedException();
         }
     }
