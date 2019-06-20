@@ -23,8 +23,83 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
-            throw new NotImplementedException();
+            string answer = "00:00:00";
+            string[] interval = new string[exactPostTime.Length];
+            for (int i = 0; i < exactPostTime.Length; i++)
+            {
+                interval[i] = GetInterval(exactPostTime[i], showPostTime[i]);
+            }
+
+            if (exactPostTime.Length == 1)
+                return interval[0];
+            else
+            {
+                for (int i = 0; i < exactPostTime.Length; i++)
+                {
+                    for (int j = i + 1; j < exactPostTime.Length; j++)
+                    {
+                        if (exactPostTime[i] == exactPostTime[j])
+                        {
+                            if (showPostTime[i] != showPostTime[j])
+                                return "impossible";
+                        }
+                    }
+                    if(Convert.ToDateTime(answer) < Convert.ToDateTime(interval[i]))
+                    answer = interval[i];
+                }
+            }
+            return answer;
+        }
+
+        public static string GetInterval(string a, string b)
+        {
+            string[] temp = BreakStringbySpace(b);
+            if (b.Contains("seconds"))
+            {
+                return a;
+            }
+            else if (b.Contains("minutes"))
+            {
+                return AddTime(a, 'm', Int32.Parse(temp[0]));
+            }
+            else
+            {
+                return AddTime(a, 'h', Int32.Parse(temp[0]));
+            }
+        }
+        public static string[] BreakStringbyInterval(string a)
+        {
+            return a.Split(',');
+        }
+        public static string[] BreakStringbySpace(string a)
+        {
+            return a.Split(' ');
+        }
+
+        public static string AddTime(string a, char t, int x = -1)
+        {
+            DateTime d1 = Convert.ToDateTime(a);
+            if (t == 's')
+                return (d1.AddSeconds(59)).ToString("HH:mm:ss");
+            else if (t == 'm')
+            {
+                return (d1.AddMinutes(x)).ToString("HH:mm:ss");
+            }
+            else if (t == 'h')
+            {
+                return (d1.AddHours(x)).ToString("HH:mm:ss");
+            }
+            else if (t == 'M')
+            {
+                d1 = d1.AddSeconds(59);
+                return (d1.AddMinutes(x)).ToString("HH:mm:ss");
+            }
+            else
+            {
+                d1 = d1.AddSeconds(59);
+                d1 = d1.AddMinutes(59);
+                return (d1.AddHours(x)).ToString("HH:mm:ss");
+            }
         }
     }
 }
