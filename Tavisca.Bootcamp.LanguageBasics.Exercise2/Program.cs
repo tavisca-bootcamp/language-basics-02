@@ -21,9 +21,61 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             Console.WriteLine($"[{postTimesCsv}], [{showTimesCsv}] => {result}");
         }
 
-        public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
+        public static string GetCurrentTime(string[] ept, string[] spt)
         {
             // Add your code here.
+            TimeSpan max = TimeSpan.Parse("0");
+            for (int i = 0; i < ept.Length; i++)
+            {
+                for (int j = i + 1; j < ept.Length; j++)
+                {
+                    if (ept[i] == ept[j])
+                        if (spt[i] != spt[j])
+                            return "impossible";
+                }
+            }
+            for (int i = 0; i < ept.Length; i++)
+            {
+                TimeSpan time = TimeSpan.Parse(ept[i]);
+                if (spt[i].Contains("sec"))
+                {
+                    if (max < time)
+                        max = time;
+
+                }
+                else
+                {
+                    int val = int.Parse(spt[i].Substring(0, spt[i].IndexOf(" ")));
+                    if (spt[i].Contains("min"))
+                    {
+                        TimeSpan span = TimeSpan.FromMinutes(val);
+                        if (time + span > TimeSpan.Parse("1.00:00:00"))
+                        {
+                            time = time + span - TimeSpan.FromDays(1);
+                            if (max < time)
+                                max = time;
+                        }
+                        else
+                             if (max < time + span)
+                            max = time + span;
+                    }
+                    if (spt[i].Contains("hour"))
+                    {
+                        TimeSpan span = TimeSpan.FromHours(val);
+                        if (time + span > TimeSpan.Parse("1.00:00:00"))
+                        {
+                            time = time + span - TimeSpan.FromDays(1);
+                            if (max < time)
+                                max = time;
+                        }
+                        else
+                            if (max < time + span)
+                            max = time + span;
+
+                    }
+                }
+            }
+            return max.ToString();
             throw new NotImplementedException();
         }
     }
