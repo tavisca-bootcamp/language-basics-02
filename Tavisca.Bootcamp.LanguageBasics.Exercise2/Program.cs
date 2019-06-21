@@ -6,7 +6,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
     {
         static void Main(string[] args)
         {
-            Test(new[] {"12:12:12"}, new [] { "few seconds ago" }, "12:12:12");
+            Test(new[] {"12:12:12"}, new [] { "few seconds ago" }, "00:00:00");
             Test(new[] { "23:23:23", "23:23:23" }, new[] { "59 minutes ago", "59 minutes ago" }, "00:22:23");
             Test(new[] { "00:10:10", "00:10:10" }, new[] { "59 minutes ago", "1 hours ago" }, "impossible");
             Test(new[] { "11:59:13", "11:13:23", "12:25:15" }, new[] { "few seconds ago", "46 minutes ago", "23 hours ago" }, "11:59:23");
@@ -165,16 +165,33 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 }
                 
             }
-            string hours;
-            if (min.Hours==0)
+            string hours,minutes,seconds;
+             if (min.Hours>=0 && min.Hours<=9)
             {
-                 hours = "00";
+                hours = "0" + Convert.ToString(min.Hours);
             }
             else
             {
                  hours = Convert.ToString(min.Hours);
             }
-             answer = hours + ":" + Convert.ToString(min.Minutes) + ":" + Convert.ToString(min.Seconds);
+             if (min.Minutes >= 0 && min.Minutes<= 9)
+            {
+                minutes = "0" + Convert.ToString(min.Minutes);
+            }
+             else
+            {
+                minutes = Convert.ToString(min.Minutes);
+            }
+            if (min.Seconds >= 0 && min.Seconds <= 9)
+            {
+                seconds = "0" + Convert.ToString(min.Seconds);
+            }
+            else
+            {
+                seconds = Convert.ToString(min.Seconds);
+            }
+
+            answer = hours + ":" + minutes + ":" + seconds;
             //Console.WriteLine(answer);
             return answer;
             //throw new NotImplementedException();
