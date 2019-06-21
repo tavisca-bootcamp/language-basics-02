@@ -23,8 +23,38 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
-            throw new NotImplementedException();
+            int length = exactPostTime.Length;
+            string[] array = new string[length];
+            for (var i = 0 ; i < length ; i++ ){
+                if(i < length-1 && exactPostTime[i] == exactPostTime[i+1] && showPostTime[i] != showPostTime[i+1]){
+                    return "impossible";
+                }
+                TimeSpan stime = TimeSpan.Parse(exactPostTime[i]);
+                TimeSpan etime;
+                if (showPostTime[i].Contains("seconds")){
+                    etime = new TimeSpan(stime.Hours, stime.Minutes, stime.Seconds);
+                    array[i] = etime.ToString();
+                }else if(showPostTime[i].Contains("minutes")){
+                    var minutes_num = showPostTime[i].Split(' ')[0];
+                    var double_minute = double.Parse(minutes_num);
+                    var time2 = TimeSpan.FromMinutes(double_minute);
+                    stime = stime.Add(time2);
+                    etime = new TimeSpan(stime.Hours,stime.Minutes,stime.Seconds);
+                    array[i] = etime.ToString();
+                }else if(showPostTime[i].Contains("hours")){
+                    var hours_num = showPostTime[i].Split(' ')[0];
+                    var double_hours = double.Parse(hours_num);
+                    var time2 = TimeSpan.FromHours(double_hours);
+                    stime = stime.Add(time2);
+                    etime = new TimeSpan(stime.Hours,stime.Minutes,stime.Seconds);
+                    array[i] = stime.ToString();
+                }else{
+                    return "impossible";
+                }
+
+            }
+            Array.Sort(array);
+            return array[array.Length-1];
         }
     }
 }
