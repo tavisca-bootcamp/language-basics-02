@@ -24,6 +24,68 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
             // Add your code here.
+            String result= "";
+            String eh, es, em, sh = "", sm = "";
+            int HH, MM, SS = 0, hour = 0, min = 0;
+            if(exactPostTime.Length == 1)
+            {
+                result = exactPostTime[0];
+                return result;
+            }
+            for(int i = 0; i < exactPostTime.Length; i++)
+            {
+                for(int j=0; j<exactPostTime.Length; j++)
+                {
+                    if((exactPostTime[i] == exactPostTime[j]) && (showPostTime[i] != showPostTime[j]))
+                    {
+                        return "impossible";
+                    }
+
+                }
+                eh = exactPostTime[i].Split(":")[0];
+                em = exactPostTime[i].Split(":")[1];
+                HH = int.Parse(eh);
+                MM = int.Parse(em);
+                if(showPostTime[i].Contains("hours"))
+                {
+                    sh = showPostTime[i].Split(" ")[0];
+                    hour = int.Parse(sh);
+                    HH += hour;
+                    if(HH > 24)
+                    {
+                        HH -= 24;
+                    }
+                }
+                if(showPostTime[i].Contains("minutes"))
+                {
+                    sm = showPostTime[i].Split(" ")[0];
+                    min = int.Parse(sm);
+                    MM += min;
+                    if(MM > 59)
+                    {
+                        MM -= 60;
+                        HH++;
+                    }
+                    if(HH == 24)
+                        HH=0;
+                
+                    es = exactPostTime[i].Split(":")[2];
+                    SS = int.Parse(es);
+                    HH.ToString();
+                    MM.ToString();
+                    SS.ToString();
+
+                    if(HH.Equals(0)|| SS.Equals(0))
+                        result = "00" + ":" + MM + ":" + SS;
+                    else if(MM.Equals(0))
+                        result = HH + ":" + "00" + ":" + SS;
+                    else if(SS.Equals(0))
+                        result = HH + ":" + MM + ":" + "00";
+                    else
+                        result = HH + ":" + MM + ":" + SS;
+                    return result;
+                }
+            }
             throw new NotImplementedException();
         }
     }
