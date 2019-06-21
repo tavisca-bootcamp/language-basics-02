@@ -23,7 +23,56 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
+            TimeSpan currentTime = TimeSpan.Parse("0");
+            for (int i = 0; i < exactPostTime.Length; i++)
+            {
+                for (int j = i + 1; j < exactPostTime.Length; j++)
+                {
+                    if (exactPostTime[i] == exactPostTime[j])
+                        if (showPostTime[i] != showPostTime[j])
+                            return "impossible";
+                }
+            }
+            for (int i = 0; i < exactPostTime.Length; i++)
+            {
+                TimeSpan time = TimeSpan.Parse(exactPostTime[i]);
+                if (showPostTime[i].Contains("sec"))
+                {
+                    if (currentTime < time)
+                        currentTime = time;
+                }
+                else
+                {
+                    int val = int.Parse(showPostTime[i].Substring(0, showPostTime[i].IndexOf(" ")));
+                    if (showPostTime[i].Contains("min"))
+                    {
+                        TimeSpan span = TimeSpan.FromMinutes(val);
+                        if (time + span > TimeSpan.Parse("1.00:00:00")) //One Day 24 Hours
+                        {
+                            time = time + span - TimeSpan.FromDays(1);  //Time is greater so Subtracting
+                            if (currentTime < time)
+                                currentTime = time;
+                        }
+                        else
+                             if (currentTime < time + span) //selecting the smallest
+                            currentTime = time + span;
+                    }
+                    if (showPostTime[i].Contains("hour"))
+                    {
+                        TimeSpan span = TimeSpan.FromHours(val);
+                        if (time + span > TimeSpan.Parse("1.00:00:00")) //One Day 24 Hours
+                        {
+                            time = time + span - TimeSpan.FromDays(1); //Time is greater so Subtracting
+                            if (currentTime < time)
+                                currentTime = time;
+                        }
+                        else
+                            if (currentTime < time + span) //selecting the smallest
+                            currentTime = time + span;
+                    }
+                }
+            }
+            return currentTime.ToString();
             throw new NotImplementedException();
         }
     }
