@@ -2,9 +2,10 @@
 
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
-    public static class Program
+    class Program
     {
-        static void Main(string[] args)
+      
+      static void Main(string[] args)
         {
             Test(new[] {"12:12:12"}, new [] { "few seconds ago" }, "12:12:12");
             Test(new[] { "23:23:23", "23:23:23" }, new[] { "59 minutes ago", "59 minutes ago" }, "00:22:23");
@@ -20,11 +21,65 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             var showTimesCsv = string.Join(", ", showTimes);
             Console.WriteLine($"[{postTimesCsv}], [{showTimesCsv}] => {result}");
         }
-
+       
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
-            throw new NotImplementedException();
+            /* 
+             try to check if two exactPostTime time is same but showPostTime is different
+            */
+            for (int i = 0; i < exactPostTime.Length-1; i++)
+                 if (exactPostTime[i] == exactPostTime[i+1] && showPostTime[i] != showPostTime[i+1])
+                            return "impossible";
+
+            /*
+            Function2 Add all of exactPostTime and showPostTime  by index and return maximum
+             */
+            string lastcheck = Function2(exactPostTime, showPostTime);//Goto Check2 Function 
+            return lastcheck; 
+
+            throw new Exception();
+        }
+
+        /*
+        Function2  Function
+        */
+        public static string Function2(string[] exactPostTime, string[] showPostTime)
+        { 
+            string[] finaCheck = new string[exactPostTime.Length];
+
+            for (int j = 0; j < exactPostTime.Length; j++) 
+            {
+                 TimeSpan PostTime =  TimeSpan.Parse(exactPostTime[j]);
+                 string[] showTime =   showPostTime[j].Split(null);
+                  
+                
+                        if(showTime[1]=="hours")
+                         {
+                              TimeSpan newTime = new TimeSpan(Convert.ToInt16(showTime[0]), 0,0); 
+                              PostTime = PostTime+newTime;
+                              string[] PostTime_toString =PostTime.ToString().Split(".");
+                              if(PostTime_toString.Length==1) 
+                                  finaCheck[j]=(PostTime_toString[0]);
+                              else
+                               finaCheck[j]=(PostTime_toString[1]); 
+                         }
+
+                        else if(showTime[1]=="minutes")
+                        {
+                              TimeSpan newTime = new TimeSpan(0,Convert.ToInt16(showTime[0]),0); 
+                              PostTime = PostTime+newTime;
+                              string[] PostTime_toString =PostTime.ToString().Split(".");
+                              if(PostTime_toString.Length==1) 
+                                  finaCheck[j]=(PostTime_toString[0]);
+                              else
+                                finaCheck[j]=(PostTime_toString[1]);  
+                        }
+                    else
+                        finaCheck[j]=(exactPostTime[j]);
+            }
+            Array.Sort(finaCheck);//Sort Array to return Maximum Value
+            return finaCheck[(exactPostTime.Length-1)];
+             
         }
     }
 }
