@@ -34,7 +34,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             /*
             Function2 Add all of exactPostTime and showPostTime  by index and return maximum
              */
-            string lastcheck = Function2(exactPostTime, showPostTime); 
+            string lastcheck = Function2(exactPostTime, showPostTime);
             return lastcheck; 
 
             throw new Exception();
@@ -45,7 +45,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         */
         public static string Function2(string[] exactPostTime, string[] showPostTime)
         { 
-            string[] finaCheck = new string[exactPostTime.Length];
+            string[] finalCheck = new string[exactPostTime.Length];
 
             for (int j = 0; j < exactPostTime.Length; j++) 
             {
@@ -59,9 +59,9 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                               PostTime = PostTime+newTime;
                               string[] PostTime_toString =PostTime.ToString().Split(".");
                               if(PostTime_toString.Length==1) 
-                                  finaCheck[j]=(PostTime_toString[0]);
+                                  finalCheck[j]=(PostTime_toString[0]);
                               else
-                               finaCheck[j]=(PostTime_toString[1]); 
+                               finalCheck[j]=(PostTime_toString[1]); 
                          }
 
                         else if(showTime[1]=="minutes")
@@ -70,15 +70,15 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                               PostTime = PostTime+newTime;
                               string[] PostTime_toString =PostTime.ToString().Split(".");
                               if(PostTime_toString.Length==1) 
-                                  finaCheck[j]=(PostTime_toString[0]);
+                                  finalCheck[j]=(PostTime_toString[0]);
                               else
-                                finaCheck[j]=(PostTime_toString[1]);  
+                                finalCheck[j]=(PostTime_toString[1]);  
                         }
                     else
-                        finaCheck[j]=(exactPostTime[j]);
+                        finalCheck[j]=(exactPostTime[j]);
             }
-            Array.Sort(finaCheck);//Sort Array to return Maximum Value
-            return finaCheck[(exactPostTime.Length-1)];
+            Array.Sort(finalCheck);//Sort Array to return Maximum Value
+            return finalCheck[(exactPostTime.Length-1)];
              
         }
     }
