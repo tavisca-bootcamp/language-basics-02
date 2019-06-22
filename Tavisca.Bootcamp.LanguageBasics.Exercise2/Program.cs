@@ -24,7 +24,99 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
             // Add your code here.
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            int rh=-1, rm=-1, rs = -1;
+            for (int i = 0; i < exactPostTime.Length; i++)
+            {
+                for (int j = 0; j < exactPostTime.Length; j++)
+                {
+                    if(exactPostTime[i].Equals(exactPostTime[j])&& !showPostTime[i].Equals(showPostTime[j]))
+                    {
+                        return "impossible";
+                    }
+                }
+            }
+            for (int i = 0; i < exactPostTime.Length; i++)
+            {
+                int[] myInts = Array.ConvertAll(exactPostTime[i].Split(':'), int.Parse);
+                int gh = myInts[0], gm = myInts[1], gs = myInts[2];
+                string[] sp = showPostTime[i].Split(separator: ' ');
+                int X=-1;
+                if (!sp[0].Equals("few"))
+                {
+                    X = int.Parse(sp[0]);
+                }
+                
+                string unit = sp[1];
+                if (unit.Equals("seconds"))
+                {
+                    rh = gh;
+                   
+                    if (rs == -1)
+                    {
+                        rm = gm;
+                        rs = gs;
+                    }
+                    else if(gm == rm+1 || gm ==rm - 1)
+                    {
+                        rm = gm;
+                        rs = gs;
+                    }
+                    //Console.Write(rh + ":" + rm + ":" + rs+ "\n");
+                }
+                else if (unit.Equals("minutes"))
+                {
+                    if (gh == 23 && gm+X>=60)
+                    {
+                        rh = 00;
+                        rm = (gm + X) % 60;
+                        if (rs == -1)
+                        {
+                            rs = gs;
+                        }
+                    }
+                    else if(gm+X>=60)
+                    {
+                        rh = gh + 1;
+                        rm = (gm + X) % 60;
+                        rs = gs;
+
+                    }
+                    else
+                    {
+                        rh = gh;
+                        rm = gm + X;
+                       
+                        rs = gs;
+                    }
+                    //Console.Write(rh + ":" + rm + ":" + rs+"\n");
+                }
+                else
+                {
+                    rh = (gh + X) % 24;
+                    if (rm == -1)
+                    {
+                        rm = gm;
+                        rs = gs;
+                    }
+                    //Console.Write(rh + ":" + rm + ":" + rs+"\n");
+                }
+            }
+            string[] arr = new string[3];
+            arr[0] = rh.ToString();
+            arr[1] = rm.ToString();
+            arr[2] = rs.ToString();
+            for(int i=0;i<arr.Length;i++)
+            {
+                if (int.Parse(arr[i])<10)
+                {
+                    arr[i] = "0"+arr[i];
+                }
+            }
+            //Console.Write(string.Join(':', arr));
+            return string.Join(':', arr);
+
+
         }
     }
 }
