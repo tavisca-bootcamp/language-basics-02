@@ -44,7 +44,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
                 
                 string[] split = exactPostTime[i].Split(":");
-                DateTime dateTime = new DateTime(1996, 7, 25, Convert.ToInt32(split[0]), Convert.ToInt32(split[1]), Convert.ToInt32(split[2]));
+                DateTime dateTime = new DateTime(2000, 1, 01, Convert.ToInt32(split[0]), Convert.ToInt32(split[1]), Convert.ToInt32(split[2]));
 
                                 
                 if (showPostTime[i].Contains("seconds"))
@@ -56,8 +56,8 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 {
 
                     string min = showPostTime[i].Split(" ")[0];                
-                    TimeSpan timeSpan = new TimeSpan(0, Convert.ToInt32(min), 0);  
-                    s[i] = dateTime.Add(timeSpan).ToString().Split(" ")[1];  
+                    TimeSpan time = new TimeSpan(0, Convert.ToInt32(min), 0);  
+                    s[i] = dateTime.Add(time).ToString().Split(" ")[1];  
 
                 }
                 else if (showPostTime[i].Contains("hours"))
