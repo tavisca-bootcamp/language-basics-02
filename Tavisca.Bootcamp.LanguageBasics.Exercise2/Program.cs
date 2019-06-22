@@ -12,7 +12,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             Test(new[] { "11:59:13", "11:13:23", "12:25:15" }, new[] { "few seconds ago", "46 minutes ago", "23 hours ago" }, "11:59:23");
             Console.ReadKey(true);
         }
-public static string[] findstarts(string[] exactPostTime, string[] showPostTime)
+        public static string[] findstarts(string[] exactPostTime, string[] showPostTime)
         {
             string[] starts = new string[exactPostTime.Length];
             int h, m, s;
