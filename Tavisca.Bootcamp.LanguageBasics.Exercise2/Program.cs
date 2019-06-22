@@ -2,7 +2,8 @@
 
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
-    public static class Program
+     
+   public static class Program
     {
         static void Main(string[] args)
         {
@@ -24,7 +25,76 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
             // Add your code here.
-            throw new NotImplementedException();
+            //check for contradiction
+           for(int i=0; i<exactPostTime.Length-1; i++)
+            {
+                for(int j=i+1; j<exactPostTime.Length; j++)
+                {
+                    if(exactPostTime[i].Equals(exactPostTime[j]))
+                    {if(!(showPostTime[i].Equals(showPostTime[j])))
+                        {
+                            return "impossible";
+                        }
+                    }
+                }
+            }
+
+            DateTime givenPostTime, CurrentTime;
+            String result,temp;
+        result="";
+            for(int i=0; i<exactPostTime.Length; i++)
+                {
+                givenPostTime = DateTime.Parse(exactPostTime[i]);
+                CurrentTime = givenPostTime;
+
+                if(showPostTime[i].Contains("seconds"))
+                {
+                    CurrentTime = givenPostTime;
+                }
+                else if(showPostTime[i].Contains("minutes"))
+                {
+                  //adding given minutes 
+                  CurrentTime = givenPostTime.AddMinutes(Convert.ToDouble(showPostTime[i].Substring(0,2)));
+                //  Console.WriteLine(givenPostTime);
+
+                }
+                else if(showPostTime[i].Contains("hours"))
+                {
+                    //adding given hours
+                    //Console.WriteLine(givenPostTime);
+                    CurrentTime = givenPostTime.AddHours(Convert.ToDouble(showPostTime[i].Substring(0,2)));
+                }
+
+                  temp=CurrentTime.ToString().Substring(11,8);//storing current time to string
+                  
+               if(CurrentTime.ToString().Contains("PM")){//convert to 24 hr format
+                    int hourDigit=Convert.ToInt32(temp.Substring(0,2));
+                    if(hourDigit!=12){
+                        hourDigit+=12;
+                    }
+                 temp=hourDigit+CurrentTime.ToString().Substring(13,6);
+               }else{//for 12 AM to 00
+                    int hourDigit=Convert.ToInt32(temp.Substring(0,2));
+                     if(hourDigit==12){
+                        temp="00"+CurrentTime.ToString().Substring(13,6);
+                    }
+                 
+               }
+
+                if(i==0)
+                 {
+                    result = temp;
+                 }else{
+                        if(string.Compare(result,temp) < 1)
+                           {result = temp;}
+                     }
+
+                
+            }
+
+       
+        //  Console.WriteLine(result);
+        return result;
         }
     }
 }
