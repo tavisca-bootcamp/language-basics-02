@@ -24,6 +24,47 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
             // Add your code here.
+            //check for self-contradiction
+            for(int i=0; i<exactPostTime.Length-1; i++)
+            {
+                for(int j=i+1; j<exactPostTime.Length; j++)
+                {
+                    if(exactPostTime[i].Equals(exactPostTime[j]))
+                    {if(!(showPostTime[i].Equals(showPostTime[j])))
+                        {
+                            return "impossible";
+                        }
+                    }
+                }
+			}
+			
+            string resulttime="";
+
+            for(int i = 0; i<exactPostTime.Length; i++) 
+            {
+                DateTime PostedDateTime, CurrentDateTime;
+            	PostedDateTime = DateTime.Parse(exactPostTime[i]);
+                CurrentDateTime = PostedDateTime;
+
+                // cases for second, minute and hour
+                if(showPostTime[i].Contains("seconds"))
+                {
+                    CurrentDateTime = PostedDateTime;
+                }
+                else if(showPostTime[i].Contains("minutes"))
+                { 
+                  CurrentDateTime = PostedDateTime.AddMinutes(Convert.ToDouble(showPostTime[i].Substring(0,2)));
+
+                }
+                else if(showPostTime[i].Contains("hours"))
+                {
+                    CurrentDateTime = PostedDateTime.AddHours(Convert.ToDouble(showPostTime[i].Substring(0,2)));
+                }
+            //convert time to 24 hour format and check for  lexicographical order
+            if(string.Compare(resulttime,CurrentDateTime.ToString("HH:mm:ss")) < 1)
+                 resulttime = CurrentDateTime.ToString("HH:mm:ss");
+            }
+            return resulttime;
             throw new NotImplementedException();
         }
     }
