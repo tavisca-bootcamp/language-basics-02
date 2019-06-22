@@ -25,7 +25,6 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
             int length = exactPostTime.Length;
-            ArrayList calPostTime = new ArrayList();
             Hashtable ht = new Hashtable();
             TimeSpan max_time =  TimeSpan.Parse("00:00:00");
         
