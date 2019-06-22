@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
@@ -23,7 +23,49 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
+            int len = exactPostTime.Length;
+            string[] arr = new string[len];
+            for(int i=0;i<len-1;i++){
+                if(exactPostTime[i]==exactPostTime[i+1] && showPostTime[i]!=showPostTime[i+1]){
+                    return "impossible";
+                }
+            }
+
+           
+            for(int i=0;i<len;i++){
+
+                 TimeSpan timing = TimeSpan.Parse(exactPostTime[i]);
+
+                if(showPostTime[i].Contains("seconds")){
+                    TimeSpan cur = new TimeSpan(timing.Hours,timing.Minutes,timing.Seconds);
+                    arr[i]=Convert.ToString(cur);
+                     //Console.Write("inside seconds \n");
+                }
+
+                else if(showPostTime[i].Contains("minutes")){
+                    string mint = showPostTime[i].Split(" ")[0];
+                    timing = timing.Add(TimeSpan.FromMinutes(Double.Parse(mint)));
+                    TimeSpan cur = new TimeSpan(timing.Hours,timing.Minutes,timing.Seconds);
+                    arr[i]=Convert.ToString(cur);
+                }
+
+                else if(showPostTime[i].Contains("hours")){
+                    string hr = showPostTime[i].Split(" ")[0];
+                    timing = timing.Add(TimeSpan.FromHours(Double.Parse(hr)));
+                    TimeSpan cur = new TimeSpan(timing.Hours,timing.Minutes,timing.Seconds);
+                    arr[i]=Convert.ToString(cur);
+                }
+                else{
+                    return "impossible";
+                }
+
+                //Console.Write(arr[i]+" ");
+
+            }
+
+            Array.Sort(arr);
+            return Convert.ToString(arr[arr.Length-1]);
+
             throw new NotImplementedException();
         }
     }
