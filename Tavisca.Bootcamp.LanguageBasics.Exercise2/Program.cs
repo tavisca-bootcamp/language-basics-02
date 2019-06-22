@@ -29,25 +29,11 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             {
                 for (int j = i + 1; j < exactPostTime.Length; j++) 
                 {
-                    if ((exactPostTime[i] == exactPostTime[j])&& (showPostTime[i] != showPostTime[j]))
+                    if ((exactPostTime[i] == exactPostTime[j]) && (showPostTime[i] != showPostTime[j]))
                             return "impossible";
                 }
             } 
              
-            /* Checking if all post time are equal */ 
-            int f=0;
-            for (int j = 0; j < exactPostTime.Length-1; j++) 
-            {
-                 if (exactPostTime[j] == exactPostTime[j+1] && showPostTime[j] == showPostTime[j+1] )
-                     continue;
-                 else f=1;
-            }
-            /* Returning current time if all post time are equal */
-            if(f==0) 
-            {
-                   currentTime(exactPostTime[0],showPostTime,0);
-            }
-  
             /* Getting the current for all different post time*/
             string[] cur_time = new string[exactPostTime.Length];
 
@@ -94,10 +80,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                          
                     } 
                    
-                 return time;
-                    
-         }
-
-       
+                 return time;               
+         }   
     }
 }
