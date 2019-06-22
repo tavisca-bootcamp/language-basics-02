@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections;
 
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
@@ -23,8 +24,38 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
-            throw new NotImplementedException();
+           int len=exactPostTime.Length;
+           int i=0;
+           Hashtable h=new Hashtable();
+           TimeSpan currentTime=new TimeSpan(00,00,00);
+            while(i<len)
+            {
+             if(!h.ContainsKey(exactPostTime[i]))
+                h.Add(exactPostTime[i],showPostTime[i]);
+
+             if(h.ContainsKey(exactPostTime[i])&&h[exactPostTime[i]].ToString()!=showPostTime[i])
+                return "impossible";
+
+             string[] sub_showTime=showPostTime[i].Split(" ");
+             TimeSpan cTime=TimeSpan.Parse(exactPostTime[i]);
+             
+             if(sub_showTime[1]=="minutes")
+             {
+                cTime=cTime.Add(TimeSpan.FromMinutes(Double.Parse(sub_showTime[0])));
+                cTime =new TimeSpan(cTime.Hours,cTime.Minutes,cTime.Seconds);
+             }
+             else if(sub_showTime[1]=="hours")
+             {
+                cTime=cTime.Add(TimeSpan.FromHours(Double.Parse(sub_showTime[0])));
+                cTime =new TimeSpan(cTime.Hours,cTime.Minutes,cTime.Seconds);
+             }
+
+             if(currentTime<cTime)
+                currentTime=cTime;
+
+            i++;
+           }
+           return currentTime.ToString();
         }
     }
 }
