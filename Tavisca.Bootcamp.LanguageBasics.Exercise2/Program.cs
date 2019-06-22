@@ -34,7 +34,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 }
             } 
              
-            /* Getting the current for all different post time*/
+            /* Getting the current time for all different post time*/
             string[] cur_time = new string[exactPostTime.Length];
 
             for (int j = 0; j < exactPostTime.Length; j++) 
@@ -54,28 +54,29 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
       public static string currentTime(string time, string[] showPostTime,int j)
       {
                  TimeSpan res_time =  TimeSpan.Parse(time);
-                 string[] s =   showPostTime[j].Split(null);
+                 string[] post =   showPostTime[j].Split(null);
                   
-                    if(s[0]!="few")
-                    {   
-                        if(s[1]=="hours")
+                    if(post[0]!="few")
+                    {   /* Computing current time for hours condition */
+                        if(post[1]=="hours")    
                          {
-                              TimeSpan res_time2 = new TimeSpan(Convert.ToInt16(s[0]), 0,0); 
+                              TimeSpan res_time2 = new TimeSpan(Convert.ToInt16(post[0]), 0,0); 
                               res_time = res_time + res_time2;
-                              string[] sx =res_time.ToString().Split(".");
+                              string[] res =res_time.ToString().Split(".");
                              
-                              if(sx.Length==1)  return (sx[0]);
-                              else  return sx[1];
+                              if(res.Length==1)  return (res[0]);
+                              else  return res[1];
                                
                          }
-                        else if(s[1]=="minutes")
+                         /* Computing current time for minutes  condition*/
+                        else if(post[1]=="minutes")
                         {
-                              TimeSpan res_time2 = new TimeSpan(0,Convert.ToInt16(s[0]),0); 
+                              TimeSpan res_time2 = new TimeSpan(0,Convert.ToInt16(post[0]),0); 
                               res_time = res_time + res_time2;
-                              string[] sx =res_time.ToString().Split(".");
+                              string[] res =res_time.ToString().Split(".");
                               
-                              if(sx.Length==1)  return (sx[0]);
-                              else  return sx[1];
+                              if(res.Length==1)  return (res[0]);
+                              else  return res[1];
                         }
                          
                     } 
