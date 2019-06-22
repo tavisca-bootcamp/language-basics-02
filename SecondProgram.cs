@@ -28,6 +28,23 @@ namespace SecondProblem
         
         public string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
+            
+            if(exactPostTime.Length > 1)
+            {
+                for (int i = 0; i < exactPostTime.Length; i++)
+                {
+                       for(int j=i+1; j<exactPostTime.Length; j++)
+                    {
+                        if(exactPostTime[i].Equals(exactPostTime[j]))
+                        {
+                            if(!showPostTime[i].Equals(showPostTime[j]))
+                            {
+                                return "impossible";
+                            }
+                        }
+                    }
+                }
+            
             string[] results = new string[exactPostTime.Length];
             int[] sum = new int[exactPostTime.Length];
             int mintime = 0;
