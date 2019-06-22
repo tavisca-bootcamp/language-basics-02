@@ -25,26 +25,15 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
             /* 
-             try to check if two exactPostTime time is same but showPostTime is different
+            Check1 try to check if two exactPostTime time is same but showPostTime is different
             */
             for (int i = 0; i < exactPostTime.Length-1; i++)
                  if (exactPostTime[i] == exactPostTime[i+1] && showPostTime[i] != showPostTime[i+1])
                             return "impossible";
 
             /*
-            Function2 Add all of exactPostTime and showPostTime  by index and return maximum
+            Check2 Add all of exactPostTime and showPostTime  by index and return maximum
              */
-            string lastcheck = Function2(exactPostTime, showPostTime);
-            return lastcheck; 
-
-            throw new Exception();
-        }
-
-        /*
-        Function2  Function
-        */
-        public static string Function2(string[] exactPostTime, string[] showPostTime)
-        { 
             string[] finalCheck = new string[exactPostTime.Length];
 
             for (int j = 0; j < exactPostTime.Length; j++) 
@@ -79,7 +68,8 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             }
             Array.Sort(finalCheck);//Sort Array to return Maximum Value
             return finalCheck[(exactPostTime.Length-1)];
-             
+
+            throw new Exception();
         }
     }
 }
