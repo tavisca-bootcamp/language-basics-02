@@ -34,7 +34,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             /*
             Function2 Add all of exactPostTime and showPostTime  by index and return maximum
              */
-            string lastcheck = Function2(exactPostTime, showPostTime);//Goto Check2 Function 
+            string lastcheck = Function2(exactPostTime, showPostTime); 
             return lastcheck; 
 
             throw new Exception();
