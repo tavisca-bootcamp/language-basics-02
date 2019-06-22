@@ -23,8 +23,65 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
+            int leng = exactPostTime.Length;
+            DateTime[] exactT = new DateTime[leng];
+            for(int i=0;i<leng;i++)
+            {
+                string[] temp = exactPostTime[i].Split(':');
+                TimeSpan ts = new TimeSpan(Int32.Parse(temp[0]), Int32.Parse(temp[1]), Int32.Parse(temp[2]));
+                exactT[i] = exactT[i].Date + ts;
+                string[] tempShowData = showPostTime[i].Split(' ');
+                if(tempShowData[0][0]!='f')
+                {
+                    int addd = Int32.Parse(tempShowData[0]);
+                    if(tempShowData[1][0]=='m')
+                    {
+                       exactT[i]= exactT[i].AddMinutes(addd);
+                    }
+                    else if(tempShowData[1][0]=='h')
+                    {
+                       exactT[i]= exactT[i].AddHours(addd);
+                    }
+                }
+            }
+            string[] exactTstr = new string[leng];
+            for(int i=0;i<leng;i++)
+            {
+                exactTstr[i] = exactT[i].ToString("HH:mm:ss", CultureInfo.InvariantCulture);
+            }
+            bool ans = checkImpossible(exactPostTime, showPostTime);
+            if (ans)
+            {
+                return "impossible";
+            }
+            else
+            {
+                CultureInfo ci = CultureInfo.InvariantCulture;
+                string lexiMax = exactTstr[0];
+                for (int i = 1; i < leng; i++)
+                {
+                    string current = exactTstr[i];
+                    int key = string.Compare(lexiMax, current, true);
+                    if (key == -1)
+                    {
+                        lexiMax = current;
+                    }
+                }
+
+                return lexiMax;
             throw new NotImplementedException();
+        }
+            static bool checkImpossible(string[] e, string[] s)
+        {
+            int leng = e.Length;
+            for(int i=0;i<leng;i++)
+            {
+                for(int j=0;j<leng;j++)
+                {
+                    if (((string.Compare(e[i], e[j])) == 0) && ((string.Compare(s[i], s[j])) != 0)) return true;
+                }
+            }
+            return false;
         }
     }
 }
