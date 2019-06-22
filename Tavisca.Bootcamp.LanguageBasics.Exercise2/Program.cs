@@ -23,8 +23,29 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
-            throw new NotImplementedException();
+            int n = exactPostTime.Length;
+            String[] currentTime = new String[n];
+            for (var i = 0; i < n; i++) {
+                TimeSpan exact_i = TimeSpan.Parse(exactPostTime[i]);
+                if (showPostTime[i].Contains("seconds")) {
+                    currentTime[i] = exactPostTime[i];
+                }
+                else if (showPostTime[i].Contains("minutes")) {
+                    int minute_count = int.Parse(showPostTime[i].Split(' ')[0]);
+                    TimeSpan t = TimeSpan.FromMinutes(minute_count);
+                    currentTime[i] = exact_i.Add(t).ToString(@"hh\:mm\:ss");
+                }
+                else if (showPostTime[i].Contains("hours")) {
+                    int hour_count = int.Parse(showPostTime[i].Split(' ')[0]);
+                    TimeSpan t = TimeSpan.FromHours(hour_count);
+                    currentTime[i] = exact_i.Add(t).ToString(@"hh\:mm\:ss");
+                }
+                else {
+                    return "impossible";
+                }
+            }
+            Array.Sort(currentTime);
+            return currentTime[n-1];
         }
     }
 }
