@@ -55,13 +55,11 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 {
                   //adding given minutes 
                   CurrentTime = givenPostTime.AddMinutes(Convert.ToDouble(showPostTime[i].Substring(0,2)));
-                //  Console.WriteLine(givenPostTime);
 
                 }
                 else if(showPostTime[i].Contains("hours"))
                 {
                     //adding given hours
-                    //Console.WriteLine(givenPostTime);
                     CurrentTime = givenPostTime.AddHours(Convert.ToDouble(showPostTime[i].Substring(0,2)));
                 }
 
@@ -92,8 +90,6 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 
             }
 
-       
-        //  Console.WriteLine(result);
         return result;
         }
     }
