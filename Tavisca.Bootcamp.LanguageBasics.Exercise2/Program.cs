@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
@@ -24,7 +25,67 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
             // Add your code here.
-            throw new NotImplementedException();
+            Dictionary<string, string> hash = new Dictionary<string ,string>();
+            for(int i =0;i<exactPostTime.Length;i++)
+            {
+                if(hash.ContainsKey(exactPostTime[i]))
+                {
+                    if( hash[exactPostTime[i]]!=showPostTime[i])
+                        return "impossible";
+                }
+                else
+                    hash.Add(exactPostTime[i],showPostTime[i]);
+            }
+
+            List<string> times = new List<string>();
+            for(int i=0;i<exactPostTime.Length;i++)
+            {
+                string []time = exactPostTime[i].Split(':');
+                //Console.WriteLine(time[0]+" "+time[1]+" "+time[2]);
+                TimeSpan post_time=new TimeSpan(Convert.ToInt32(time[0]),Convert.ToInt32(time[1]),Convert.ToInt32(time[2]));
+                TimeSpan time_diff=time_message(showPostTime[i]);
+
+                TimeSpan current=post_time+time_diff;
+                //string total = 
+                times.Add(Convert.ToString(current));
+            }
+            return lexo(times);
         }
+
+        private static TimeSpan time_message(string x)
+        {
+            string [] check = x.Split(' ');
+            if(check[0]=="few")
+                return new TimeSpan(0,0,0);
+            else if(check[1]=="minutes")
+                return new TimeSpan(0,Convert.ToInt32(check[0]),0);
+            else
+                return new TimeSpan(Convert.ToInt32(check[0]),0,0);
+        }
+
+        public static string lexo(List<string> times)
+        {
+            int max=Int32.MinValue;
+            int pos=Int32.MinValue;
+            for(int i=0;i<times.Count;i++)
+            {
+                //Console.WriteLine(times[i]);
+                int index=times[i].IndexOf('.');
+                if(index>=0)
+                    times[i]=times[i].Substring(index+1);
+                string [] num=times[i].Split(":");
+               // int index=num[0].IndexOf('.');
+                
+                //Console.WriteLine(num[0]);
+                int total=Convert.ToInt32(num[0])*60*60+Convert.ToInt32(num[1])*60+Convert.ToInt32(num[2]);
+                if(total>max)
+                {
+                    max=total;
+                    pos=i;
+                }
+            }
+            return times[pos];
+        }
+        //throw new NotImplementedException();
     }
 }
