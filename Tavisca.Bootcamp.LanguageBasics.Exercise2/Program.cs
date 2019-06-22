@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections;
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
     public static class Program
@@ -23,8 +23,56 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
+            
             // Add your code here.
-            throw new NotImplementedException();
+           
+            ArrayList exactPostTimeList = new ArrayList();
+            ArrayList showPostTimeList = new ArrayList();
+            ArrayList list1 = new ArrayList();
+            for (int i = 0; i < exactPostTime.Length; i++)
+            {
+                string[] exactPostTimeSplit = exactPostTime[i].Split(':');
+                DateTime d = new DateTime(2001, 01, 01, int.Parse(exactPostTimeSplit[0]), int.Parse(exactPostTimeSplit[1]), int.Parse(exactPostTimeSplit[2]));
+                if ((exactPostTimeList.Contains(d) && showPostTimeList.Contains(showPostTime[i])) || (!exactPostTimeList.Contains(d)) && !showPostTimeList.Contains(showPostTime[i]))
+                {
+                    showPostTimeList.Add(showPostTime[i]);
+                    exactPostTimeList.Add(d);
+                }
+                else
+                {
+                    return "impossible";
+                }
+            }
+
+            for (int i = 0; i < showPostTime.Length; i++)
+            {
+                string[] showPostTimeSplit = showPostTime[i].Split(' ');
+                DateTime dt = (DateTime)exactPostTimeList[i];
+                switch (showPostTimeSplit[1])
+                {
+                    case "hours":
+                        dt = dt.AddHours(double.Parse(showPostTimeSplit[0]));
+                        break;
+
+                    case "minutes":
+                        dt = dt.AddMinutes(double.Parse(showPostTimeSplit[0]));
+                        break;
+
+                    case "seconds":
+                        if (showPostTimeSplit[0].Equals("few"))
+                        {
+                            dt = dt.AddSeconds(0);
+                        }
+                        else
+                        {
+                            dt = dt.AddSeconds(double.Parse(showPostTimeSplit[0]));
+                        }
+                        break;
+                }
+                list1.Add(dt.ToLongTimeString());
+            }
+            list1.Sort();
+            return list1[0].ToString();
         }
     }
 }
