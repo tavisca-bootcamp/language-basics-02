@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
@@ -25,156 +26,57 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         {
             // Add your code here.
             //throw new NotImplementedException();
-            string min = "00:00:00", max = "23:59:59";
+        ArrayList exactPostTimeList = new ArrayList();
+            ArrayList showPostTimeList = new ArrayList();
+            ArrayList list1 = new ArrayList();
             for (int i = 0; i < exactPostTime.Length; i++)
             {
-                string back = "";
-                string present = "";
-                int hours, minutes, seconds;
-                hours = Convert.ToInt32(exactPostTime[i].Substring(0, 2));
-                minutes = Convert.ToInt32(exactPostTime[i].Substring(3, 2));
-                seconds = Convert.ToInt32(exactPostTime[i].Substring(6, 2));
-                string[] message = showPostTime[i].Split(" ");
-                if (string.Compare(message[1], "seconds") == 0)
+                string[] exactPostTimeSplit = exactPostTime[i].Split(':');
+                DateTime d = new DateTime(2001, 01, 01, int.Parse(exactPostTimeSplit[0]), int.Parse(exactPostTimeSplit[1]), int.Parse(exactPostTimeSplit[2]));
+                if ((exactPostTimeList.Contains(d) && showPostTimeList.Contains(showPostTime[i])) || (!exactPostTimeList.Contains(d)) && !showPostTimeList.Contains(showPostTime[i]))
                 {
-                    back = exactPostTime[i];
-                    seconds = seconds + 59;
-                    if (seconds % 60 != seconds)
-                    {
-                        seconds = seconds % 60;
-                        minutes++;
-                        if (minutes % 60 != minutes)
-                        {
-                            minutes = minutes % 60;
-                            hours++;
-                            if (hours % 24 != hours)
-                            {
-                                hours = hours % 24;
-
-                            }
-                        }
-                    }
-                    string h = hours.ToString(), m = minutes.ToString(), s = seconds.ToString();
-                    if (hours <= 9)
-                        h = "0" + hours.ToString();
-                    if (minutes <= 9)
-                        m = ":0" + minutes.ToString();
-                    if (seconds <= 9)
-                        s = ":0" + seconds.ToString();
-                    present = h + ":" + m + ":" + s;
-
-
+                    showPostTimeList.Add(showPostTime[i]);
+                    exactPostTimeList.Add(d);
                 }
-                else if (string.Compare(message[1], "minutes") == 0)
-                {
-                    minutes = minutes + Int32.Parse(message[0]);
-                    if (minutes % 60 != minutes)
-                    {
-                        minutes = minutes % 60;
-                        hours++;
-                        if (hours % 24 != hours)
-                        {
-                            hours = hours % 24;
-
-                        }
-                    }
-                    string h = hours.ToString(), m = minutes.ToString(), s = seconds.ToString();
-                    if (hours <= 9)
-                        h = "0" + hours.ToString();
-                    if (minutes <= 9)
-                        m = ":0" + minutes.ToString();
-                    if (seconds <= 9)
-                        s = ":0" + seconds.ToString();
-                    back = h + ":" + m + ":" + s;
-
-                    seconds = seconds + 59;
-                    if (seconds % 60 != seconds)
-                    {
-                        seconds = seconds % 60;
-                        minutes++;
-                        if (minutes % 60 != minutes)
-                        {
-                            minutes = minutes % 60;
-                            hours++;
-                            if (hours % 24 != hours)
-                            {
-                                hours = hours % 24;
-
-                            }
-                        }
-
-
-                    }
-                    h = hours.ToString(); m = minutes.ToString(); s = seconds.ToString();
-                    if (hours <= 9)
-                        h = "0" + hours.ToString();
-                    if (minutes <= 9)
-                        m = ":0" + minutes.ToString();
-                    if (seconds <= 9)
-                        s = ":0" + seconds.ToString();
-                    present = h + ":" + m + ":" + s;
-                }
+               
                 else
-                {
-                    hours = hours + Int32.Parse(message[0]);
-                    hours = hours % 24;
-                    string h = hours.ToString(), m = minutes.ToString(), s = seconds.ToString();
-                    if (hours <= 9)
-                        h = "0" + hours.ToString();
-                    if (minutes <= 9)
-                        m = ":0" + minutes.ToString();
-                    if (seconds <= 9)
-                        s = ":0" + seconds.ToString();
-                    back = h + ":" + m + ":" + s;
-                    seconds = seconds + 59;
-                    if (seconds % 60 != seconds)
-                    {
-                        seconds = seconds % 60;
-                        minutes++;
-                        if (minutes % 60 != minutes)
-                        {
-                            minutes = minutes % 60;
-                            hours++;
-                            if (hours % 24 != hours)
-                            {
-                                hours = hours % 24;
-
-                            }
-                        }
-
-
-                    }
-                    minutes = minutes + 59;
-                    if (minutes % 60 != minutes)
-                    {
-                        minutes = minutes % 60;
-                        hours++;
-                        if (hours % 24 != hours)
-                        {
-                            hours = hours % 24;
-
-                        }
-                    }
-                    h = hours.ToString(); m = minutes.ToString(); s = seconds.ToString();
-                    if (hours <= 9)
-                        h = "0" + hours.ToString();
-                    if (minutes <= 9)
-                        m = ":0" + minutes.ToString();
-                    if (seconds <= 9)
-                        s = ":0" + seconds.ToString();
-                    present = h + ":" + m + ":" + s;
-
+                { 
+                    return "impossible";
                 }
-                if (string.Compare(min, back) == -1)
-                    min = back;
-                if (string.Compare(max, present) == 1)
-                    max = present;
             }
-            if (string.Compare(min, max) == -1)
-                return min;
-            return "impossible";
+
+            for (int i = 0; i < showPostTime.Length; i++)
+            {
+                string[] showPostTimeSplit = showPostTime[i].Split(' ');
+                DateTime dt = (DateTime)exactPostTimeList[i];
+                switch (showPostTimeSplit[1])
+                {
+                    case "hours":
+                        dt = dt.AddHours(double.Parse(showPostTimeSplit[0]));
+                        break;
+
+                    case "minutes":
+                        dt = dt.AddMinutes(double.Parse(showPostTimeSplit[0]));
+                        break;
+
+                    case "seconds":
+                        if (showPostTimeSplit[0].Equals("few"))
+                        {
+                            dt = dt.AddSeconds(0);
+                        }
+                        else
+                        {
+                            dt = dt.AddSeconds(double.Parse(showPostTimeSplit[0]));
+                        }
+                        break;
+                }
+                list1.Add(dt.ToLongTimeString());
+            }
+            list1.Sort();
+            return list1[0].ToString();
         }
     }
 }
+
 
 
