@@ -23,8 +23,56 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
-            throw new NotImplementedException();
+           
+           //getting number of posts
+          int postNumber = exactPostTime.Length;
+
+            string[] probableTimes = new string[postNumber];  //array to contain probable current times.
+
+            for (int i = 0; i < postNumber; i++)
+            {
+                 //converting post time to a DateTime object
+                DateTime time = DateTime.ParseExact(exactPostTime[i], "HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                
+                if (showPostTime[i].Contains("seconds"))  //current time for cases where string is "a few seconds ago"
+                {
+                    probableTimes[i] = exactPostTime[i];
+                }
+
+                else if (showPostTime[i].Contains("minutes"))
+                {
+                    string minutes = showPostTime[i].Split(' ')[0];
+                    DateTime current = time.AddMinutes(Int32.Parse(minutes)); //adding minutes to get probable current time
+                    string result = current.ToString("HH:mm:ss");
+
+                    probableTimes[i] = result;
+                }
+
+                else if (showPostTime[i].Contains("hours"))
+                {
+                    string hours = showPostTime[i].Split(' ')[0];
+                    DateTime current = time.AddHours(Int32.Parse(hours));// adding hours to get probable current time
+                    string result = current.ToString("HH:mm:ss");
+
+                    probableTimes[i] = result;
+                }
+
+
+            }
+
+            for (int i = 0; i <postNumber; i++) //checking for cases where same post time gives different human readable strings.
+            {
+                for (int j = i + 1; j < postNumber; j++)
+                {
+                    if (exactPostTime[i] == exactPostTime[j])
+                        if (showPostTime[i] != showPostTime[j])
+                            return "impossible";
+                }
+            }
+
+            Array.Sort(probableTimes);
+            return probableTimes[postNumber - 1]; //printing the time which comes lexicographically first
+
         }
     }
 }
