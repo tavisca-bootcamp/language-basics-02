@@ -24,6 +24,50 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
             // Add your code here.
+            int totalPosts = exactPostTime.Length;
+            for(int i=0;i<totalPosts;i++)
+            {
+                for(int j=i+1;j<totalPosts;j++)
+                {
+                    if(exactPostTime[i] == exactPostTime[j])
+                    {
+                        if(showPostTime[i] != showPostTime[j])
+                        {
+                            Console.WriteLine("Impossible!");
+                            return "impossible";
+                        }
+                    }
+                }
+            }
+
+            string[] resultantCurrentTime = new string[totalPosts];
+            for(int i=0;i<totalPosts;i++)
+            {
+                string[] splittedTimeIntoHoursMinSec = exactPostTime[i].Split(":");
+                DateTime tempDateTimeObject = new DateTime(2019, 6, 21, Int32.Parse(splittedTimeIntoHoursMinSec[0]), Int32.Parse(splittedTimeIntoHoursMinSec[1]), Int32.Parse(splittedTimeIntoHoursMinSec[2]));
+
+                if(showPostTime[i].Contains("seconds"))
+                {
+                    resultantCurrentTime[i] = exactPostTime[i];
+                }
+                else if(showPostTime[i].Contains("minutes"))
+                {
+                    string spanAfterPostInMinutes = showPostTime[i].Split(" ")[0];
+                    TimeSpan timeSpanObject = new TimeSpan(0, 0, Int32.Parse(spanAfterPostInMinutes), 0);
+                    resultantCurrentTime[i] = tempDateTimeObject.Add(timeSpanObject).ToString().Split(" ")[1];
+                }
+                else
+                {
+                    string spanAfterPostInHours = showPostTime[i].Split(" ")[0];
+                    TimeSpan timeSpanObject = new TimeSpan(0, Int32.Parse(spanAfterPostInHours), 0, 0);
+                    resultantCurrentTime[i] = tempDateTimeObject.Add(timeSpanObject).ToString().Split(" ")[1];
+                }
+            }
+
+            Array.Sort(resultantCurrentTime);
+            Console.WriteLine(resultantCurrentTime[totalPosts - 1]);
+            return resultantCurrentTime[totalPosts - 1];
+
             throw new NotImplementedException();
         }
     }
