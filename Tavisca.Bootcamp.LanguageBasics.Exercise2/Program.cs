@@ -1,5 +1,5 @@
 using System;
-
+using System.Collections.Generic;
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
     public static class Program
@@ -23,48 +23,53 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            int len = exactPostTime.Length;
-            string[] arr = new string[len];
-            for(int i=0;i<len-1;i++){
-                if(exactPostTime[i]==exactPostTime[i+1] && showPostTime[i]!=showPostTime[i+1]){
-                    return "impossible";
+            var length = exactPostTime.Length;
+            List<string> array = new List<string>();
+
+            for(var i=0;i<length;i++){
+                // Check whether for same exactPostTime we have different showPostTime
+
+                if(i!=length-1){
+                    if(exactPostTime[i]==exactPostTime[i+1] && showPostTime[i]!=showPostTime[i+1])
+                        return "impossible";
                 }
-            }
 
-           
-            for(int i=0;i<len;i++){
+                 var postTime = TimeSpan.Parse(exactPostTime[i]);
 
-                 TimeSpan timing = TimeSpan.Parse(exactPostTime[i]);
-
+                // add seconds in exactPostTime
                 if(showPostTime[i].Contains("seconds")){
-                    TimeSpan cur = new TimeSpan(timing.Hours,timing.Minutes,timing.Seconds);
-                    arr[i]=Convert.ToString(cur);
-                     //Console.Write("inside seconds \n");
+                    var currentTime = new TimeSpan(postTime.Hours,postTime.Minutes,postTime.Seconds);
+                    array.Add(Convert.ToString(currentTime));
+                     
                 }
 
+                // else add minutes in exactPostTime
                 else if(showPostTime[i].Contains("minutes")){
-                    string mint = showPostTime[i].Split(" ")[0];
-                    timing = timing.Add(TimeSpan.FromMinutes(Double.Parse(mint)));
-                    TimeSpan cur = new TimeSpan(timing.Hours,timing.Minutes,timing.Seconds);
-                    arr[i]=Convert.ToString(cur);
+                    var minutes = showPostTime[i].Split(" ")[0];
+                    postTime = postTime.Add(TimeSpan.FromMinutes(Double.Parse(minutes)));
+                    var currentTime = new TimeSpan(postTime.Hours,postTime.Minutes,postTime.Seconds);
+                    array.Add(Convert.ToString(currentTime));
                 }
 
+                // else add hours in exactPostTime
                 else if(showPostTime[i].Contains("hours")){
-                    string hr = showPostTime[i].Split(" ")[0];
-                    timing = timing.Add(TimeSpan.FromHours(Double.Parse(hr)));
-                    TimeSpan cur = new TimeSpan(timing.Hours,timing.Minutes,timing.Seconds);
-                    arr[i]=Convert.ToString(cur);
+                    var hours = showPostTime[i].Split(" ")[0];
+                    postTime = postTime.Add(TimeSpan.FromHours(Double.Parse(hours)));
+                    var currentTime = new TimeSpan(postTime.Hours,postTime.Minutes,postTime.Seconds);
+                    array.Add(Convert.ToString(currentTime));
                 }
                 else{
                     return "impossible";
                 }
 
-                //Console.Write(arr[i]+" ");
-
             }
 
-            Array.Sort(arr);
-            return Convert.ToString(arr[arr.Length-1]);
+            // Sort array and return the largest one
+
+            array.Sort();
+            return Convert.ToString(array[array.Count-1]);
+
+            
         }
     }
 }
