@@ -65,8 +65,6 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
             Array.Sort(arr);
             return Convert.ToString(arr[arr.Length-1]);
-
-            throw new NotImplementedException();
         }
     }
 }
