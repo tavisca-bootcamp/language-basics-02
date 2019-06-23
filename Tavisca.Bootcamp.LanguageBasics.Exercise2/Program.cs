@@ -33,6 +33,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 			 # 3599 means 3600s - 1s
 			 # 59 means 60 s -1s
 
+
 		**********************************************************************/
          // early detection of no solution
 			for(int i=0;i< exactPostTime.Length;i++){
