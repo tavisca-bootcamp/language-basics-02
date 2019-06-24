@@ -34,7 +34,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 			 # 59 means 60 s -1s
 
 
-		**********************************************************************/
+			**********************************************************************/
          // early detection of no solution
 			for(int i=0;i< exactPostTime.Length;i++){
 
@@ -47,8 +47,8 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 			}
 
 			int totalsec,low,high;
-			int[] sol_array_1=new int[exactPostTime.Length];
-			int[] sol_array_2=new int[exactPostTime.Length];
+			var sol_array_1=new TimeSpan[exactPostTime.Length];
+			var sol_array_2=new TimeSpan[exactPostTime.Length];
 			for(int i=0;i<exactPostTime.Length;i++){
 				totalsec=Convert.ToInt32(TimeSpan.Parse(exactPostTime[i]).TotalSeconds);
 				low=0;high=0;
@@ -64,37 +64,19 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 					low=Int32.Parse(showPostTime[i].Split(" ")[0])*60*60;
 					high=3599+low;
 				}
-				sol_array_1[i]=(totalsec+low)%86400;
-				sol_array_2[i]=(totalsec+high)%86400;
+				sol_array_1[i]= new TimeSpan(0,0,(totalsec+low)%86400);
+				sol_array_2[i]=new TimeSpan(0,0,(totalsec+high)%86400);
 			}
-
-			int min=sol_array_1.Max();
-			int max=sol_array_2.Min();
-
-			if(min<=max){
-				int HH,MM,SS;
-				SS=min%60;
-				min=min/60;
-				MM=min%60;
-				min=min/60;
-				HH=min;
-				String result;
-				if(HH>9)
-				result=HH+":";
-				else
-				result="0"+HH+":";
-				if(MM>9)
-				result=result+MM+":";
-				else
-				result=result+"0"+MM+":";
-				if(SS>9)
-				result=result+SS;
-				else
-				result=result+"0"+SS;
-				return result;
+			
+			TimeSpan minSpan=sol_array_1.Max();
+			TimeSpan maxSpan=sol_array_2.Min();
+			/* Result lies between Max TimeSpan of sol_array_1 and min TimeSpan of sol_array_2  i.e innermost subset*/
+			if(minSpan<=maxSpan){
+				return minSpan.ToString();
 			}
 			return "impossible";
+			
 		}
-	
+		
 	}
 }
