@@ -1,5 +1,6 @@
 ﻿using System;
-
+using System.Text.RegularExpressions;
+using System.Linq;
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
     public static class Program
@@ -23,7 +24,53 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
+            int i=0;
+            int len=exactPostTime.Length;
+            String[] arr = new String[len];
+            int k=0;
+            for (int z = 0; z < exactPostTime.Length; z++)
+            {
+                for (int j = z + 1; j < exactPostTime.Length; j++)
+                {
+                    if (exactPostTime[z] == exactPostTime[j])
+                    {
+                        if (showPostTime[z] != showPostTime[j])
+                        {
+                            return "impossible";
+                        }
+                    }
+                }
+            }
+           foreach(string s in exactPostTime)
+           {
+                int hr = Int32.Parse(s.Substring(0,2));
+                int min =Int32.Parse(s.Substring(3,2));
+                int sec = Int32.Parse(s.Substring(6,2));
+                DateTime d = new DateTime(2019, 1, 1, hr, min, sec);
+               if(showPostTime[i].Contains("seconds"))
+               {
+                    arr[i]=s;
+               }
+               else if(showPostTime[i].Contains("minutes"))
+                {
+                   int temp = Int32.Parse(showPostTime[i].Substring(0,2));
+                   d=d.AddMinutes(temp);
+                   arr[i]=d.ToLongTimeString();
+                   
+                }
+                else if(showPostTime[i].Contains("hours"))
+                {
+                   int t = Int32.Parse(showPostTime[i].Substring(0,2));
+                   d=d.AddHours(t);
+                   arr[i]=d.ToLongTimeString();
+                }
+               i++;
+               k++;
+           }
+           Array.Sort(arr);
+            String res = arr[len-1].Split(" ")[0];
+            //Console.WriteLine(res);
+           return res;
             throw new NotImplementedException();
         }
     }
