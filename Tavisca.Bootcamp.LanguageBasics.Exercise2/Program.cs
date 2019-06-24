@@ -1,9 +1,10 @@
 ﻿using System;
 
-namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
+namespace Tavisca.Bootcamp.LanguageBasics.Exercise2
 {
-    public static class Program
+    class Program
     {
+
         static void Main(string[] args)
         {
             Test(new[] {"12:12:12"}, new [] { "few seconds ago" }, "12:12:12");
@@ -15,16 +16,13 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         private static void Test(string[] postTimes, string[] showTimes, string expected)
         {
-            var result = GetCurrentTime(postTimes, showTimes).Equals(expected) ? "PASS" : "FAIL";
+            ForumPostEasy o=new ForumPostEasy();
+            var result = o.GetCurrentTime(postTimes, showTimes).Equals(expected) ? "PASS" : "FAIL";
             var postTimesCsv = string.Join(", ", postTimes);
             var showTimesCsv = string.Join(", ", showTimes);
             Console.WriteLine($"[{postTimesCsv}], [{showTimesCsv}] => {result}");
         }
 
-        public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
-        {
-            // Add your code here.
-            throw new NotImplementedException();
-        }
+        
     }
 }
