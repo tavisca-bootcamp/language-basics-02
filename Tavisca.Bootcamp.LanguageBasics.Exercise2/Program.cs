@@ -43,33 +43,32 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             {
                 String[] temp = exactPostTime[i].Split(":");
                 DateTime d = new DateTime(2019, 1, 1, Int32.Parse(temp[0]), Int32.Parse(temp[1]), Int32.Parse(temp[2]));
-                var hr = temp[0];
-                var min = temp[1];
-                var sec = temp[2];
+                String AddTime = showPostTime[i].Split(" ")[0];
+                int TotalTime=0;
                 if (showPostTime[i].Contains("seconds"))
                 {
-                    ans[i] = exactPostTime[i];
+                    if(int.TryParse(AddTime,out TotalTime))
+                    {
+                        d=d.AddSeconds(TotalTime);  
+                    }
                 }
                 else if (showPostTime[i].Contains("minutes"))
                 {
-                    String minutes = showPostTime[i].Split(" ")[0];
-                    int m = Int32.Parse(minutes);
-                    d = d.AddMinutes(m);
-                    ans[i] = d.ToLongTimeString();
-
+                    int.TryParse(AddTime,out TotalTime);
+                    d = d.AddMinutes(TotalTime);
+                    
                 }
                 else if (showPostTime[i].Contains("hours"))
                 {
-                    String hour = showPostTime[i].Split(" ")[0];
-                    int h = Int32.Parse(hour);
-                    d = d.AddHours(h);
-                    ans[i] = d.ToLongTimeString();
+                     int.TryParse(AddTime,out TotalTime);
+                    d = d.AddHours(TotalTime);
+                   
                 }
+                ans[i]=d.ToLongTimeString();
 
             }
             Array.Sort(ans);
             return ans[exactPostTime.Length - 1];
-            throw new NotImplementedException();
         }
     }
 }
