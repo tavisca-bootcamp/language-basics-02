@@ -70,7 +70,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 list1.Add(dt.ToLongTimeString());
             }
             list1.Sort();
-            return list1[0].ToString();
+            return list1[list1.Count-1].ToString();
         }
     }
 }
