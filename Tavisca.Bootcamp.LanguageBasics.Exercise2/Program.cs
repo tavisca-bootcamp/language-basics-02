@@ -23,8 +23,72 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
-            throw new NotImplementedException();
+
+            for (int i = 0; i < exactPostTime.Length - 1; i++)
+            {
+                for (int j = i + 1; j < exactPostTime.Length; j++)
+                {
+                    if (exactPostTime[i] == exactPostTime[j])
+                    {
+                        if (showPostTime[i] != showPostTime[j])
+                        {
+                            return "impossible";
+                        }
+                    }
+                }
+            }
+
+            DateTime x, ct, min = DateTime.Parse("00:00:00"), max = DateTime.Parse("23:59:59");
+            string ShowTime;
+
+            
+
+            for (int i = 0; i < exactPostTime.Length; i++)
+            {
+                x = DateTime.Parse(exactPostTime[i]);
+                ShowTime = showPostTime[i];
+                string[] st = ShowTime.Split(' ');
+
+                if (st[1].Equals("seconds"))
+                {
+                    ct = x;
+                    if (DateTime.Compare(DateTime.Parse(ct.ToLongTimeString()), DateTime.Parse(min.ToLongTimeString())) == 1)
+                    {
+                        min = ct;
+                    }
+                    if (DateTime.Compare(DateTime.Parse(ct.AddSeconds(59).ToLongTimeString()), DateTime.Parse(max.ToLongTimeString())) == -1)
+                    {
+                        max = ct.AddSeconds(59);
+                    }
+                }
+                else if (st[1].Equals("minutes"))
+                {
+                    ct = x.AddMinutes(double.Parse(st[0]));
+                    if (DateTime.Compare(DateTime.Parse(ct.ToLongTimeString()), DateTime.Parse(min.ToLongTimeString())) == 1)
+                    {
+                        min = ct;
+                    }
+                    if (DateTime.Compare(DateTime.Parse(ct.AddSeconds(59).ToLongTimeString()), DateTime.Parse(max.ToLongTimeString())) == -1)
+                    {
+                        max = ct.AddSeconds(59);
+                    }
+                }
+                else if (st[1].Equals("hours"))
+                {
+                    ct = x.AddHours(double.Parse(st[0]));
+                    if (DateTime.Compare(DateTime.Parse(ct.ToLongTimeString()), DateTime.Parse(min.ToLongTimeString())) == 1)
+                    {
+                        min = ct;
+                    }
+                    if (DateTime.Compare(DateTime.Parse(ct.AddMinutes(59).ToLongTimeString()), DateTime.Parse(max.ToLongTimeString())) == -1)
+                    {
+                        max = ct.AddMinutes(59);
+                    }
+                }
+            }
+
+            return min.ToLongTimeString();
+
         }
     }
 }
