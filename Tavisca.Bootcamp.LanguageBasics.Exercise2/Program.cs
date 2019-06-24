@@ -23,8 +23,51 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
-            throw new NotImplementedException();
+            for (int i = 0; i < exactPostTime.Length; i++)
+            {
+                for (int j = i + 1; j < exactPostTime.Length; j++)
+                {
+                    if (exactPostTime[i] == exactPostTime[j])
+                    {
+                        if (showPostTime[i] != showPostTime[j])
+                        {
+                            return "impossible";
+                        }
+                    }
+                }
+            }
+            String[] ans = new String[exactPostTime.Length];
+
+            for (int i = 0; i < exactPostTime.Length; i++)
+            {
+                String[] temp = exactPostTime[i].Split(":");
+                DateTime d = new DateTime(2019, 1, 1, Int32.Parse(temp[0]), Int32.Parse(temp[1]), Int32.Parse(temp[2]));
+                String AddTime = showPostTime[i].Split(" ")[0];
+                int TotalTime=0;
+                if (showPostTime[i].Contains("seconds"))
+                {
+                    if(int.TryParse(AddTime,out TotalTime))
+                    {
+                        d=d.AddSeconds(TotalTime);  
+                    }
+                }
+                else if (showPostTime[i].Contains("minutes"))
+                {
+                    int.TryParse(AddTime,out TotalTime);
+                    d = d.AddMinutes(TotalTime);
+                    
+                }
+                else if (showPostTime[i].Contains("hours"))
+                {
+                     int.TryParse(AddTime,out TotalTime);
+                    d = d.AddHours(TotalTime);
+                   
+                }
+                ans[i]=d.ToLongTimeString();
+
+            }
+            Array.Sort(ans);
+            return ans[exactPostTime.Length - 1];
         }
     }
 }
