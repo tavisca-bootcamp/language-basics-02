@@ -20,7 +20,40 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             var showTimesCsv = string.Join(", ", showTimes);
             Console.WriteLine($"[{postTimesCsv}], [{showTimesCsv}] => {result}");
         }
+        public static int Time(string posttime,int value) // this function is about retrieving the values from showposttime
+        {
+            string answer;
+            if (posttime.Length == value)
+            {
+                answer = posttime.Substring(0, 2);
+            }
+            else
+            {
+                answer = posttime.Substring(0, 1);
+            }
+            int x = int.Parse(answer);
+            return x;
+        }
+        public static string convert(TimeSpan x)
+        {
+            string answer="";
+            if (x.Hours >= 0 && x.Hours <= 9)
+                answer += ("0" + Convert.ToString(x.Hours));
+            else
+                answer += Convert.ToString(x.Hours);
+            answer += ":";
+            if (x.Minutes >= 0 && x.Minutes <= 9)
+                answer+= ("0" + Convert.ToString(x.Minutes));
+            else
+                answer+= Convert.ToString(x.Minutes);
+            answer += ":";
+            if (x.Seconds >= 0 && x.Seconds <= 9)
+                answer+= ("0" + Convert.ToString(x.Seconds));
+            else
+                answer+= Convert.ToString(x.Seconds);
 
+            return answer;
+        }
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
             // Add your code here.
@@ -32,169 +65,59 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             string minute = "minute";
             TimeSpan min = TimeSpan.Parse(exactPostTime[0]);
             TimeSpan max = TimeSpan.Parse(exactPostTime[0]);
-            if (showPostTime[0].Contains(sec))
-            {
-                TimeSpan min_sec = TimeSpan.Parse("00:00:00");
-                TimeSpan max_sec = TimeSpan.Parse("00:00:59");
-                min = min.Add(min_sec);
-                 answer = Convert.ToString(min.Hours) + ":" + Convert.ToString(min.Minutes) + ":" + Convert.ToString(min.Seconds);
-                min = TimeSpan.Parse(answer);
-                max = max.Add(max_sec);
-                answer = Convert.ToString(max.Hours) + ":" + Convert.ToString(max.Minutes) + ":" + Convert.ToString(max.Seconds);
-                max = TimeSpan.Parse(answer);
-            }
-            else if (showPostTime[0].Contains(minute))
-            {
-                string minut;
-                if (showPostTime[i].Length == 14)
-                {
-                    minut = showPostTime[i].Substring(0, 2);
-                }
-                else
-                {
-                    minut = showPostTime[i].Substring(0, 1);
-                }
-                int x = int.Parse(minut);
-                TimeSpan min_min = new TimeSpan(0, x, 0);
-                TimeSpan max_min = new TimeSpan(0, x, 59);
-                min = min.Add(min_min);
-                answer = Convert.ToString(min.Hours) + ":" + Convert.ToString(min.Minutes) + ":" + Convert.ToString(min.Seconds);
-                min = TimeSpan.Parse(answer);
-                max = max.Add(max_min);
-                answer = Convert.ToString(max.Hours) + ":" + Convert.ToString(max.Minutes) + ":" + Convert.ToString(max.Seconds);
-                max = TimeSpan.Parse(answer);
-            }
-            else
-            {
-                string hou;
-                if (showPostTime[i].Length == 12)
-                {
-                    hou = showPostTime[i].Substring(0, 2);
-                }
-                else
-                {
-                    hou = showPostTime[i].Substring(0, 1);
-                }
-                int x = int.Parse(hou);
-                TimeSpan min_hour = new TimeSpan(x, 59, 0);
-                TimeSpan max_hour = new TimeSpan(x, 59, 59);
-                min = min.Add(min_hour);
-                answer = Convert.ToString(min.Hours) + ":" + Convert.ToString(min.Minutes) + ":" + Convert.ToString(min.Seconds);
-                min = TimeSpan.Parse(answer);
-                max = max.Add(max_hour);
-                answer = Convert.ToString(max.Hours) + ":" + Convert.ToString(max.Minutes) + ":" + Convert.ToString(max.Seconds);
-                max = TimeSpan.Parse(answer);
-            }
-            //string hour = "hour";
-            for (i=1;i<exactPostTime.Length;i++)
+            TimeSpan min1= TimeSpan.Parse(exactPostTime[0]), max1= TimeSpan.Parse(exactPostTime[0]);
+
+            for (i=0;i<exactPostTime.Length;i++)
             {
                 TimeSpan exact = TimeSpan.Parse(exactPostTime[i]);
+                
                 if (showPostTime[i].Contains(sec))
                 {
-                    TimeSpan min_sec = TimeSpan.Parse("00:00:00");
-                    TimeSpan max_sec = TimeSpan.Parse("00:00:59");
-                     min_sec = min_sec.Add(exact);
-                    answer = Convert.ToString(min_sec.Hours) + ":" + Convert.ToString(min_sec.Minutes) + ":" + Convert.ToString(min_sec.Seconds);
-                    min_sec = TimeSpan.Parse(answer);
-                    max_sec = max_sec.Add(exact);
-                    answer = Convert.ToString(max_sec.Hours) + ":" + Convert.ToString(max_sec.Minutes) + ":" + Convert.ToString(max_sec.Seconds);
-                    max_sec = TimeSpan.Parse(answer);
-                    if (TimeSpan.Compare(min_sec,max) == 1)
-                        return "impossible";
-                    if (TimeSpan.Compare(min_sec, min) == 1)
-                        min = min_sec;
-                    if (TimeSpan.Compare(max_sec, max) == 1)
-                        max = max_sec;
-
+                     min1 = TimeSpan.Parse("00:00:00");
+                     max1 = TimeSpan.Parse("00:00:59");
                 }
                 else if(showPostTime[i].Contains(minute))
                 {
-                    string minut;
-                    if (showPostTime[i].Length == 14)
-                    {
-                         minut = showPostTime[i].Substring(0, 2);
-                    }
-                    else
-                    {
-                         minut = showPostTime[i].Substring(0, 1);
-                    }
-                    int x = int.Parse(minut);
-                    TimeSpan min_min = new TimeSpan(0, x, 0);
-                    TimeSpan max_min = new TimeSpan(0, x, 59);
-                    min_min = min_min.Add(exact);
-                    answer = Convert.ToString(min_min.Hours) + ":" + Convert.ToString(min_min.Minutes) + ":" + Convert.ToString(min_min.Seconds);
-                    min_min = TimeSpan.Parse(answer);
-                    max_min = max_min.Add(exact);
-                    answer = Convert.ToString(max_min.Hours) + ":" + Convert.ToString(max_min.Minutes) + ":" + Convert.ToString(max_min.Seconds);
-                    max_min = TimeSpan.Parse(answer);
-                    if (TimeSpan.Compare(min_min, max) == 1)
-                        return "impossible";
-                    if (TimeSpan.Compare(min_min, min) == 1)
-                        min = min_min;
-                    if (TimeSpan.Compare(max_min, max) == 1)
-                        max = max_min;
-
+                    int x = Time(showPostTime[i], 14);
+                    min1 = new TimeSpan(0, x, 0);
+                     max1 = new TimeSpan(0, x, 59);
                 }
                 else
                 {
-                    string hou;
-                    if (showPostTime[i].Length == 12)
-                    {
-                         hou = showPostTime[i].Substring(0, 2);
-                    }
-                    else
-                    {
-                         hou = showPostTime[i].Substring(0, 1);
-                    }
-                    int x = int.Parse(hou);
-                    TimeSpan min_hour = new TimeSpan(x, 0, 0);
-                    TimeSpan max_hour = new TimeSpan(x, 59, 59);
-                    min_hour = min_hour.Add(exact);
-                    answer = Convert.ToString(min_hour.Hours) + ":" + Convert.ToString(min_hour.Minutes) + ":" + Convert.ToString(min_hour.Seconds);
-                    min_hour = TimeSpan.Parse(answer);
-                    max_hour = max_hour.Add(exact);
-                    answer = Convert.ToString(max_hour.Hours) + ":" + Convert.ToString(max_hour.Minutes) + ":" + Convert.ToString(max_hour.Seconds);
-                    max_hour = TimeSpan.Parse(answer);
-                    
-                    if (TimeSpan.Compare(min_hour, max) == 1)
-                        return "impossible";
-                    if (TimeSpan.Compare(min_hour, min) == 1)
-                        min = min_hour;
-                    if (TimeSpan.Compare(max_hour, max) == 1)
-                        max = max_hour;
+                    int x = Time(showPostTime[i], 12);
+                    min1 = new TimeSpan(x, 0, 0);
+                     max1 = new TimeSpan(x, 59, 59);
                 }
-                
+                if (i != 0)
+                {
+                    min1 = min1.Add(exact);
+                    answer = Convert.ToString(min1.Hours) + ":" + Convert.ToString(min1.Minutes) + ":" + Convert.ToString(min1.Seconds);
+                    min1 = TimeSpan.Parse(answer);
+                    max1 = max1.Add(exact);
+                    answer = Convert.ToString(max1.Hours) + ":" + Convert.ToString(max1.Minutes) + ":" + Convert.ToString(max1.Seconds);
+                    max1 = TimeSpan.Parse(answer);
+                    if (TimeSpan.Compare(min1, max) == 1)
+                        return "impossible";
+                    if (TimeSpan.Compare(min1, min) == 1)
+                        min = min1;
+                    if (TimeSpan.Compare(max1, max) == 1)
+                        max = max1;
+                }
+                else
+                {
+                    min1 = min1.Add(exact);
+                    answer = Convert.ToString(min1.Hours) + ":" + Convert.ToString(min1.Minutes) + ":" + Convert.ToString(min1.Seconds);
+                    min1 = TimeSpan.Parse(answer);
+                    max1 = max1.Add(exact);
+                    answer = Convert.ToString(max1.Hours) + ":" + Convert.ToString(max1.Minutes) + ":" + Convert.ToString(max1.Seconds);
+                    max1 = TimeSpan.Parse(answer);
+                    min = min1;
+                    max = max1;
+                    //Console.WriteLine(min);
+                }
             }
-            string hours,minutes,seconds;
-             if (min.Hours>=0 && min.Hours<=9)
-            {
-                hours = "0" + Convert.ToString(min.Hours);
-            }
-            else
-            {
-                 hours = Convert.ToString(min.Hours);
-            }
-             if (min.Minutes >= 0 && min.Minutes<= 9)
-            {
-                minutes = "0" + Convert.ToString(min.Minutes);
-            }
-             else
-            {
-                minutes = Convert.ToString(min.Minutes);
-            }
-            if (min.Seconds >= 0 && min.Seconds <= 9)
-            {
-                seconds = "0" + Convert.ToString(min.Seconds);
-            }
-            else
-            {
-                seconds = Convert.ToString(min.Seconds);
-            }
-
-            answer = hours + ":" + minutes + ":" + seconds;
-            //Console.WriteLine(answer);
-            return answer;
-            //throw new NotImplementedException();
+            return convert(min);
         }
     }
+    
 }
