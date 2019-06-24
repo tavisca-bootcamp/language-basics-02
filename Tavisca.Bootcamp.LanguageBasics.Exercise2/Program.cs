@@ -26,7 +26,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         {
             int length = exactPostTime.Length;
             Hashtable ht = new Hashtable();
-            TimeSpan max_time =  TimeSpan.Parse("00:00:00");
+            TimeSpan maxTime =  TimeSpan.Parse("00:00:00");
         
             for(int i=0;i<length;i++)
             {
@@ -37,25 +37,25 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                     ht.Add(exactPostTime[i], showPostTime[i]);
 
                 TimeSpan timeSpan = TimeSpan.Parse(exactPostTime[i]);
-                string[] showPostArr = showPostTime[i].Split(" ");
+                string[] showPostSplitted = showPostTime[i].Split(" ");
 
-                if(showPostArr[1] == "minutes")
+                if(showPostSplitted[1] == "minutes")
                 {
-                    timeSpan = timeSpan.Add(TimeSpan.FromMinutes(double.Parse(showPostArr[0])));
+                    timeSpan = timeSpan.Add(TimeSpan.FromMinutes(double.Parse(showPostSplitted[0])));
                     timeSpan = new TimeSpan(timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
                 }
-                else if(showPostArr[1] == "hours")
+                else if(showPostSplitted[1] == "hours")
                 {
-                    timeSpan = timeSpan.Add(TimeSpan.FromHours(double.Parse(showPostArr[0])));
+                    timeSpan = timeSpan.Add(TimeSpan.FromHours(double.Parse(showPostSplitted[0])));
                     timeSpan = new TimeSpan(timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
                 }
 
-                if(max_time < timeSpan)
-                    max_time = timeSpan;
+                if(maxTime < timeSpan)
+                    maxTime = timeSpan;
 
             }
             
-            return max_time.ToString();
+            return maxTime.ToString();
         }
     }
 }
