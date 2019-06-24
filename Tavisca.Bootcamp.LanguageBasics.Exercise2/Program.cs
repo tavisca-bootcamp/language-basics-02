@@ -23,8 +23,42 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
-            throw new NotImplementedException();
+            int numberOfPosts = exactPostTime.Length;
+            string[] currentTimesArray = new string[numberOfPosts];
+
+            for (var index = 0 ; index < numberOfPosts ; index++ ){
+                if( index < numberOfPosts-1 && exactPostTime[index] == exactPostTime[index+1] && showPostTime[index] != showPostTime[index+1]){
+                    return "impossible";
+                }
+                TimeSpan startTime = TimeSpan.Parse(exactPostTime[index]);
+                TimeSpan endTime;
+                if (showPostTime[index].Contains("seconds")){
+                    endTime = new TimeSpan(startTime.Hours, startTime.Minutes, startTime.Seconds);
+                    currentTimesArray[index] = endTime.ToString();
+                }
+                else if(showPostTime[index].Contains("minutes")){
+                    var minutesNum = showPostTime[index].Split(' ')[0];
+                    var doubleMinute = double.Parse(minutesNum);
+                    var timeToAdd = TimeSpan.FromMinutes(doubleMinute);
+                    startTime = startTime.Add(timeToAdd);
+                    endTime = new TimeSpan(startTime.Hours,startTime.Minutes,startTime.Seconds);
+                    currentTimesArray[index] = endTime.ToString();
+                }
+                else if(showPostTime[index].Contains("hours")){
+                    var hours_num = showPostTime[index].Split(' ')[0];
+                    var double_hours = double.Parse(hours_num);
+                    var timeToAdd = TimeSpan.FromHours(double_hours);
+                    startTime = startTime.Add(timeToAdd);
+                    endTime = new TimeSpan(startTime.Hours,startTime.Minutes,startTime.Seconds);
+                    currentTimesArray[index] = startTime.ToString();
+                }
+                else{
+                    return "impossible";
+                }
+
+            }
+            Array.Sort(currentTimesArray);
+            return currentTimesArray[currentTimesArray.Length-1];
         }
     }
 }
