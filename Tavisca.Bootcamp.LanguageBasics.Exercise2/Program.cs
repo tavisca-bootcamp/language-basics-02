@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
-    public static class ForumPostEasy
+    public static class Program
     {
         static void Main(string[] args)
         {
@@ -59,7 +59,6 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             }
             currTime.Sort();
             return currTime[currTime.Count - 1].ToString();
-            throw new NotImplementedException();
         }
     }
 }
