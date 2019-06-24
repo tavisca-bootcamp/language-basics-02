@@ -23,7 +23,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise2
         }
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            var ans = new List<TimeSpan>();
+            var Answer = new List<TimeSpan>();
             for(int i=0;i<exactPostTime.Length;i++)
             {
                 for(int j=i+1;j<exactPostTime.Length;j++)
@@ -34,30 +34,29 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise2
                             return "impossible";
                     }
                 }
-                TimeSpan ts=TimeSpan.Parse(exactPostTime[i]);
+                TimeSpan timespan=TimeSpan.Parse(exactPostTime[i]);
                 if (showPostTime[i].Contains("few"))
                 {
-                    TimeSpan t1=new TimeSpan(ts.Hours,ts.Minutes,ts.Seconds);
-                    ans.Add(t1);
+                    TimeSpan timespan1=new TimeSpan(timespan.Hours,timespan.Minutes,timespan.Seconds);
+                    Answer.Add(timespan1);
                 }
                 else if(showPostTime[i].Contains("minutes"))
                 {
-                    string min =showPostTime[i].Split(' ')[0];
-                    ts=ts.Add(TimeSpan.FromMinutes(double.Parse(min)));
-                    TimeSpan t1 = new TimeSpan(ts.Hours, ts.Minutes, ts.Seconds);
-                    ans.Add(t1);
+                    string Minutes =showPostTime[i].Split(' ')[0];
+                    timespan=timespan.Add(TimeSpan.FromMinutes(double.Parse(Minutes)));
+                    TimeSpan timespan1 = new TimeSpan(timespan.Hours, timespan.Minutes, timespan.Seconds);
+                    Answer.Add(timespan1);
                 }
                 else
                 {
-                    string hr=showPostTime[i].Split(' ')[0];
-                    ts=ts.Add(TimeSpan.FromHours(double.Parse(hr)));
-                    TimeSpan t1 = new TimeSpan(ts.Hours, ts.Minutes, ts.Seconds);
-                    ans.Add(t1);
+                    string Hours=showPostTime[i].Split(' ')[0];
+                    timespan=timespan.Add(TimeSpan.FromHours(double.Parse(Hours)));
+                    TimeSpan timespan1 = new TimeSpan(timespan.Hours, timespan.Minutes, timespan.Seconds);
+                    Answer.Add(timespan1);
                 }
-
             }
-            ans.Sort();
-            return ans[ans.Count-1].ToString();
+            Answer.Sort();
+            return Answer[Answer.Count-1].ToString();
             throw new NotImplementedException();
         }
     }
