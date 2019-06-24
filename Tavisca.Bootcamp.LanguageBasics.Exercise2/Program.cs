@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
@@ -23,8 +24,38 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
-            throw new NotImplementedException();
+            int length = exactPostTime.Length;
+            Hashtable hashtable = new Hashtable();
+            TimeSpan maxTime =  TimeSpan.Parse("00:00:00");
+        
+            for(int i=0;i<length;i++)
+            {
+                if(hashtable.ContainsKey(exactPostTime[i]) && hashtable[exactPostTime[i]].ToString() != showPostTime[i])
+                    return "impossible";
+
+                if(!hashtable.ContainsKey(exactPostTime[i]))
+                    hashtable.Add(exactPostTime[i], showPostTime[i]);
+
+                TimeSpan timeSpan = TimeSpan.Parse(exactPostTime[i]);
+                string[] showPostSplitted = showPostTime[i].Split(" ");
+
+                if(showPostSplitted[1] == "minutes")
+                {
+                    timeSpan = timeSpan.Add(TimeSpan.FromMinutes(double.Parse(showPostSplitted[0])));
+                    timeSpan = new TimeSpan(timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
+                }
+                else if(showPostSplitted[1] == "hours")
+                {
+                    timeSpan = timeSpan.Add(TimeSpan.FromHours(double.Parse(showPostSplitted[0])));
+                    timeSpan = new TimeSpan(timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
+                }
+
+                if(maxTime < timeSpan)
+                    maxTime = timeSpan;
+
+            }
+            
+            return maxTime.ToString();
         }
     }
 }
