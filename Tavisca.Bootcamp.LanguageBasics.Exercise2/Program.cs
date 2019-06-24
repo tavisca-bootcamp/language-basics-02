@@ -23,42 +23,42 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            int number_of_posts = exactPostTime.Length;
-            string[] current_times_array = new string[number_of_posts];
+            int numberOfPosts = exactPostTime.Length;
+            string[] currentTimesArray = new string[numberOfPosts];
 
-            for (var index = 0 ; index < number_of_posts ; index++ ){
-                if( index < number_of_posts-1 && exactPostTime[index] == exactPostTime[index+1] && showPostTime[index] != showPostTime[index+1]){
+            for (var index = 0 ; index < numberOfPosts ; index++ ){
+                if( index < numberOfPosts-1 && exactPostTime[index] == exactPostTime[index+1] && showPostTime[index] != showPostTime[index+1]){
                     return "impossible";
                 }
-                TimeSpan start_time = TimeSpan.Parse(exactPostTime[index]);
-                TimeSpan end_time;
+                TimeSpan startTime = TimeSpan.Parse(exactPostTime[index]);
+                TimeSpan endTime;
                 if (showPostTime[index].Contains("seconds")){
-                    end_time = new TimeSpan(start_time.Hours, start_time.Minutes, start_time.Seconds);
-                    current_times_array[index] = end_time.ToString();
+                    endTime = new TimeSpan(startTime.Hours, startTime.Minutes, startTime.Seconds);
+                    currentTimesArray[index] = endTime.ToString();
                 }
                 else if(showPostTime[index].Contains("minutes")){
-                    var minutes_num = showPostTime[index].Split(' ')[0];
-                    var double_minute = double.Parse(minutes_num);
-                    var time_to_add = TimeSpan.FromMinutes(double_minute);
-                    start_time = start_time.Add(time_to_add);
-                    end_time = new TimeSpan(start_time.Hours,start_time.Minutes,start_time.Seconds);
-                    current_times_array[index] = end_time.ToString();
+                    var minutesNum = showPostTime[index].Split(' ')[0];
+                    var doubleMinute = double.Parse(minutesNum);
+                    var timeToAdd = TimeSpan.FromMinutes(doubleMinute);
+                    startTime = startTime.Add(timeToAdd);
+                    endTime = new TimeSpan(startTime.Hours,startTime.Minutes,startTime.Seconds);
+                    currentTimesArray[index] = endTime.ToString();
                 }
                 else if(showPostTime[index].Contains("hours")){
                     var hours_num = showPostTime[index].Split(' ')[0];
                     var double_hours = double.Parse(hours_num);
-                    var time_to_add = TimeSpan.FromHours(double_hours);
-                    start_time = start_time.Add(time_to_add);
-                    end_time = new TimeSpan(start_time.Hours,start_time.Minutes,start_time.Seconds);
-                    current_times_array[index] = start_time.ToString();
+                    var timeToAdd = TimeSpan.FromHours(double_hours);
+                    startTime = startTime.Add(timeToAdd);
+                    endTime = new TimeSpan(startTime.Hours,startTime.Minutes,startTime.Seconds);
+                    currentTimesArray[index] = startTime.ToString();
                 }
                 else{
                     return "impossible";
                 }
 
             }
-            Array.Sort(current_times_array);
-            return current_times_array[current_times_array.Length-1];
+            Array.Sort(currentTimesArray);
+            return currentTimesArray[currentTimesArray.Length-1];
         }
     }
 }
