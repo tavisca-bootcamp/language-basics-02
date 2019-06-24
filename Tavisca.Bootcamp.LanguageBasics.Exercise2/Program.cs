@@ -26,7 +26,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         {
             // Add your code here.
             String[] currentTime=new String[exactPostTime.Length];
-            String CurrentTime="";
+            String FinalCurrentTime="";
             int i,j;
             
             //For impossible cases
@@ -36,7 +36,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                         if(string.Compare(showPostTime[i],showPostTime[j])!=0)
                             return "impossible";
            
-            int  incr=0;
+            //int  incr=0;
             for(i=0;i<exactPostTime.Length;i++)
             {
                 if(showPostTime[i].Contains("seconds"))
@@ -45,16 +45,20 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 }
                 else if(showPostTime[i].Contains("minutes"))
                 {
-                    DateTime date=DateTime.Parse(exactPostTime[i]);
-                    incr=int.Parse(showPostTime[i].Substring(0,showPostTime[i].IndexOf(" ")));
-                    DateTime cTime=date.AddMinutes(incr);
+                    DateTime date;
+                    bool ifSuccess1=DateTime.TryParse(exactPostTime[i], out date);
+                    int incr1;
+                    bool ifSuccess2=int.TryParse(showPostTime[i].Substring(0,showPostTime[i].IndexOf(" ")), out incr1);
+                    DateTime cTime=date.AddMinutes(incr1);
                     currentTime[i]=cTime.ToString("HH:mm:ss",CultureInfo.InvariantCulture);
                 }
                 else if(showPostTime[i].Contains("hours"))
                 {
-                    DateTime date=DateTime.Parse(exactPostTime[i]);
-                    incr=int.Parse(showPostTime[i].Substring(0,showPostTime[i].IndexOf(" ")));
-                    DateTime cTime=date.AddHours(incr);
+                    DateTime date;
+                    bool ifSuccess1=DateTime.TryParse(exactPostTime[i], out date);
+                    int incr2;
+                    bool ifSuccess2=int.TryParse(showPostTime[i].Substring(0,showPostTime[i].IndexOf(" ")), out incr2);
+                    DateTime cTime=date.AddHours(incr2);
                     currentTime[i]=cTime.ToString("HH:mm:ss",CultureInfo.InvariantCulture);
                 }
             }
@@ -65,16 +69,16 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                         if(string.Compare(currentTime[i],currentTime[i+1])!=0)
                         {
                             if(string.Compare(currentTime[i],currentTime[i+1])>0)
-                                CurrentTime=currentTime[i];
+                                FinalCurrentTime=currentTime[i];
                         }
                         else
-                            CurrentTime=currentTime[i];
+                            FinalCurrentTime=currentTime[i];
                     }
             else
-                CurrentTime=currentTime[0];
+                FinalCurrentTime=currentTime[0];
 
-            return CurrentTime;
-            throw new NotImplementedException();
+            return FinalCurrentTime;
+            
         }
     }
 }
