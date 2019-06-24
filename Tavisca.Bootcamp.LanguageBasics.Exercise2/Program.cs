@@ -25,16 +25,16 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
             int length = exactPostTime.Length;
-            Hashtable ht = new Hashtable();
+            Hashtable hashtable = new Hashtable();
             TimeSpan maxTime =  TimeSpan.Parse("00:00:00");
         
             for(int i=0;i<length;i++)
             {
-                if(ht.ContainsKey(exactPostTime[i]) && ht[exactPostTime[i]].ToString() != showPostTime[i])
+                if(hashtable.ContainsKey(exactPostTime[i]) && hashtable[exactPostTime[i]].ToString() != showPostTime[i])
                     return "impossible";
 
-                if(!ht.ContainsKey(exactPostTime[i]))
-                    ht.Add(exactPostTime[i], showPostTime[i]);
+                if(!hashtable.ContainsKey(exactPostTime[i]))
+                    hashtable.Add(exactPostTime[i], showPostTime[i]);
 
                 TimeSpan timeSpan = TimeSpan.Parse(exactPostTime[i]);
                 string[] showPostSplitted = showPostTime[i].Split(" ");
