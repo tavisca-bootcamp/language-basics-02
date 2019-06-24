@@ -23,7 +23,6 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
             for (int i = 0; i < exactPostTime.Length; i++)
             {
                 for (int j = i + 1; j < exactPostTime.Length; j++)
