@@ -34,37 +34,41 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 }
             }
 
-            String[] result = new string[n];
+            String currentTime = null;
 
     	    for(int i=0;i<n;i++)  {
+                String tempCurrTime = null;
                 String[] timeSplit = exactPostTime[i].Split(":");
-
-                //int hour = int.Parse(timeSplit[0]);
-                //int minute = int.Parse(timeSplit[1]);
-                //int second = int.Parse(timeSplit[2]);
 
                 DateTime date = new DateTime(2019, 6, 24, int.Parse(timeSplit[0]), int.Parse(timeSplit[1]), int.Parse(timeSplit[2]), 24);
 
                 if(showPostTime[i].Contains("seconds"))  {
-                    result[i] = exactPostTime[i];
+                    tempCurrTime = date.ToString("HH:mm:ss");
                 }
 
                 else if(showPostTime[i].Contains("minutes"))  {
                     int mins  = int.Parse(showPostTime[i].Split(" ")[0]);
                     date = date.AddMinutes(mins);
-                    result[i] = date.ToString("HH:mm:ss");
+                    tempCurrTime = date.ToString("HH:mm:ss");
                 }
 
                 else  {
                     int h = int.Parse(showPostTime[i].Split(" " )[0]);
                     date = date.AddHours(h);
-                    result[i] = date.ToString("HH:mm:ss");
+                    tempCurrTime = date.ToString("HH:mm:ss");
+                }
+                
+                if(currentTime != null)  {
+                    if(currentTime.CompareTo(tempCurrTime) < 0)  {
+                        currentTime = tempCurrTime;
+                    }
+                }
+                else  {
+                    currentTime = tempCurrTime;
                 }
             }
 
-            Array.Sort(result);
-
-            return result[n-1];
+            return currentTime;
 
             throw new NotImplementedException();
         }
