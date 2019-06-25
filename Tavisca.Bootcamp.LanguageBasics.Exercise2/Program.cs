@@ -65,7 +65,6 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                  resulttime = CurrentDateTime.ToString("HH:mm:ss");
             }
             return resulttime;
-            throw new NotImplementedException();
         }
     }
 }
