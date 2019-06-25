@@ -23,197 +23,119 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            int[] previousStart = null;
-            int[] previousEnd = null;
+            DateTime previousStart = DateTime.Now;  // initialized to avoid compile-time error
+            DateTime previousEnd = DateTime.Now;  // initialized to avoid compile-time error
+            System.Console.WriteLine("I am Ironman");
 
             for (int i = 0; i < exactPostTime.Length; i++) {
-                DateTime prevDateStart = DateTime.Now,
-                         prevDateEnd = DateTime.Now,
-                        currDateStart = DateTime.Now, 
-                        currDateEnd = DateTime.Now;
-                // Find time intersection of current and previous
-                if (previousStart == null && previousEnd == null) {
-                    string[] currentStartSplit = exactPostTime[i].Split(':');
-                    previousStart = new[] {int.Parse(currentStartSplit[0]), 
-                                           int.Parse(currentStartSplit[1]),
-                                           int.Parse(currentStartSplit[2])};
-
-                    int[] getTime_ = Program.getTime(showPostTime[i]);
-                    
-                    if (getTime_[3] == 1) {
-                        previousStart[0] = (getTime_[0] + previousStart[0]) % 24;
-                        getTime_[0] = previousStart[0];
-                        getTime_[1] = previousStart[1];
-                        getTime_[2] = previousStart[2];
-
-                        getTime_[2] = (getTime_[2] + 59);
-                        if (getTime_[2] >= 60) getTime_[1] += 1;
-                        getTime_[2] %= 60;
-
-                        getTime_[1] = (getTime_[1] + 59);
-                        if (getTime_[1] >= 60) getTime_[0] += 1;
-                        getTime_[1] %= 60;
-                        getTime_[0] %= 24;
-                        
-                        
-                    } else if (getTime_[4] == 1) {
-
-                        previousStart[1] = (getTime_[1] + previousStart[1]);
-                        if (previousStart[1] >= 60) previousStart[0] = (previousStart[0] + 1) % 24;
-                        previousStart[1] %= 60;
-                        getTime_[1] = previousStart[1];
-                        getTime_[0] = previousStart[0];
-                        getTime_[2] = previousStart[2];
-                        
-                        getTime_[2] = (getTime_[2] + 59);
-                        if (getTime_[2] >= 60) getTime_[1] += 1;
-                        getTime_[2] %= 60;
-
-                        if (getTime_[1] >= 60) getTime_[0] += 1;
-                        getTime_[1] %= 60;
-                        getTime_[0] %= 24;
-                        
-                    } else {
-                        getTime_[2] = (getTime_[2] + previousStart[2]);
-                        getTime_[1] = previousStart[1];
-                        getTime_[0] = previousStart[0];
-
-                        if (getTime_[2] >= 60) getTime_[1] += 1;
-                        getTime_[2] %= 60;
-
-                        if (getTime_[1] >= 60) getTime_[0] += 1;
-                        getTime_[1] %= 60;
-                        getTime_[0] %= 24;
-                    }
-                    previousEnd = new[] {getTime_[0], getTime_[1], getTime_[2]};
-                    continue;
+                
+                // Get the first time interval
+                if (i == 0) {
+                    GetPossibleTimeInterval(exactPostTime[i], showPostTime[i], out previousStart, out previousEnd);
                 }
-                // else, update the previous to be intersection
+                
                 else {
-                    string[] currentStartSplit = exactPostTime[i].Split(':');
-                    int[] currentStart = new[] {int.Parse(currentStartSplit[0]),
-                                                int.Parse(currentStartSplit[1]),
-                                                int.Parse(currentStartSplit[2])};
-
-                    int[] getTime_ = Program.getTime(showPostTime[i]);
+                    DateTime currentStart;
+                    DateTime currentEnd;
                     
-                    if (getTime_[3] == 1) {
-                        currentStart[0] = (getTime_[0] + currentStart[0]) % 24;
-                        getTime_[0] = currentStart[0];
-                        getTime_[1] = currentStart[1];
-                        getTime_[2] = currentStart[2];
+                    // Find time interval for current time 
+                    GetPossibleTimeInterval(exactPostTime[i], showPostTime[i], out currentStart, out currentEnd);
 
-                        getTime_[2] = (getTime_[2] + 59);
-                        if (getTime_[2] >= 60) getTime_[1] += 1;
-                        getTime_[2] %= 60;
+                    #region  Find the intersection time interval between current and previous time stamps
+                        // p -> previous, c -> current, S -> start, E -> end
 
-                        getTime_[1] = (getTime_[1] + 59);
-                        if (getTime_[1] >= 60) getTime_[0] += 1;
-                        getTime_[1] %= 60;
-                        getTime_[0] %= 24;
-                        
-                    } else if (getTime_[4] == 1) {
+                        // Timeline: [pS |cS pE| cE]
+                        if (currentStart >= previousStart && currentStart <= previousEnd && currentEnd >= previousEnd) {
+                                previousStart = currentStart;
+                                // previousEnd = previousEnd;  // Statement unnecessary
+                        }
+                        // Timeline: [cS |pS pE| cE]
+                        else if (currentStart <= previousStart && previousEnd <= currentEnd) {
+                                // previousStart = previousStart;  // Statement unnecessary
+                                // previousEnd = previousEnd;  // Statement unnecessary
+                        } 
+                        // Timeline: [cS |pS cE| pE]
+                        else if (previousStart >= currentStart && previousStart <= currentEnd && previousEnd >= currentEnd) {
+                                // previousStart = previousStart;  // Statement unnecessary
+                                previousEnd = currentEnd;
+                        } 
+                        // Timeline: [pS |cS cE| pE]
+                        else if (previousStart <= currentStart && currentEnd <= previousEnd) {
+                                previousStart = currentStart;
+                                previousEnd = currentEnd;
+                        }
+                        // No intersection possible as Timeline: [pS pE cS cE] or [cS cE pS pE] 
+                        else {
+                            return "impossible";
+                        }
+                    #endregion
 
-                        currentStart[1] = (getTime_[1] + currentStart[1]);
-                        if (currentStart[1] >= 60) currentStart[0] = (currentStart[0] + 1) % 24;
-                        currentStart[1] %= 60;
-                        getTime_[1] = currentStart[1];
-                        getTime_[0] = currentStart[0];
-                        getTime_[2] = currentStart[2];
-                        
-                        getTime_[2] = (getTime_[2] + 59);
-                        if (getTime_[2] >= 60) getTime_[1] += 1;
-                        getTime_[2] %= 60;
-
-                        if (getTime_[1] >= 60) getTime_[0] += 1;
-                        getTime_[1] %= 60;
-                        getTime_[0] %= 24;
-                    } else {
-                        getTime_[2] = (getTime_[2] + currentStart[2]);
-                        getTime_[1] = currentStart[1];
-                        getTime_[0] = currentStart[0];
-
-                        if (getTime_[2] >= 60) getTime_[1] += 1;
-                        getTime_[2] %= 60;
-
-                        if (getTime_[1] >= 60) getTime_[0] += 1;
-                        getTime_[1] %= 60;
-                        getTime_[0] %= 24;
-                    }
-                    int[] currentEnd = new[] {getTime_[0], getTime_[1], getTime_[2]};
-
-                    prevDateStart = new DateTime(1, 1, 1, previousStart[0], previousStart[1], previousStart[2]);
-                    currDateStart = new DateTime(1, 1, 1, currentStart[0], currentStart[1], currentStart[2]);
-
-                    if (previousStart[0] <= previousEnd[0]) {
-                        prevDateEnd = new DateTime(1, 1, 1, previousEnd[0], previousEnd[1], previousEnd[2]);
-                    } else {
-                        prevDateEnd = new DateTime(1, 1, 2, previousEnd[0], previousEnd[1], previousEnd[2]);
-                    }
-
-                    if (currentStart[0] <= currentEnd[0]) {
-                        currDateEnd = new DateTime(1, 1, 1, currentEnd[0], currentEnd[1], currentEnd[2]);
-                    } else {
-                        currDateEnd = new DateTime(1, 1, 2, currentEnd[0], currentEnd[1], currentEnd[2]);
-                    }
-
-                    if (DateTime.Compare(currDateStart, prevDateStart) >= 0 &&
-                        DateTime.Compare(currDateStart, prevDateEnd) <= 0 &&
-                        DateTime.Compare(currDateEnd, prevDateEnd) >=0) {
-                            previousStart = new[] {currDateStart.Hour, currDateStart.Minute, currDateStart.Second};
-                            previousEnd = new[] {prevDateEnd.Hour, prevDateEnd.Minute, prevDateEnd.Second};
-                    } else if (DateTime.Compare(currDateStart, prevDateStart) <= 0 &&
-                                DateTime.Compare(prevDateEnd, currDateEnd) <=0 ) {
-                            previousStart = new[] {prevDateStart.Hour, prevDateStart.Minute, prevDateStart.Second};
-                            previousEnd = new[] {prevDateEnd.Hour, prevDateEnd.Minute, prevDateEnd.Second};
-                    } else if (DateTime.Compare(prevDateStart, currDateStart) >= 0 &&
-                        DateTime.Compare(prevDateStart, currDateEnd) <= 0 &&
-                        DateTime.Compare(prevDateEnd, currDateEnd) >= 0) {
-                            previousStart = new[] {prevDateStart.Hour, prevDateStart.Minute, prevDateStart.Second};
-                            previousEnd = new[] {currDateEnd.Hour, currDateEnd.Minute, currDateEnd.Second};
-                    } else if (DateTime.Compare(prevDateStart, currDateStart) <= 0 &&
-                                DateTime.Compare(currDateEnd, prevDateEnd) <= 0) {
-                            previousStart = new[] {currDateStart.Hour, currDateStart.Minute, currDateStart.Second};
-                            previousEnd = new[] {currDateEnd.Hour, currDateEnd.Minute, currDateEnd.Second};
-                    } else {
-                        return "impossible";
-                    }
                 }
             }
 
             // return lexicographically smallest string
-            if (previousEnd[0] < previousStart[0]) {
+            if (previousStart.DayOfWeek != previousEnd.DayOfWeek) {
                 return "00:00:00";
             } 
-            string hr = $"{previousStart[0]}";
-            if (hr.Length == 1) hr = "0" + hr;
-            string min = $"{previousStart[1]}";
-            if (min.Length == 1) min = "0" + min;
-            string sec = $"{previousStart[2]}";
-            if (sec.Length == 1) sec = "0" + sec;
+            #region Constructing correct format->  hh:mm:ss
+                string hr = $"{previousStart.Hour}";
+                if (hr.Length == 1) hr = "0" + hr;
+                string min = $"{previousStart.Minute}";
+                if (min.Length == 1) min = "0" + min;
+                string sec = $"{previousStart.Second}";
+                if (sec.Length == 1) sec = "0" + sec;
+            #endregion
+
             return $"{hr}:{min}:{sec}";
         }
 
+        public static void GetPossibleTimeInterval(string exactPostTime, string showPostTime, out DateTime start, out DateTime end) {
+            #region Separate hh:mm:ss
+                string[] time_t = exactPostTime.Split(':');
+                int[] time_t_int = new[] {int.Parse(time_t[0]), int.Parse(time_t[1]), int.Parse(time_t[2])};
+            #endregion
+            
+            #region Convert to DateTime Object
+                start = new DateTime(1, 1, 1, time_t_int[0], time_t_int[1], time_t_int[2]);
+                end = new DateTime(1, 1, 1, time_t_int[0], time_t_int[1], time_t_int[2]);
+            #endregion
+
+            // Posted X time ago. Get the time separated
+            int[] getTimeIncrement = Program.getTime(showPostTime);
+            
+            #region Add the time increment to the time
+                if (getTimeIncrement[3] == 1) {
+                    // X hours
+                    start = start.AddHours(getTimeIncrement[0]);
+                } else if (getTimeIncrement[4] == 1) {
+                    // X minutes 
+                    start = start.AddMinutes(getTimeIncrement[1]);
+                } else {
+                    // few seconds
+                    // start = start;  // statement unnecessary
+                }
+                end += new TimeSpan(getTimeIncrement[0], getTimeIncrement[1], getTimeIncrement[2]);
+            #endregion
+            
+            // As we are only adding hr:min:sec we don't care of their of their days if their start and end
+            // are on the same day.
+            #region If both on day 2, then change their day to day 1
+                if (start.Day == 2 && end.Day == 2) {
+                    start = new DateTime (1, 1, 1, start.Hour, start.Minute, start.Second); // day 1
+                    end = new DateTime (1, 1, 1, end.Hour, end.Minute, end.Second); // day 1
+                }
+            #endregion
+        }
+
+        // returns: {hr, min, sec, isPostedHoursAgo, isPostedMinutesAgo, isPostedSecondsAgo}
         public static int[] getTime(string post) {
             var time_ = post.Split(' ');
 
-            int duration;
-            if (time_[0].Length == 3) {
-                duration = 59;
-            } else {
-                duration = int.Parse(time_[0]);
-            }
+            if (time_[0] == "few") return new[] {0, 0, 59, 0, 0, 1};  // Posted: few seconds ago
 
-            // 3rd index: posted hours ago?
-            // 4rd index: posted minutes ago?
-            // 5rd index: posted seconds ago?
-            if (post.IndexOf("seconds") != -1) {
-                return new[] {0, 0, duration, 0, 0, 1};
-            } else if (post.IndexOf("minutes") != -1) {
-                return new[] {0, duration, 0, 0, 1, 0};
-            } else {
-                return new[] {duration, 0, 0, 1, 0, 0};
-            }
+            if (time_[1] == "minutes") return new[] {0, int.Parse(time_[0]), 59, 0, 1, 0};  // X minutes ago
+
+            return new[] {int.Parse(time_[0]), 59, 0, 1, 0, 0};  // X hours ago
         }
     }
 }
