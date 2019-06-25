@@ -23,11 +23,12 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         }
         public static string GetCurrentTime(string[] exactTime, string[] showTime)
         {
-            var cTime = new List<TimeSpan>();
+            var currentTime = new List<TimeSpan>();
+			
             for (int i=0;i<exactTime.Length;i++)
             {
-				//Impossible Case
-                for(int j=i+1;j<exactTime.Length;j++)
+		//Impossible Case
+		for(int j=i+1;j<exactTime.Length;j++)
                 {
                     if(exactTime[i]==exactTime[j])
                     {
@@ -35,35 +36,41 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                             return "impossible";
                     }
                 }
-                TimeSpan timeSpan = TimeSpan.Parse(exactTime[i]);
-                //Case 1
-				if (showTime[i].Contains("few"))
-                {
-                    TimeSpan t = new TimeSpan(timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
-                    cTime.Add(t);
-                }
-				//Case 2
-                else if(showTime[i].Contains("minutes"))
-                {
-                    string minute = showTime[i].Split(' ')[0];
-                    timeSpan = timeSpan.Add(TimeSpan.FromMinutes(double.Parse(minute)));
-                    TimeSpan t = new TimeSpan(timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
-                    cTime.Add(t);
-                }
-				//Case 3 
+                
+		TimeSpan exactTimeSpan = TimeSpan.Parse(exactTime[i]);
+		string time = showTime[i].Split(' ')[0];
+				 
+		if (showTime[i].Contains("few"))
+                    currentTime.Add(GetCurrentTimeSecond(exactTimeSpan));
+                else if(showTime[i].Contains("minutes"))     
+                    currentTime.Add(GetCurrentTimeMinute(exactTimeSpan,time));		  
                 else
-                {
-                    string hours = showTime[i].Split(' ')[0];
-                    timeSpan = timeSpan.Add(TimeSpan.FromHours(double.Parse(hours)));
-                    TimeSpan t = new TimeSpan(timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
-                    cTime.Add(t);
-                }
-
+                    currentTime.Add(GetCurrentTimeHour(exactTimeSpan,time));
             }
-            cTime.Sort();
-			int minIndex=cTime.Count - 1;
-            return cTime[minIndex].ToString();
-            throw new NotImplementedException();
+			
+            currentTime.Sort();
+			int minIndex=currentTime.Count - 1;
+            return currentTime[minIndex].ToString();
         }
+		
+	public static TimeSpan GetCurrentTimeSecond(TimeSpan exactTimeSpan)
+	{	
+		TimeSpan temp = new TimeSpan(exactTimeSpan.Hours, exactTimeSpan.Minutes, exactTimeSpan.Seconds);
+		return temp;
+	}
+		
+	public static TimeSpan GetCurrentTimeMinute(TimeSpan exactTimeSpan,string time)
+	{   
+		exactTimeSpan = exactTimeSpan.Add(TimeSpan.FromMinutes(double.Parse(time)));
+                TimeSpan temp = new TimeSpan(exactTimeSpan.Hours, exactTimeSpan.Minutes, exactTimeSpan.Seconds);
+		return temp;
+	}
+		
+	public static TimeSpan GetCurrentTimeHour(TimeSpan exactTimeSpan,string time)
+	{
+            	exactTimeSpan = exactTimeSpan.Add(TimeSpan.FromHours(double.Parse(time)));
+            	TimeSpan temp = new TimeSpan(exactTimeSpan.Hours, exactTimeSpan.Minutes, exactTimeSpan.Seconds);		
+		return temp;
+	}	
     }
 }
