@@ -23,59 +23,86 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            int l=exactPostTime.Length,EPT,SPT1,SPT2;
-            int[] CT1=new int[l];
-            int[] CT2=new int[l];
-            for(int i=0;i<l;i++){
-                String[] str=exactPostTime[i].Split(":");
-                EPT=(Convert.ToInt32(str[0])*3600)+(Convert.ToInt32(str[1])*60)+Convert.ToInt32(str[2]);
-                str=showPostTime[i].Split(" ");SPT1=0;SPT2=0;
+            var lengthOfTimeArray=exactPostTime.Length; 
+            int exactPostTimeInSec,showPostTimeMin,showPostTimeMax;
+            // To store min current time for every exact post time
+            var currentTimeMin=new int[lengthOfTimeArray];
+            // To store max current time for every exact post time
+            var currentTimeMax=new int[lengthOfTimeArray];
+
+            //Storing values in arrays declared above for current time calculation
+            for(int i=0;i<lengthOfTimeArray;i++){
+                //Evaluting exact post time in sec. Also checking if input of exact post time is in right format
+                string[] str=exactPostTime[i].Split(":");
+                if((str.Length==3)&&(str[0]!=null)&&(str[1]!=null)&&(str[2]!=null))
+                exactPostTimeInSec=(Convert.ToInt32(str[0])*3600)+(Convert.ToInt32(str[1])*60)+Convert.ToInt32(str[2]);
+                else
+                return "impossible";
+                //Verifying the show post time is in right format and storing it in an array
+                str=showPostTime[i].Split(" ");
+                if((str.Length!=3))
+                return "impossible";
+                if((str[0]==null)||(str[1]==null)||(str[2]==null))
+                return "impossible";
+                //calculation of min and max show post time in seconds
                 if(str[1]=="seconds"){
-                    SPT1=0;
-                    SPT2=59;
+                    showPostTimeMin=0;
+                    showPostTimeMax=59;
                 }
                 else if(str[1]=="minutes"){
-                    SPT1=Convert.ToInt32(str[0])*60;
-                    SPT2=SPT1+59;
+                    showPostTimeMin=Convert.ToInt32(str[0])*60;
+                    showPostTimeMax=showPostTimeMin+59;
                 }
                 else{
-                    SPT1=Convert.ToInt32(str[0])*60*60;
-                    SPT2=3599+SPT1;
+                    showPostTimeMin=Convert.ToInt32(str[0])*60*60;
+                    showPostTimeMax=3599+showPostTimeMin;
                 }
-                CT1[i]=(EPT+SPT1)%86400;
-                CT2[i]=(EPT+SPT2)%86400;
+                //calculation of max and min current time in seconds
+                currentTimeMin[i]=(exactPostTimeInSec+showPostTimeMin)%86400;
+                currentTimeMax[i]=(exactPostTimeInSec+showPostTimeMax)%86400;
             }
-            int min=CT1[0],max=CT2[0];
-            for(int i=1;i<l;i++){
-                if(CT1[i]>min)
-                min=CT1[i];
-                if(CT2[i]<max)
-                max=CT2[i];
+
+            //calculating max and min value for current time 
+            int minOfCurrentTime=currentTimeMin[0],maxOfCurrentTime=currentTimeMax[0];
+            for(int i=1;i<lengthOfTimeArray;i++){
+                if(currentTimeMin[i]>minOfCurrentTime)
+                minOfCurrentTime=currentTimeMin[i];
+                if(currentTimeMax[i]<maxOfCurrentTime)
+                maxOfCurrentTime=currentTimeMax[i];
             }
-            if(min<=max){
-                int HH,MM,SS;
-                SS=min%60;
-                min=min/60;
-                MM=min%60;
-                min=min/60;
-                HH=min;
-                String s;
-                if(HH>9)
-                s=HH+":";
+            //if min current time is less than max current time
+            if(minOfCurrentTime<=maxOfCurrentTime){
+                //calculation of current time in hours, mins and seconds
+                int currentTimeHH,currentTimeMM,currentTimeSS;
+                //minOfCurrentTime in sec
+                currentTimeSS=minOfCurrentTime%60;
+                //minOfCurrentTime in mins
+                minOfCurrentTime=minOfCurrentTime/60;
+                currentTimeMM=minOfCurrentTime%60;
+                //minOfCurrentTime in hours
+                minOfCurrentTime=minOfCurrentTime/60;
+                currentTimeHH=minOfCurrentTime;
+                //Converting time into string format
+                string currentTime;
+                //adding HH part
+                if(currentTimeHH>9)
+                currentTime=currentTimeHH+":";
                 else
-                s="0"+HH+":";
-                if(MM>9)
-                s=s+MM+":";
+                currentTime="0"+currentTimeHH+":";
+                //adding MM part
+                if(currentTimeMM>9)
+                currentTime=currentTime+currentTimeMM+":";
                 else
-                s=s+"0"+MM+":";
-                if(SS>9)
-                s=s+SS;
+                currentTime=currentTime+"0"+currentTimeMM+":";
+                //adding SS part
+                if(currentTimeSS>9)
+                currentTime=currentTime+currentTimeSS;
                 else
-                s=s+"0"+SS;
-                return s;
+                currentTime=currentTime+"0"+currentTimeSS;
+                return currentTime;
             }
+            //if min current time is greater than max current time
             return "impossible";
-            throw new NotImplementedException();
         }
     }
 }
