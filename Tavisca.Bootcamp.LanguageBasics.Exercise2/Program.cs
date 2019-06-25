@@ -49,7 +49,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             }
 			
             currentTime.Sort();
-			int minIndex=currentTime.Count - 1;
+	    int minIndex=currentTime.Count - 1;
             return currentTime[minIndex].ToString();
         }
 		
