@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
@@ -20,11 +21,56 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             var showTimesCsv = string.Join(", ", showTimes);
             Console.WriteLine($"[{postTimesCsv}], [{showTimesCsv}] => {result}");
         }
-
-        public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
+        public static string GetCurrentTime(string[] exactTime, string[] showTime)
         {
-            // Add your code here.
-            throw new NotImplementedException();
+            var currentTime = new List<TimeSpan>();
+			
+            for (int i=0;i<exactTime.Length;i++)
+            {
+		//Impossible Case
+		for(int j=i+1;j<exactTime.Length;j++)
+                {
+                    if(exactTime[i]==exactTime[j])
+                    {
+                        if (showTime[i] != showTime[j])
+                            return "impossible";
+                    }
+                }
+                
+		TimeSpan exactTimeSpan = TimeSpan.Parse(exactTime[i]);
+		string time = showTime[i].Split(' ')[0];
+				 
+		if (showTime[i].Contains("few"))
+                    currentTime.Add(GetCurrentTimeSecond(exactTimeSpan));
+                else if(showTime[i].Contains("minutes"))     
+                    currentTime.Add(GetCurrentTimeMinute(exactTimeSpan,time));		  
+                else
+                    currentTime.Add(GetCurrentTimeHour(exactTimeSpan,time));
+            }
+			
+            currentTime.Sort();
+	    int minIndex=currentTime.Count - 1;
+            return currentTime[minIndex].ToString();
         }
+		
+	public static TimeSpan GetCurrentTimeSecond(TimeSpan exactTimeSpan)
+	{	
+		TimeSpan temp = new TimeSpan(exactTimeSpan.Hours, exactTimeSpan.Minutes, exactTimeSpan.Seconds);
+		return temp;
+	}
+		
+	public static TimeSpan GetCurrentTimeMinute(TimeSpan exactTimeSpan,string time)
+	{   
+		exactTimeSpan = exactTimeSpan.Add(TimeSpan.FromMinutes(double.Parse(time)));
+                TimeSpan temp = new TimeSpan(exactTimeSpan.Hours, exactTimeSpan.Minutes, exactTimeSpan.Seconds);
+		return temp;
+	}
+		
+	public static TimeSpan GetCurrentTimeHour(TimeSpan exactTimeSpan,string time)
+	{
+            	exactTimeSpan = exactTimeSpan.Add(TimeSpan.FromHours(double.Parse(time)));
+            	TimeSpan temp = new TimeSpan(exactTimeSpan.Hours, exactTimeSpan.Minutes, exactTimeSpan.Seconds);		
+		return temp;
+	}	
     }
 }
