@@ -1,19 +1,3 @@
-
-
-/*
-
-Created By Ragu Balagi Karuppaiah.
-
-Date : 22.06.2019
-
-
-Solution For Second Assignment Second Problem.(Tavisca)
-
-
-
-*/
-
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,139 +6,121 @@ using System.Threading.Tasks;
 
 namespace SecondProblem
 {
-    public class ForumPostEasy
+    public static class ForumPostEasy
     {
-        string PostTime;
-        
-        public string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
+       
+        static int[] sumTime;
+        static int index = 0;
+
+
+        public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            
+
             if(exactPostTime.Length > 1)
             {
-                for (int i = 0; i < exactPostTime.Length; i++)
+                for (int i = 0; i < exactPostTime.Length-1; i++)
                 {
-                       for(int j=i+1; j<exactPostTime.Length; j++)
+                    if (exactPostTime[i].Equals(exactPostTime[i+1]))
                     {
-                        if(exactPostTime[i].Equals(exactPostTime[j]))
+                        if (!showPostTime[i].Equals(showPostTime[i+1]))
                         {
-                            if(!showPostTime[i].Equals(showPostTime[j]))
-                            {
-                                return "impossible";
-                            }
+                            return "impossible";
                         }
                     }
                 }
-            
+            }
+
             string[] results = new string[exactPostTime.Length];
-            int[] sum = new int[exactPostTime.Length];
-            int mintime = 0;
-            string time;
+            sumTime = new int[exactPostTime.Length];
+            int minValueIndex = 0;
             for(int i =0; i< exactPostTime.Length; i++)
             {
-                //Console.WriteLine(exactPostTime[i]);
+                int showTime;
 
-                int hr = int.Parse(exactPostTime[i].Split(':')[0]);
-                int min = int.Parse(exactPostTime[i].Split(':')[1]);
-                int sec = int.Parse(exactPostTime[i].Split(':')[2]);
+                int hour = int.Parse(exactPostTime[i].Split(':')[0]);
+                int minutes = int.Parse(exactPostTime[i].Split(':')[1]);
+                int seconds = int.Parse(exactPostTime[i].Split(':')[2]);
 
 
                 if(showPostTime[i].Contains("seconds"))
                 {
-                    int newsec = sec + 59;
-
-                    if(newsec>60)
-                    {
-                        min = min + 1;
-                        sec = sec % 60;
-                    }
-                    if(min>60)
-                    {
-                        hr = hr + 1;
-                        min = min % 60;
-                    }
-
-                    if(hr>23)
-                    {
-                        hr = hr % 24;
-
-                    }
-
-                    time = hr + ":" + min + ":" + sec;
-                    sum[i] = hr + min + sec;
-                    results[i] = time; 
-
+                    showTime = 59;
+                    results[i] = AddTime("seconds", hour, minutes, seconds, showTime);
                 }
                 else if(showPostTime[i].Contains("minutes"))
                 {
-                    int st = int.Parse(showPostTime[i].Split(' ')[0]);
+                    int.TryParse(showPostTime[i].Split(' ')[0], out showTime);
 
-                    int newmin = min + st;
-                    if (newmin > 60)
-                    {
-                        hr = hr + 1;
-                        min = newmin % 60;
-                    }
-
-                    if (hr > 23)
-                    {
-                        hr = hr % 24;
-
-                    }
-
-                    time = hr + ":" + min + ":" + sec;
-                    sum[i] = hr + min + sec;
-                    results[i] = time;
+                    results[i] = AddTime("minutes", hour, minutes, seconds, showTime);
 
 
                 }
                 else if(showPostTime[i].Contains("hours"))
                 {
-                    int st = int.Parse(showPostTime[i].Split(' ')[0]);
+                    int.TryParse(showPostTime[i].Split(' ')[0], out showTime);
 
-                    int newhr = hr + st;
+                    results[i] = AddTime("hours", hour, minutes, seconds, showTime);
+                }          
 
-                    if(newhr>24)
-                    {
-                        hr = newhr % 24;
-                    }
-
-                    time = hr + ":" + min + ":" + sec;
-                    sum[i] = hr + min + sec;
-
-                    results[i] = time;
-                }
-
-
-                //Console.WriteLine(hr + "" + min + "" + sec);
-
-
-                /*if (showPostTime[i].Equals("few seconds ago"))
-                {
-                    PostTime = exactPostTime[i];
-                }*/
-
-            }
-            /*
-            for(int i=0; i< showPostTime.Length; i++)
-            {
-                Console.WriteLine(showPostTime[i]);
-            }*/
+            }          
           
-            for(int i=0; i<sum.Length; i++)
+            for(int i=0; i<sumTime.Length; i++)
             {
-                int min = sum[0];
+                int minValueIndexValue = sumTime[0];
 
-                if(min>sum[i])
+                if(minValueIndexValue>sumTime[i])
                 {
-                    min = sum[i];
-                    mintime = i;
+                    minValueIndexValue = sumTime[i];
+                    minValueIndex = i;
                 }
             }
 
 
 
 
-            return results[mintime];
+            return results[minValueIndex];
+        }
+
+        public static string AddTime(string timeVariable, int hour, int minutes, int seconds, int showTime)
+        {
+            
+            if(timeVariable.Equals("seonds"))
+            {
+                seconds= seconds + showTime;
+            }
+            else if(timeVariable.Equals("minutes"))
+            {
+                minutes = minutes + showTime;
+            }
+            else if(timeVariable.Equals("hours"))
+            {
+                hour = hour + showTime;
+            }
+
+            
+
+            if (seconds > 60)
+            {
+                minutes = minutes + 1;
+                seconds = seconds % 60;
+            }
+            if (minutes > 60)
+            {
+                hour = hour + 1;
+                minutes = minutes % 60;
+            }
+
+            if (hour > 23)
+            {
+                hour = hour % 24;
+
+            }
+
+            
+            sumTime[index++] = hour + minutes + seconds;
+
+
+            return hour + ":" + minutes + ":" + seconds;
         }
     }
     class Program
@@ -164,14 +130,14 @@ namespace SecondProblem
             Console.WriteLine("Enter the Array Limits");
             string arraySize = Console.ReadLine();
             int length = int.Parse(arraySize);
-            string[] ept = new string[length];
-            string[] spt = new string[length];
+            string[] exactPostTime = new string[length];
+            string[] showPostTime = new string[length];
 
             Console.WriteLine("Enter the exact post time");
 
             for(int i=0; i<length; i++)
             {
-                ept[i] = Console.ReadLine();
+                exactPostTime[i] = Console.ReadLine();
                 
             }
 
@@ -179,11 +145,11 @@ namespace SecondProblem
 
             for(int i=0; i<length; i++)
             {
-                spt[i] = Console.ReadLine();
+                showPostTime[i] = Console.ReadLine();
             }
 
-            ForumPostEasy forumPostEasy = new ForumPostEasy();
-            Console.WriteLine(forumPostEasy.GetCurrentTime(ept, spt));
+            
+            Console.WriteLine(ForumPostEasy.GetCurrentTime(exactPostTime, showPostTime));
 
 
         }
