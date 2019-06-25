@@ -25,54 +25,53 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
             // Add your code here.
-            String[] currentTime=new String[exactPostTime.Length];
-            String FinalCurrentTime="";
-            int i,j;
+            string[] currentTime=new string[exactPostTime.Length];
+            string FinalCurrentTime="";
+            int indexTime,indexIncrementTime;
             
             //For impossible cases
-            for(i=0;i<exactPostTime.Length;i++)
-                for(j=i+1;j<exactPostTime.Length;j++)
-                    if(string.Compare(exactPostTime[i],exactPostTime[j])==0)
-                        if(string.Compare(showPostTime[i],showPostTime[j])!=0)
+            for(indexTime=0;indexTime<exactPostTime.Length;indexTime++)
+                for(indexIncrementTime=indexTime+1;indexIncrementTime<exactPostTime.Length;indexIncrementTime++)
+                    if(string.Compare(exactPostTime[indexTime],exactPostTime[indexIncrementTime])==0)
+                        if(string.Compare(showPostTime[indexTime],showPostTime[indexIncrementTime])!=0)
                             return "impossible";
            
-            //int  incr=0;
-            for(i=0;i<exactPostTime.Length;i++)
+            for(indexTime=0;indexTime<exactPostTime.Length;indexTime++)
             {
-                if(showPostTime[i].Contains("seconds"))
+                if(showPostTime[indexTime].Contains("seconds"))
                 {
-                    currentTime[i]=exactPostTime[i];
+                    currentTime[indexTime]=exactPostTime[indexTime];
                 }
-                else if(showPostTime[i].Contains("minutes"))
+                else if(showPostTime[indexTime].Contains("minutes"))
                 {
                     DateTime date;
-                    bool ifSuccess1=DateTime.TryParse(exactPostTime[i], out date);
+                    bool ifSuccess1=DateTime.TryParse(exactPostTime[indexTime], out date);
                     int incr1;
-                    bool ifSuccess2=int.TryParse(showPostTime[i].Substring(0,showPostTime[i].IndexOf(" ")), out incr1);
+                    bool ifSuccess2=int.TryParse(showPostTime[indexTime].Substring(0,showPostTime[indexTime].IndexOf(" ")), out incr1);
                     DateTime cTime=date.AddMinutes(incr1);
-                    currentTime[i]=cTime.ToString("HH:mm:ss",CultureInfo.InvariantCulture);
+                    currentTime[indexTime]=cTime.ToString("HH:mm:ss",CultureInfo.InvariantCulture);
                 }
-                else if(showPostTime[i].Contains("hours"))
+                else if(showPostTime[indexTime].Contains("hours"))
                 {
                     DateTime date;
-                    bool ifSuccess1=DateTime.TryParse(exactPostTime[i], out date);
+                    bool ifSuccess1=DateTime.TryParse(exactPostTime[indexTime], out date);
                     int incr2;
-                    bool ifSuccess2=int.TryParse(showPostTime[i].Substring(0,showPostTime[i].IndexOf(" ")), out incr2);
+                    bool ifSuccess2=int.TryParse(showPostTime[indexTime].Substring(0,showPostTime[indexTime].IndexOf(" ")), out incr2);
                     DateTime cTime=date.AddHours(incr2);
-                    currentTime[i]=cTime.ToString("HH:mm:ss",CultureInfo.InvariantCulture);
+                    currentTime[indexTime]=cTime.ToString("HH:mm:ss",CultureInfo.InvariantCulture);
                 }
             }
             //For multiple solutions: CurrentTime that comes first lexicographically.
             if(currentTime.Length>1)
-                    for(i=0;i<currentTime.Length-1;i++)
+                    for(indexTime=0;indexTime<currentTime.Length-1;indexTime++)
                     {
-                        if(string.Compare(currentTime[i],currentTime[i+1])!=0)
+                        if(string.Compare(currentTime[indexTime],currentTime[indexTime+1])!=0)
                         {
-                            if(string.Compare(currentTime[i],currentTime[i+1])>0)
-                                FinalCurrentTime=currentTime[i];
+                            if(string.Compare(currentTime[indexTime],currentTime[indexTime+1])>0)
+                                FinalCurrentTime=currentTime[indexTime];
                         }
                         else
-                            FinalCurrentTime=currentTime[i];
+                            FinalCurrentTime=currentTime[indexTime];
                     }
             else
                 FinalCurrentTime=currentTime[0];
