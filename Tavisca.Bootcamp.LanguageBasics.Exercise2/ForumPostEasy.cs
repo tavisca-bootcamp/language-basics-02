@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise2
 {
-    class ForumPostEasy
+    public static class ForumPostEasy
     {
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
@@ -19,29 +19,24 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise2
                     }
                 }
                 TimeSpan timeSpan = TimeSpan.Parse(exactPostTime[i]);
-                if (showPostTime[i].Contains("few"))
-                {
-                    TimeSpan time = new TimeSpan(timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
-                    currentTime.Add(time);
-                }
-                else if (showPostTime[i].Contains("minutes"))
-                {
-                    string minute = showPostTime[i].Split(' ')[0];
-                    timeSpan = timeSpan.Add(TimeSpan.FromMinutes(double.Parse(minute)));
-                    TimeSpan time = new TimeSpan(timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
-                    currentTime.Add(time);
-                }
-                else
-                {
-                    string hours = showPostTime[i].Split(' ')[0];
-                    timeSpan = timeSpan.Add(TimeSpan.FromHours(double.Parse(hours)));
-                    TimeSpan time = new TimeSpan(timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
-                    currentTime.Add(time);
-                }
-
+                TimeSpan time = GetTimeSpan(timeSpan, showPostTime[i]);
+                currentTime.Add(time);
             }
             currentTime.Sort();
             return currentTime[currentTime.Count - 1].ToString();
+        }
+        public static TimeSpan GetTimeSpan(TimeSpan timeSpan,string showPostTime)
+        {
+            string time = showPostTime.Split(' ')[0];
+            if (showPostTime.Contains("minutes"))
+            {
+                timeSpan = timeSpan.Add(TimeSpan.FromMinutes(double.Parse(time)));
+            }
+            if (showPostTime.Contains("hours"))
+            {
+                timeSpan = timeSpan.Add(TimeSpan.FromHours(double.Parse(time)));
+            }
+            return new TimeSpan(timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
         }
     }
 }
