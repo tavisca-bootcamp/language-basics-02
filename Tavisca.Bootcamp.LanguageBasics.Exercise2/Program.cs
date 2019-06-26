@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Linq;
 
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
-    public static class Program
+    public static class ForumPostEasy
     {
         static void Main(string[] args)
         {
@@ -24,62 +24,71 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            for (int i = 0; i < exactPostTime.Length; i++)
+            string contradictoryTime = "impossible";
+            for (int index = 0; index < exactPostTime.Length; index++)
             {
-                for (int j = i + 1; j < exactPostTime.Length; j++)
+                for (int position = index + 1; position < exactPostTime.Length; position++)
                 {
-                    if (exactPostTime[i] == exactPostTime[j])
-                        if (showPostTime[i] != showPostTime[j])
-                            return "impossible";
+                    if (exactPostTime[index] == exactPostTime[position])
+                        if (showPostTime[index] != showPostTime[position])
+                            return contradictoryTime;
                 }
             }
 
             
-            string[] s = new string[exactPostTime.Length];
+            string[] currentTime = new string[exactPostTime.Length];
 
             
-            for (int i = 0; i < exactPostTime.Length; i++)
+            for (int index = 0; index < exactPostTime.Length; index++)
             {
 
                 
-                string[] split = exactPostTime[i].Split(":");
-                DateTime dateTime = new DateTime(2000, 1, 01, Convert.ToInt32(split[0]), Convert.ToInt32(split[1]), Convert.ToInt32(split[2]));
+                string[] split = exactPostTime[index].Split(":");
+                DateTime timeOfDay = new DateTime(2000, 1, 01, Convert.ToInt32(split[0]), Convert.ToInt32(split[1]), Convert.ToInt32(split[2]));
 
                                 
                 //for 00:00:00 to 00:00:59
-                if (showPostTime[i].Contains("seconds"))
+                if (showPostTime[index].Contains("seconds"))
                 {
-                    s[i] = exactPostTime[i];
+                    currentTime[index] = exactPostTime[index];
                 }
 
                 //for 00:01:00 to 00:59:59
-                else if (showPostTime[i].Contains("minutes"))
+                else if (showPostTime[index].Contains("minutes"))
                 {
 
-                    string min = showPostTime[i].Split(" ")[0];                
-                    TimeSpan time = new TimeSpan(0, Convert.ToInt32(min), 0);  
-                    s[i] = dateTime.Add(time).ToString().Split(" ")[1];  
+                    string min = showPostTime[index].Split(" ")[0];                
+                    TimeSpan time = new TimeSpan(0, Convert.ToInt32(min),0);
+                    currentTime[index] = timeOfDay.Add(time).ToString().Split(" ")[1];  
 
                 }
 
                 //for 01:00:00 and before
-                else if (showPostTime[i].Contains("hours"))
+                else if (showPostTime[index].Contains("hours"))
                 {
 
-                    string hours = showPostTime[i].Split(" ")[0];
+                    string hours = showPostTime[index].Split(" ")[0];
                     TimeSpan timeSpan = new TimeSpan(Convert.ToInt32(hours), 0, 0);
-                    s[i] = dateTime.Add(timeSpan).ToString().Split(" ")[1];
+                    currentTime[index] = timeOfDay.Add(timeSpan).ToString().Split(" ")[1];
 
+                }
+
+                //Exception handling for empty strings
+                try
+                {
+                    if (showPostTime[index].Length == 0)
+                        throw new NullReferenceException();
+                }
+                catch (NullReferenceException ex)
+                {
+                    Console.WriteLine("Empty post time value " + ex);
+                    return contradictoryTime;
                 }
             }
 
-            Array.Sort(s);
-            return s[(exactPostTime.Length - 1)];
 
-
-
-
-            throw new NotImplementedException();
+            Array.Sort(currentTime);
+            return currentTime[(exactPostTime.Length - 1)];
             
         }
         }
