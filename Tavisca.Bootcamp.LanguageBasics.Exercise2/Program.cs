@@ -23,15 +23,14 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
-            String result= "";
-            String eh, es, em, sh = "", sm = "";
-            int HH, MM, SS = 0, hour = 0, min = 0;
+           string result= "";
+            //condition if only one exactPostTime is given
             if(exactPostTime.Length == 1)
             {
                 result = exactPostTime[0];
                 return result;
             }
+            //
             for(int i = 0; i < exactPostTime.Length; i++)
             {
                 for(int j=0; j<exactPostTime.Length; j++)
@@ -42,40 +41,40 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                     }
 
                 }
-                eh = exactPostTime[i].Split(":")[0];
-                em = exactPostTime[i].Split(":")[1];
-                HH = int.Parse(eh);
-                MM = int.Parse(em);
+                var exactHour = exactPostTime[i].Split(":")[0];
+                var HH = int.Parse(exactHour);
+                var exactMinute = exactPostTime[i].Split(":")[1];         
+                var MM = int.Parse(exactMinute);
+                var exactSecond = exactPostTime[i].Split(":")[2];
+                var SS = int.Parse(exactSecond);
+                // if showPostTime contain hour then the total number of hour ago is added to HH which shows current hour 
                 if(showPostTime[i].Contains("hours"))
                 {
-                    sh = showPostTime[i].Split(" ")[0];
-                    hour = int.Parse(sh);
-                    HH += hour;
+                    var shownHour = showPostTime[i].Split(" ")[0];
+                    HH += int.Parse(shownHour);
                     if(HH > 24)
                     {
                         HH -= 24;
                     }
                 }
+                // if showPostTime contain minutes then the total number of minutes ago is added to MM which shows current minute 
                 if(showPostTime[i].Contains("minutes"))
                 {
-                    sm = showPostTime[i].Split(" ")[0];
-                    min = int.Parse(sm);
-                    MM += min;
-                    if(MM > 59)
+                    var shownMinute = showPostTime[i].Split(" ")[0];
+                    MM += int.Parse(shownMinute);
+                    if(MM > 59)// if current minute is greater tha 59 then hour is increased buy one 
                     {
                         MM -= 60;
                         HH++;
                     }
-                    if(HH == 24)
-                        HH=0;
-                
-                    es = exactPostTime[i].Split(":")[2];
-                    SS = int.Parse(es);
+                    if(HH == 24)//value of HH cannot be 24
+                        HH = 0;
+
                     HH.ToString();
                     MM.ToString();
                     SS.ToString();
 
-                    if(HH.Equals(0)|| SS.Equals(0))
+                    if(HH.Equals(0))
                         result = "00" + ":" + MM + ":" + SS;
                     else if(MM.Equals(0))
                         result = HH + ":" + "00" + ":" + SS;
@@ -83,10 +82,9 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                         result = HH + ":" + MM + ":" + "00";
                     else
                         result = HH + ":" + MM + ":" + SS;
-                    return result;
                 }
             }
-            throw new NotImplementedException();
+            return result;
         }
     }
 }
