@@ -26,104 +26,15 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         {
             // Add your code here.
             TimeSpan[] minTimeSpan = new TimeSpan[exactPostTime.Length], maxTimeSpan = new TimeSpan[exactPostTime.Length];
-
-            if (showPostTime[0].Contains("second"))
+            CalculateMinAndMaxTimePossible(minTimeSpan, maxTimeSpan, 0, exactPostTime, showPostTime);
+            for (int i = 1;i < exactPostTime.Length; i++)
             {
-                minTimeSpan[0] = new TimeSpan(Int32.Parse(exactPostTime[0].Split(':')[0]), Int32.Parse(exactPostTime[0].Split(':')[1]), Int32.Parse(exactPostTime[0].Split(':')[2]));
-                maxTimeSpan[0] = new TimeSpan(0, 0, 59)+minTimeSpan[0];
-                if (minTimeSpan[0].ToString().Contains("."))
-                {
-                    String[] tempString = minTimeSpan[0].ToString().Split('.')[1].Split(':');
-                    minTimeSpan[0] = new TimeSpan(Int32.Parse(tempString[0]), Int32.Parse(tempString[1]), Int32.Parse(tempString[2]));
-                }
-                if (maxTimeSpan[0].ToString().Contains("."))
-                {
-                    String[] tempString = maxTimeSpan[0].ToString().Split('.')[1].Split(':');
-                    maxTimeSpan[0] = new TimeSpan(Int32.Parse(tempString[0]), Int32.Parse(tempString[1]), Int32.Parse(tempString[2]));
-                }
+                CalculateMinAndMaxTimePossible(minTimeSpan, maxTimeSpan, i, exactPostTime, showPostTime);
             }
-            if (showPostTime[0].Contains("minute"))
-            {
-                TimeSpan temp = new TimeSpan(Int32.Parse(exactPostTime[0].Split(':')[0]), Int32.Parse(exactPostTime[0].Split(':')[1]), Int32.Parse(exactPostTime[0].Split(':')[2]));
-                minTimeSpan[0] = new TimeSpan(0, Int32.Parse(showPostTime[0].Split(' ')[0]), 0) + temp;
-                maxTimeSpan[0] = new TimeSpan(0, 0, 59) + minTimeSpan[0];
-                if (minTimeSpan[0].ToString().Contains("."))
-                {
-                    String[] tempString = minTimeSpan[0].ToString().Split('.')[1].Split(':');
-                    minTimeSpan[0] = new TimeSpan(Int32.Parse(tempString[0]), Int32.Parse(tempString[1]), Int32.Parse(tempString[2]));
-                }
-                if (maxTimeSpan[0].ToString().Contains("."))
-                {
-                    String[] tempString = maxTimeSpan[0].ToString().Split('.')[1].Split(':');
-                    maxTimeSpan[0] = new TimeSpan(Int32.Parse(tempString[0]), Int32.Parse(tempString[1]), Int32.Parse(tempString[2]));
-                }
-            }
-            if (showPostTime[0].Contains("hour"))
-            {
-                TimeSpan temp = new TimeSpan(Int32.Parse(exactPostTime[0].Split(':')[0]), Int32.Parse(exactPostTime[0].Split(':')[1]), Int32.Parse(exactPostTime[0].Split(':')[2]));
-                minTimeSpan[0] = new TimeSpan(Int32.Parse(showPostTime[0].Split(' ')[0]), 0, 0) + temp;
-                maxTimeSpan[0] = new TimeSpan(0, 59, 59) + minTimeSpan[0];
-                if (minTimeSpan[0].ToString().Contains("."))
-                {
-                    String[] tempString = minTimeSpan[0].ToString().Split('.')[1].Split(':');
-                    minTimeSpan[0] = new TimeSpan(Int32.Parse(tempString[0]), Int32.Parse(tempString[1]), Int32.Parse(tempString[2]));
-                }
-                if (maxTimeSpan[0].ToString().Contains("."))
-                {
-                    String[] tempString = maxTimeSpan[0].ToString().Split('.')[1].Split(':');
-                    maxTimeSpan[0] = new TimeSpan(Int32.Parse(tempString[0]), Int32.Parse(tempString[1]), Int32.Parse(tempString[2]));
-                }
-            }
-            for(int i = 1;i < exactPostTime.Length; i++)
-            {
-                if (showPostTime[i].Contains("second"))
-                {
-                    minTimeSpan[i] = new TimeSpan(Int32.Parse(exactPostTime[i].Split(':')[0]), Int32.Parse(exactPostTime[i].Split(':')[1]), Int32.Parse(exactPostTime[i].Split(':')[2]));
-                    maxTimeSpan[i] = new TimeSpan(0, 0, 59) + minTimeSpan[i];
-                    if (minTimeSpan[i].ToString().Contains("."))
-                    {
-                        String[] tempString = minTimeSpan[i].ToString().Split('.')[1].Split(':');
-                        minTimeSpan[i] = new TimeSpan(Int32.Parse(tempString[0]), Int32.Parse(tempString[1]), Int32.Parse(tempString[2]));
-                    }
-                    if (maxTimeSpan[i].ToString().Contains("."))
-                    {
-                        String[] tempString = maxTimeSpan[i].ToString().Split('.')[1].Split(':');
-                        maxTimeSpan[i] = new TimeSpan(Int32.Parse(tempString[0]), Int32.Parse(tempString[1]), Int32.Parse(tempString[2]));
-                    }
-                }
-                if (showPostTime[i].Contains("minute"))
-                {
-                    TimeSpan temp = new TimeSpan(Int32.Parse(exactPostTime[i].Split(':')[0]), Int32.Parse(exactPostTime[i].Split(':')[1]), Int32.Parse(exactPostTime[i].Split(':')[2]));
-                    minTimeSpan[i] = new TimeSpan(0, Int32.Parse(showPostTime[i].Split(' ')[0]), 0) + temp;
-                    maxTimeSpan[i] = new TimeSpan(0, 0, 59) + minTimeSpan[i];
-                    if (minTimeSpan[i].ToString().Contains("."))
-                    {
-                        String[] tempString = minTimeSpan[i].ToString().Split('.')[1].Split(':');
-                        minTimeSpan[i] = new TimeSpan(Int32.Parse(tempString[0]), Int32.Parse(tempString[1]), Int32.Parse(tempString[2]));
-                    }
-                    if (maxTimeSpan[i].ToString().Contains("."))
-                    {
-                        String[] tempString = maxTimeSpan[i].ToString().Split('.')[1].Split(':');
-                        maxTimeSpan[i] = new TimeSpan(Int32.Parse(tempString[0]), Int32.Parse(tempString[1]), Int32.Parse(tempString[2]));
-                    }
-                }
-                if (showPostTime[i].Contains("hour"))
-                {
-                    TimeSpan temp = new TimeSpan(Int32.Parse(exactPostTime[i].Split(':')[0]), Int32.Parse(exactPostTime[i].Split(':')[1]), Int32.Parse(exactPostTime[i].Split(':')[2]));
-                    minTimeSpan[i] = new TimeSpan(Int32.Parse(showPostTime[i].Split(' ')[0]), 0, 0) + temp;
-                    maxTimeSpan[i] = new TimeSpan(0, 59, 59) + minTimeSpan[i];
-                    if (minTimeSpan[i].ToString().Contains("."))
-                    {
-                        String[] tempString = minTimeSpan[i].ToString().Split('.')[1].Split(':');
-                        minTimeSpan[i] = new TimeSpan(Int32.Parse(tempString[0]), Int32.Parse(tempString[1]), Int32.Parse(tempString[2]));
-                    }
-                    if (maxTimeSpan[i].ToString().Contains("."))
-                    {
-                        String[] tempString = maxTimeSpan[i].ToString().Split('.')[1].Split(':');
-                        maxTimeSpan[i] = new TimeSpan(Int32.Parse(tempString[0]), Int32.Parse(tempString[1]), Int32.Parse(tempString[2]));
-                    }
-                }
-            }
+            /*boundary condition to check if the given time is 23:59:59 few seconds ago
+             * then our minTimeSpan will be 23:59:59 and maxTimeSpan will be 00:00:58 then
+             * time 00:00:00 is lexicographically smaller
+             */
             if(TimeSpan.Compare(maxTimeSpan.Min(), minTimeSpan.Max())==-1)
             {
                 if (TimeSpan.Compare(minTimeSpan.Max(), new TimeSpan(0, 0, 0)) == -1 && (TimeSpan.Compare(maxTimeSpan.Min(), new TimeSpan(0, 0, 0)) == 1 || TimeSpan.Compare(maxTimeSpan.Min(), new TimeSpan(0, 0, 0)) == 0))
@@ -139,7 +50,47 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             {
                 return minTimeSpan.Max().ToString();
             }
-            throw new NotImplementedException();
+        }
+
+        private static void CalculateMinAndMaxTimePossible(TimeSpan[] minTimeSpan, TimeSpan[] maxTimeSpan, int i, string[] exactPostTime, string[] showPostTime)
+        {
+            String[] splitGivenTime = exactPostTime[i].Split(':');
+            TimeSpan temp = new TimeSpan(Int32.Parse(splitGivenTime[0]), Int32.Parse(splitGivenTime[1]), Int32.Parse(splitGivenTime[2]));
+            if (showPostTime[i].Contains("second"))
+            {
+                minTimeSpan[i] = temp;
+                maxTimeSpan[i] = new TimeSpan(0, 0, 59) + minTimeSpan[i];
+                minTimeSpan[i] = RemoveDaysIfTimeExceedsTwetyFourHours(minTimeSpan[i]);
+                maxTimeSpan[i] = RemoveDaysIfTimeExceedsTwetyFourHours(maxTimeSpan[i]);
+            }
+            if (showPostTime[i].Contains("minute"))
+            {
+                minTimeSpan[i] = new TimeSpan(0, Int32.Parse(showPostTime[i].Split(' ')[0]), 0) + temp;
+                maxTimeSpan[i] = new TimeSpan(0, 0, 59) + minTimeSpan[i];
+                minTimeSpan[i] = RemoveDaysIfTimeExceedsTwetyFourHours(minTimeSpan[i]);
+                minTimeSpan[i] = RemoveDaysIfTimeExceedsTwetyFourHours(minTimeSpan[i]);
+                maxTimeSpan[i] = RemoveDaysIfTimeExceedsTwetyFourHours(maxTimeSpan[i]);
+            }
+            if (showPostTime[i].Contains("hour"))
+            {
+                minTimeSpan[i] = new TimeSpan(Int32.Parse(showPostTime[i].Split(' ')[0]), 0, 0) + temp;
+                maxTimeSpan[i] = new TimeSpan(0, 59, 59) + minTimeSpan[i];
+                minTimeSpan[i] = RemoveDaysIfTimeExceedsTwetyFourHours(minTimeSpan[i]);
+                maxTimeSpan[i] = RemoveDaysIfTimeExceedsTwetyFourHours(maxTimeSpan[i]);
+            }
+        }
+        /* when time is 23:59:59 few seconds ago then adding
+         * 59 seconds will give 1.00:00:58 where 1 denotes
+         * days so removing the days from the time
+        */
+        private static TimeSpan RemoveDaysIfTimeExceedsTwetyFourHours(TimeSpan timeSpan)
+        {
+            if (timeSpan.ToString().Contains("."))
+            {
+                String[] tempString = timeSpan.ToString().Split('.')[1].Split(':');
+                timeSpan = new TimeSpan(Int32.Parse(tempString[0]), Int32.Parse(tempString[1]), Int32.Parse(tempString[2]));
+            }
+            return timeSpan;
         }
     }
 }
