@@ -23,44 +23,43 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
-            
             if(exactPostTime.Length != showPostTime.Length){
                 return "Please give valid information.";
             }
-            string str="impossible";
+            string ResultTime="impossible";
 
-            TimeSpan[] ts1 = new TimeSpan[exactPostTime.Length];
-            TimeSpan[] ts2 = new TimeSpan[exactPostTime.Length];
+            TimeSpan[] ExactTimes = new TimeSpan[exactPostTime.Length];
+            TimeSpan[] ShowTimes = new TimeSpan[exactPostTime.Length];
 
-            for(int i=0; i<ts1.Length; i++){
+            for(int i=0; i<ExactTimes.Length; i++){
                 try{
-                    ts1[i] = TimeSpan.Parse(exactPostTime[i]);
+                    ExactTimes[i] = TimeSpan.Parse(exactPostTime[i]);
                 }
                 catch(Exception ex){
-                    string res = "Please put a valid time. Error: "+ex;
-                    return res;
+                    string resultError = "Please put a valid time. Error: "+ex;
+                    return resultError;
                 }
             }
 
              //Separating Shw Time
-            string[] shw1 = new string[showPostTime.Length];
-            string[] shw2 = new string[showPostTime.Length];
-            string[] shw3 = new string[showPostTime.Length];
+            string[] showPostWord1 = new string[showPostTime.Length];
+            string[] showPostWord2 = new string[showPostTime.Length];
+            //string[] shw3 = new string[showPostTime.Length];
 
             for(int i=0; i<showPostTime.Length; i++){
-                string[] shwTime = showPostTime[i].Split(" ");
+                string[] showPostWords = showPostTime[i].Split(" ");
 
                 //Separating Hr, Min, Sec
-                shw1[i] = shwTime[0];
-                shw2[i] = shwTime[1];
-                shw3[i] = shwTime[2];
+                showPostWord1[i] = showPostWords[0];
+                showPostWord2[i] = showPostWords[1];
+                //shw3[i] = showPostWords[2];
             }
 
-            for(int i=0; i<ts1.Length-1; i++){
-                for(int j=i+1; j<ts1.Length; j++){
-                    if(ts1[i] == ts1[j]){
-                        if(shw1[i] == shw1[j] && shw2[i].Equals(shw2[j])){
+            //Checking for consistancy
+            for(int i=0; i<ExactTimes.Length-1; i++){
+                for(int j=i+1; j<ExactTimes.Length; j++){
+                    if(ExactTimes[i] == ExactTimes[j]){
+                        if(showPostWord1[i].Equals(showPostWord1[j]) && showPostWord2[i].Equals(showPostWord2[j])){
                             continue;
                         }else{
                             return "impossible";
@@ -69,25 +68,26 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 }
             }
 
+            //Array for storing present or past day
             int[] day = new int[showPostTime.Length];
             for(int i=0; i<day.Length; i++){
                 day[i] = 0;
             }
 
             for(int i=0; i<showPostTime.Length; i++){
-                if(shw1[i].Equals("few")){
-                    ts2[i] = ts1[i];
+                if(showPostWord1[i].Equals("few")){
+                    ShowTimes[i] = ExactTimes[i];
                 }else{
-                    int num = Int32.Parse(shw1[i]);
+                    int number = Int32.Parse(showPostWord1[i]);
 
                     int[] time1 = {00,00,00};
 
                     //setting latest time
-                    if(shw2[i].Equals("seconds")){
-                        if(num <= 59){
-                            time1[0] = ts1[i].Hours;
-                            time1[1] = ts1[i].Minutes;
-                            time1[2] = ts1[i].Seconds + num;
+                    if(showPostWord2[i].Equals("seconds")){
+                        if(number <= 59){
+                            time1[0] = ExactTimes[i].Hours;
+                            time1[1] = ExactTimes[i].Minutes;
+                            time1[2] = ExactTimes[i].Seconds + number;
 
                             //rearranging time
                             if(time1[2] > 59){
@@ -107,14 +107,14 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                             return "put seconds less than 60";
                         }
 
-                        ts2[i] = TimeSpan.Parse(""+time1[0]+":"+time1[1]+":"+time1[2]);
+                        ShowTimes[i] = TimeSpan.Parse(""+time1[0]+":"+time1[1]+":"+time1[2]);
                         
                     }
-                    if(shw2[i].Equals("hours")){
-                        if(num <= 23){
-                            time1[0] = ts1[i].Hours + num;
-                            time1[1] = ts1[i].Minutes;
-                            time1[2] = ts1[i].Seconds;
+                    if(showPostWord2[i].Equals("hours")){
+                        if(number <= 23){
+                            time1[0] = ExactTimes[i].Hours + number;
+                            time1[1] = ExactTimes[i].Minutes;
+                            time1[2] = ExactTimes[i].Seconds;
 
                             //rearranging time
                             if(time1[0] > 23){
@@ -125,14 +125,14 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                         else{
                             return "put hour in correct format";
                         }
-                        ts2[i] = TimeSpan.Parse(""+time1[0]+":"+time1[1]+":"+time1[2]);
+                        ShowTimes[i] = TimeSpan.Parse(""+time1[0]+":"+time1[1]+":"+time1[2]);
                         
                     }
-                    if(shw2[i].Equals("minutes")){
-                        if(num <= 59){
-                            time1[0] = ts1[i].Hours;
-                            time1[1] = ts1[i].Minutes + num;
-                            time1[2] = ts1[i].Seconds;
+                    if(showPostWord2[i].Equals("minutes")){
+                        if(number <= 59){
+                            time1[0] = ExactTimes[i].Hours;
+                            time1[1] = ExactTimes[i].Minutes + number;
+                            time1[2] = ExactTimes[i].Seconds;
 
                             //rearranging time
                             if(time1[1] > 59){
@@ -147,36 +147,37 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                         else{
                             return "put minutes less than 60";
                         }
-                        ts2[i] = TimeSpan.Parse(""+time1[0]+":"+time1[1]+":"+time1[2]);
+                        ShowTimes[i] = TimeSpan.Parse(""+time1[0]+":"+time1[1]+":"+time1[2]);
                     }
                 }
             }
             
-            TimeSpan lrgst = ts2[0];
-            int all = 0;
-            for(int i=0; i<ts2.Length; i++){
+            TimeSpan largestTime = ShowTimes[0];
+            //
+            int dayFlag = 0;
+            for(int i=0; i<ShowTimes.Length; i++){
                 if(day[i] == 0){
-                    lrgst = ts2[i];
+                    largestTime = ShowTimes[i];
                     break;
                 }else{
-                    all =1;
+                    dayFlag =1;
                 }
             }
 
-            for(int i=0; i<ts2.Length; i++){
-                if(ts2[i] >= lrgst){
+            for(int i=0; i<ShowTimes.Length; i++){
+                if(ShowTimes[i] >= largestTime){
                     if(day[i] == 0){
-                        lrgst = ts2[i];
-                    }else if(all == 1){
-                        if(ts2[i] >= lrgst){
-                            lrgst = ts2[i];
+                        largestTime = ShowTimes[i];
+                    }else if(dayFlag == 1){
+                        if(ShowTimes[i] >= largestTime){
+                            largestTime = ShowTimes[i];
                         }
                     }
                 }
             }
 
-            str = lrgst.ToString();
-            return str;
+            ResultTime = largestTime.ToString();
+            return ResultTime;
             throw new NotImplementedException();
         }
     }
