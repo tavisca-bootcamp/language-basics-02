@@ -24,36 +24,37 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-           int len=exactPostTime.Length;
+           int length=exactPostTime.Length;
            int i=0;
-           Hashtable h=new Hashtable();
+           Hashtable hashTable=new Hashtable();//hashtable to check for consistent showPostTime for two same exactPostTime
            TimeSpan currentTime=new TimeSpan(00,00,00);
-            while(i<len)
+            while(i<length)
             {
-             if(!h.ContainsKey(exactPostTime[i]))
-                h.Add(exactPostTime[i],showPostTime[i]);
+               if(!hashTable.ContainsKey(exactPostTime[i]))//add exactPostTime and ShowPostTime Pair into hashtable
+                  hashTable.Add(exactPostTime[i],showPostTime[i]);
 
-             if(h.ContainsKey(exactPostTime[i])&&h[exactPostTime[i]].ToString()!=showPostTime[i])
-                return "impossible";
+               //check if hashtable already contains exactPostTime and corresponding showPostTime is same as any other ShowPostTime
+               if(hashTable.ContainsKey(exactPostTime[i])&&hashTable[exactPostTime[i]].ToString()!=showPostTime[i])
+                  return "impossible";
 
-             string[] sub_showTime=showPostTime[i].Split(" ");
-             TimeSpan cTime=TimeSpan.Parse(exactPostTime[i]);
-             
-             if(sub_showTime[1]=="minutes")
-             {
-                cTime=cTime.Add(TimeSpan.FromMinutes(Double.Parse(sub_showTime[0])));
-                cTime =new TimeSpan(cTime.Hours,cTime.Minutes,cTime.Seconds);
-             }
-             else if(sub_showTime[1]=="hours")
-             {
-                cTime=cTime.Add(TimeSpan.FromHours(Double.Parse(sub_showTime[0])));
-                cTime =new TimeSpan(cTime.Hours,cTime.Minutes,cTime.Seconds);
-             }
+               string[] splittedShowTime=showPostTime[i].Split(" ");//splittedShowTime[0] conatins the time as string and splittedShowTime[1] contains "minutes" or "hours" or "second"
+               TimeSpan calcualtedTime=TimeSpan.Parse(exactPostTime[i]);
+               
+               if(splittedShowTime[1]=="minutes")
+               {
+                  calcualtedTime=calcualtedTime.Add(TimeSpan.FromMinutes(Double.Parse(splittedShowTime[0])));//add minutes of ShowPostTime to calculating Time
+                  calcualtedTime =new TimeSpan(calcualtedTime.Hours,calcualtedTime.Minutes,calcualtedTime.Seconds);
+               }
+               else if(splittedShowTime[1]=="hours")
+               {
+                  calcualtedTime=calcualtedTime.Add(TimeSpan.FromHours(Double.Parse(splittedShowTime[0])));//add hours of ShowPostTime to calculating Time
+                  calcualtedTime =new TimeSpan(calcualtedTime.Hours,calcualtedTime.Minutes,calcualtedTime.Seconds);
+               }
 
-             if(currentTime<cTime)
-                currentTime=cTime;
+               if(currentTime<calcualtedTime)// for first lexicographic Current Time. 
+                  currentTime=calcualtedTime;
 
-            i++;
+               i++;
            }
            return currentTime.ToString();
         }
