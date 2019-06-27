@@ -21,21 +21,43 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             Console.WriteLine($"[{postTimesCsv}], [{showTimesCsv}] => {result}");
         }
 
-        public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
-        {
-            TimeSpan currentTime = TimeSpan.Parse("0");
+        public static bool isFormatPOssible(string[] exactPostTime,string[] showPostTime){
             for (int i = 0; i < exactPostTime.Length; i++)
             {
                 for (int j = i + 1; j < exactPostTime.Length; j++)
                 {
-                    if (exactPostTime[i] == exactPostTime[j])
-                        if (showPostTime[i] != showPostTime[j])
-                            return "impossible";
+                    if (exactPostTime[i] == exactPostTime[j] && showPostTime[i] != showPostTime[j])
+                            return false;
                 }
             }
+            return true;
+        }
+
+        public static TimeSpan calculateCurrentTime(TimeSpan currentTime, TimeSpan exactPostTime, TimeSpan span){
+            if (exactPostTime + span > TimeSpan.Parse("1.00:00:00")) //One Day 24 Hours
+            {
+                exactPostTime = exactPostTime + span - TimeSpan.FromDays(1);  //Time is greater so Subtracting
+                if (currentTime < exactPostTime)
+                    currentTime = exactPostTime;
+            }
+            else
+                    if (currentTime < exactPostTime + span) //selecting the smallest
+                currentTime = exactPostTime + span;
+            return currentTime;
+        }
+
+        public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
+        {
+            TimeSpan currentTime = TimeSpan.Parse("0");
+
+            if(!isFormatPOssible(exactPostTime,showPostTime)){
+                return "impossible";
+            }
+			
             for (int i = 0; i < exactPostTime.Length; i++)
             {
                 TimeSpan time = TimeSpan.Parse(exactPostTime[i]);
+                
                 if (showPostTime[i].Contains("sec"))
                 {
                     if (currentTime < time)
@@ -43,37 +65,22 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 }
                 else
                 {
-                    int val = int.Parse(showPostTime[i].Substring(0, showPostTime[i].IndexOf(" ")));
+                    int val = int.Parse(showPostTime[i].Substring(0, showPostTime[i].IndexOf(" ")));                    
                     if (showPostTime[i].Contains("min"))
                     {
                         TimeSpan span = TimeSpan.FromMinutes(val);
-                        if (time + span > TimeSpan.Parse("1.00:00:00")) //One Day 24 Hours
-                        {
-                            time = time + span - TimeSpan.FromDays(1);  //Time is greater so Subtracting
-                            if (currentTime < time)
-                                currentTime = time;
-                        }
-                        else
-                             if (currentTime < time + span) //selecting the smallest
-                            currentTime = time + span;
+                        currentTime = calculateCurrentTime(currentTime,time,span);
                     }
                     if (showPostTime[i].Contains("hour"))
                     {
                         TimeSpan span = TimeSpan.FromHours(val);
-                        if (time + span > TimeSpan.Parse("1.00:00:00")) //One Day 24 Hours
-                        {
-                            time = time + span - TimeSpan.FromDays(1); //Time is greater so Subtracting
-                            if (currentTime < time)
-                                currentTime = time;
-                        }
-                        else
-                            if (currentTime < time + span) //selecting the smallest
-                            currentTime = time + span;
+                        currentTime = calculateCurrentTime(currentTime,time,span);
                     }
                 }
             }
             return currentTime.ToString();
-            throw new NotImplementedException();
         }
+
+        
     }
 }
