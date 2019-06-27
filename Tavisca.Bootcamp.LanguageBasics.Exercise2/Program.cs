@@ -2,7 +2,7 @@
 
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
-    public static class Program
+    public static class ForumPostEasy
     {
         static void Main(string[] args)
         {
@@ -23,17 +23,17 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
+            // Solution ver1.1
             String[] sorted=new String[exactPostTime.Length];
             String res;
-            //============================================================================================================================================
-            //finding the resultant minimum for one post only
+            //================================================================================================
+            //for single input
             if(exactPostTime.Length==1)
             {
                 
-                String[] time=exactPostTime[0].Split(new char[]{':'}); //spliting original time
-                String[] show=showPostTime[0].Split(" ");          //spliting show time
-                int m=0,h=0;                                  
+                String[] time=exactPostTime[0].Split(new char[]{':'});   //spliting original time
+                String[] show=showPostTime[0].Split(" ");                 //spliting show time
+                int m=0,h=0;                                             //vaiables m,h for showPostTime
                 if((show[1].Contains("seconds"))!=true)     
                 {
                     if(show[1].Contains("minutes"))
@@ -41,34 +41,34 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                     if(show[1].Contains("hours"))
                         h=Int32.Parse(show[0]);
                 }   
-
+                
+                //variables M,H,S for exactPostTime
                 int H=Int32.Parse(time[0]), M=Int32.Parse(time[1]), S=Int32.Parse(time[2]); //coverting to int
 
-                //Console.WriteLine($"{time[0]} : {time[1]} : {time[2]} = {show[0]} {show[1]}");
-                //System.Console.WriteLine($"{exactPostTime[i]} <-> {exactPostTime[i]}");
                 //change of the time for every post
-                if((M+m)>60)
+                if((M+m)>60)                                              //For X minutes
                     {H=((H+1)%24);M=((M+m)%60);}
-                else if((H+h)>24)
+                else if((H+h)>24)                                         //For X hours
                     H=(H+h)%24;
                 else
                     {H+=h;M+=m;}
 
-                res=string.Format("{0:00}:{1:00}:{2:00}", H, M,S);    
-                //System.Console.WriteLine($"H{H},M:{M},S{S}  h{h},m:{m} == {res}");
+                res=string.Format("{0:00}:{1:00}:{2:00}", H, M,S);    //Joining Hour,min,seconds into string
+                
                 return res;
             }
-            //====================================================================================================================================                
+            //For multiple inputs================================================================================                
             else
             {   //for impossible condition
                 for(int j=0;j<exactPostTime.Length-1;j++)
                     if((exactPostTime[j]==exactPostTime[j+1])&&(showPostTime[j]!=showPostTime[j+1]))
-                        {return "impossible";break;}
+                        {return "impossible";  break;}
+
                 //for multiple inputs
                 for(int i=0;i<exactPostTime.Length;i++)
                 {
                     String[] time=exactPostTime[i].Split(new char[]{':'}); //spliting original time
-                    String[] show=showPostTime[i].Split(" ");          //spliting show time
+                    String[] show=showPostTime[i].Split(" ");              //spliting show time
                     int m=0,h=0;                                  
                     if((show[1].Contains("seconds"))!=true)     
                     {
@@ -80,8 +80,6 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
                     int H=Int32.Parse(time[0]), M=Int32.Parse(time[1]), S=Int32.Parse(time[2]); //coverting to int
 
-                    //Console.WriteLine($"{time[0]} : {time[1]} : {time[2]} = {show[0]} {show[1]}");
-                    //System.Console.WriteLine($"{exactPostTime[i]} <-> {exactPostTime[i]}");
                     //change of the time for every post
                     if((M+m)>60)
                         {H=((H+1)%24);M=((M+m)%60);}
@@ -91,22 +89,21 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                         {H+=h;M+=m;}
 
                     res=string.Format("{0:00}:{1:00}:{2:00}", H, M,S);    
-                    //System.Console.WriteLine($"H{H},M:{M},S{S}  h{h},m{m} == {res}");
-                    sorted[i]=res;
+
+                    sorted[i]=res;    //saving the output  in array
                     }
-                    
-                var abc="";
+                //Finding the resultant interval which satisfy all the condition    
+                var temp="";
                 for(int i=0;i<sorted.Length-1;i++)
                 {
                     if(string.Compare(sorted[i],sorted[i+1])==1)
-                        abc=sorted[i];
+                        temp=sorted[i];
                     else
-                        abc=sorted[i+1];
+                        temp=sorted[i+1];
                 }
-                //System.Console.WriteLine($"abc ={abc}");
-                return abc;
+                return temp;
             }
-            throw new NotImplementedException();
+           
         }
     }
 }
