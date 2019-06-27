@@ -1,0 +1,70 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Tavisca.Bootcamp.LanguageBasics.Exercise1;
+
+namespace LanguageBasics2
+{
+    [TestClass]
+    public class ForumPostEasyTests
+    {
+        [TestMethod]
+        public void ShowPostTime_Contains_Seconds()
+        {
+            // Arrange
+            string[] postTimes = new[] { "12:12:12" };
+            string[] showTimes = new[] { "few seconds ago" };
+            string expected = "12:12:12";
+
+            // Act
+            string actual = ForumPostEasy.GetCurrentTime(postTimes, showTimes);
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void ShowPostTime_Contains_Minutes()
+        {
+            // Arrange
+            string[] postTimes = new[] { "23:23:23", "23:23:23" };
+            string[] showTimes = new[] { "59 minutes ago", "59 minutes ago" };
+            string expected = "00:22:23";
+
+            // Act
+            string actual = ForumPostEasy.GetCurrentTime(postTimes, showTimes);
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+
+        }
+
+        [TestMethod]
+        public void When_NoSolution()
+        {
+            // Arrange
+            string[] postTimes = new[] { "00:10:10", "00:10:10" };
+            string[] showTimes = new[] { "59 minutes ago", "1 hours ago" };
+            string expected = "impossible";
+
+            // Act
+            string actual = ForumPostEasy.GetCurrentTime(postTimes, showTimes);
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void ShowPostTime_Contains_Hours()
+        {
+            // Arrange
+            string[] postTimes = new[] { "11:59:13", "11:13:23", "12:25:15" };
+            string[] showTimes = new[] { "few seconds ago", "46 minutes ago", "23 hours ago" };
+            string expected = "11:59:23";
+
+            // Act
+            string actual = ForumPostEasy.GetCurrentTime(postTimes, showTimes);
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+    }
+}
