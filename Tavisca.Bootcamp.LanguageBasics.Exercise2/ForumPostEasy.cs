@@ -1,8 +1,8 @@
 using System;
 
-namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
+namespace Tavisca.Bootcamp.LanguageBasics.Exercise2
 {
-    public static class Program
+    public static class ForumPostEasy
     {
         static void Main(string[] args)
         {
@@ -24,11 +24,11 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
             // Add your code here.
-            int ptlen = exactPostTime.Length;
+            int length = exactPostTime.Length;
 
-            for (int i = 0; i <ptlen; i++)
+            for (int i = 0; i < length; i++)
             {
-                for (int j = i + 1; j < ptlen; j++)
+                for (int j = i + 1; j < length; j++)
                 {
                     if (exactPostTime[i] == exactPostTime[j])
                         if (showPostTime[i] != showPostTime[j])
@@ -36,63 +36,39 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 }
             }
 
-            string[] currarr = new string[ptlen]; //new array to store current-time
+            string[] currentTime = new string[length]; //new array to store current-time
 
-            for (int i = 0; i < ptlen; i++)
+            for (int i = 0; i < length; i++)
             {
-
                 DateTime time = Convert.ToDateTime(exactPostTime[i]); //converting string to an equivalent date and time value
 
-                //if showPostTime contains "seconds"
-                if (showPostTime[i].Contains("seconds"))
+                if (showPostTime[i].Contains("seconds"))   //if showPostTime contains "seconds"
                 {
-
-                    currarr[i] = exactPostTime[i];
-
+                    currentTime[i] = exactPostTime[i];
                 }
-
-
-                //if showPostTime contains "minutes"
-                else if (showPostTime[i].Contains("minutes"))
+                
+                else if (showPostTime[i].Contains("minutes"))  //if showPostTime contains "minutes"
                 {
-
                     string minutes = showPostTime[i].Split(' ')[0];
-                    DateTime current = time.AddMinutes(Int32.Parse(minutes)); //adding minutes to time
-                    string result = current.ToString().Split(' ')[1];
-
-                    currarr[i] = result;
-
+                    DateTime newTime = time.AddMinutes(Int32.Parse(minutes)); //adding minutes to time
+                    string result = newTime.ToString().Split(' ')[1];
+                    currentTime[i] = result;
                 }
 
-                //if showPostTime contains "hours"
-                else if (showPostTime[i].Contains("hours"))
+                else if (showPostTime[i].Contains("hours"))  //if showPostTime contains "hours"
                 {
-
                     string hours = showPostTime[i].Split(' ')[0];
-                    DateTime current = time.AddHours(Int32.Parse(hours)); //adding hours to time
-                    string result = current.ToString().Split(' ')[1];
-
-                    currarr[i] = result;
-
+                    DateTime newTime = time.AddHours(Int32.Parse(hours)); //adding hours to time
+                    string result = newTime.ToString().Split(' ')[1];
+                    currentTime[i] = result;
                 }
-
-                //if there is no solution
-                else
+              
+                else                // //if there is no solution
                     return "impossible";
-
-
-
             }
 
-
-            Array.Sort(currarr);
-
-            return currarr[ptlen - 1]; //choosing the largest element
-
-            throw new NotImplementedException();
-
+            Array.Sort(currentTime);
+            return currentTime[length - 1]; //choosing the largest element
         }
-
     }
-     
 }
