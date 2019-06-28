@@ -24,168 +24,50 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
             int n = exactPostTime.Length;
-            int[,] a = new int[n, 6];
-            int h = 0, m = 0, s = 0, min = 0, hour = 0;
+            int[,] startTime= new int[n,3];
+            int[,] endTime = new int[n,3];
+            int hours = 0, minutes = 0, seconds = 0, temp = 0;
             for (int i = 0; i < n; i++)
             {
-                h = Int32.Parse(exactPostTime[i].Substring(0, 2));
-                m = Int32.Parse(exactPostTime[i].Substring(3, 2));
-                s = Int32.Parse(exactPostTime[i].Substring(6, 2));
-                string k = showPostTime[i];
-                if (k[0] == 'f')
+                hours = Int32.Parse(exactPostTime[i].Substring(0, 2));
+                minutes = Int32.Parse(exactPostTime[i].Substring(3, 2));
+                seconds = Int32.Parse(exactPostTime[i].Substring(6, 2));
+                var timeInterval = new TimeInterval(hours, minutes, seconds);
+                string postTime = showPostTime[i];
+                if(postTime[0] == 'f')
                 {
-                    a[i, 0] = h;
-                    a[i, 1] = m;
-                    a[i, 2] = s;
-                    if (s == 0)
-                        s = 59;
-                    else
-                    {
-                        s = s - 1;
-                        if (m < 59)
-                            m = m + 1;
-                        else
-                        {
-                            m = 0;
-                            h = (h + 1) % 24;
-                        }
-
-
-
-                    }
-                    a[i, 3] = h;
-                    a[i, 4] = m;
-                    a[i, 5] = s;
+                    timeInterval.CalculateStartTime(0, 0, 0);
+                    timeInterval.CalculateEndTime(0, 0, 59);
                 }
-                else if (k[2] == 'm' || k[3] == 'm')
+                else if (postTime[2] == 'm' || postTime[3] == 'm')
                 {
-                    if (k[1] == ' ')
-                        min = Int32.Parse(k.Substring(0, 1));
+                    if (postTime[1] == ' ')
+                        temp = Int32.Parse(postTime.Substring(0, 1));
                     else
-                        min = Int32.Parse(k.Substring(0, 2));
-                    m = m + min;
-                    if (m <= 59)
-                    {
-                        a[i, 0] = h;
-                        a[i, 1] = m;
-                        a[i, 2] = s;
-
-                    }
-                    else
-                    {
-                        m = m % 60;
-                        h = (h + 1) % 24;
-                        a[i, 0] = h;
-                        a[i, 1] = m;
-                        a[i, 2] = s;
-                    }
-                    if (s == 0)
-                        s = 59;
-                    else
-                    {
-                        s = s - 1;
-                        if (m < 59)
-                            m = m + 1;
-                        else
-                        {
-                            m = 0;
-                            h = (h + 1) % 24;
-                        }
-
-
-
-                    }
-                    a[i, 3] = h;
-                    a[i, 4] = m;
-                    a[i, 5] = s;
-
-
-
+                        temp = Int32.Parse(postTime.Substring(0, 2));
+                    timeInterval.CalculateStartTime(0, temp, 0);
+                    timeInterval.CalculateEndTime(0, 0, 59);
+                   
                 }
-                else if (k[2] == 'h' || k[3] == 'h')
+                else if (postTime[2] == 'h' || postTime[3] == 'h')
                 {
-                    if (k[1] == ' ')
-                        hour = Int32.Parse(k.Substring(0, 1));
+                    if (postTime[1] == ' ')
+                        temp = Int32.Parse(postTime.Substring(0, 1));
                     else
-                        hour = Int32.Parse(k.Substring(0, 2));
-
-                    h = (h + hour) % 24;
-                    a[i, 0] = h;
-                    a[i, 1] = m;
-                    a[i, 2] = s;
-
-                    if (s == 0)
-                        s = 59;
-                    else
-                    {
-                        s = s - 1;
-                        if (m < 59)
-                            m = m + 1;
-                        else
-                        {
-                            m = 0;
-                            h = (h + 1) % 24;
-                        }
-
-
-
-                    }
-                    if (m == 0)
-                        m = 59;
-                    else
-                    {
-                        m = m - 1;
-                        h = (h + 1) % 24;
-                    }
-                    a[i, 3] = h;
-                    a[i, 4] = m;
-                    a[i, 5] = s;
+                        temp = Int32.Parse(postTime.Substring(0, 2));
+                    timeInterval.CalculateStartTime(temp,0, 0);
+                    timeInterval.CalculateEndTime(0, 59, 59);
                 }
+                startTime[i,0] = timeInterval.StartTime[0];   endTime[i,0] = timeInterval.EndTime[0];
+                startTime[i,1] = timeInterval.StartTime[1];   endTime[i,1] = timeInterval.EndTime[1];
+                startTime[i,2] = timeInterval.StartTime[2];   endTime[i,2] = timeInterval.EndTime[2];
+
             }
-
-
             int[] result = new int[2];
-            int[] temp = new int[2];
-            result[0] = a[0, 0] * 10000 + a[0, 1] * 100 + a[0, 2];
-            result[1] = a[0, 3] * 10000 + a[0, 4] * 100 + a[0, 5];
-            for (int i = 1; i < n; i++)
-            {
-                temp[0] = a[i, 0] * 10000 + a[i, 1] * 100 + a[i, 2];
-                temp[1] = a[i, 3] * 10000 + a[i, 4] * 100 + a[i, 5];
-                if (temp[0] >= result[0] && temp[0] < result[1])
-                {
-                    result[0] = temp[0];
-                    result[1] = Math.Min(temp[1], result[1]);
-                }
-                else if (result[0] >= temp[0] && result[0] < temp[1])
-                {
-                    result[1] = Math.Min(temp[1], result[1]);
-                }
-                else
-                    return "impossible";
-            }
-            string res = null;
-            if (result[0] > result[1])
-                return "00:00:00";
+            if (TimeInterval.FindIntersection(startTime, endTime, result,n))
+                return TimeInterval.GettingStringFormat(result);
             else
-            {
-                string x = result[0].ToString();
-                switch (x.Length)
-                {
-                    case 0: return "00:00:00";
-                    case 1: return String.Concat("00:00:0", x);
-                    case 2: return String.Concat("00:00:", x);
-                    case 3: return String.Concat("00:0", x.Substring(0, 1), ":", x.Substring(1, 2));
-                    case 4: return String.Concat("00:", x.Substring(0, 2), ":", x.Substring(2, 2));
-                    case 5: return String.Concat("0", x.Substring(0, 1), ":", x.Substring(1, 2), ":", x.Substring(3, 2));
-                }
-
-                res = String.Concat(x.Substring(0, 2), ":", x.Substring(2, 2), ":", x.Substring(4, 2));
-
-            }
-            return res;
-
-            //throw new NotImplementedException();
+                return "impossible";
         }
     }
 }
