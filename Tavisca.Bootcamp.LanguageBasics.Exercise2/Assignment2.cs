@@ -40,8 +40,8 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
             for(int i = 0; i<exactPostTime.Length; i++) 
             {
-                string[] hour_min_sec = exactPostTime[i].Split(":");
-                DateTime dateTime = new DateTime(1996, 8, 1, Int32.Parse(hour_min_sec[0]), Int32.Parse(hour_min_sec[1]), Int32.Parse(hour_min_sec[2]));
+                string[] hourminsec = exactPostTime[i].Split(":");
+                DateTime dateTime = new DateTime(1996, 8, 1, Int32.Parse(hourminsec[0]), Int32.Parse(hourminsec[1]), Int32.Parse(hourminsec[2]));
 
                 if(showPostTime[i].Contains("seconds")) 
                 {
@@ -51,19 +51,17 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 {
                     string minutes = showPostTime[i].Split(" ")[0];
                     TimeSpan tspan = new TimeSpan(0, Int32.Parse(minutes), 0);
-                    currentTime[i] = dateTime.Add(tspan).ToString().Split(" ")[1];
+                    currentTime[i] = dateTime.Add(tspan).ToString("HH:mm:ss");
                 } 
                 else if(showPostTime[i].Contains("hours")) 
                 {
                     string hours = showPostTime[i].Split(" ")[0];
                     TimeSpan tspan = new TimeSpan(Int32.Parse(hours), 0, 0);
-                    currentTime[i] = dateTime.Add(tspan).ToString().Split(" ")[1];
+                    currentTime[i] = dateTime.Add(tspan).ToString("HH:mm:ss");
                 }
             }
             Array.Sort(currentTime);
             return currentTime[(exactPostTime.Length-1)];
-
-            throw new NotImplementedException();
         }
     }
 }
