@@ -46,29 +46,28 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 CurrentTime = singleIndex(exactPostTime[0], showPostTime[0]);
                 return CurrentTime;
             }
-            string[] UpperBounds = findLowerBounds(exactPostTime, showPostTime);
-            string[] LowerBound = findUpperBounds(exactPostTime, showPostTime);
-            for (int j = 0; j < UpperBounds.Length; j++)
+            string[] LowerBounds = findLowerBounds(exactPostTime, showPostTime);
+            string[] UpperBounds = findUpperBounds(exactPostTime, showPostTime);
+            for (int j = 0; j < LowerBounds.Length; j++)
             {
                 int IntervalsMatched = 0;
-                for (int i = 0; i < UpperBounds.Length; i++)
+                for (int i = 0; i < LowerBounds.Length; i++)
                 {
-                    if (CheckIntervals(UpperBounds[i], UpperBounds[j], LowerBound[i]) == 1)
+                    if (CheckIntervals(LowerBounds[i], LowerBounds[j], UpperBounds[i]) == 1)
                     {
                         IntervalsMatched++;
                     }
                 }
-                if (IntervalsMatched == UpperBounds.Length)//If the given time is falling in all intervals
+                if (IntervalsMatched == LowerBounds.Length)//If the given time is falling in all intervals
                 {
-                    return UpperBounds[j];
+                    return LowerBounds[j];
                 }
             }
             return "impossible";
         }
-        //findLowerBounds will return a string array of time which serve as 
-        //lower bounds of the intervals created by the showpostime and exactposttime
         public static string[] findLowerBounds(string[] exactPostTime, string[] showPostTime)
-        {
+        {//findLowerBounds will return a string array of time which serve as 
+         //lower bounds of the intervals created by the showpostime and exactposttime
             string[] LowerBounds = new string[exactPostTime.Length];
             for (int i = 0; i < exactPostTime.Length; i++)
             {
@@ -126,10 +125,9 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             }
             return UpperBounds;
         }
-        //single handles the case when there is only one element in exactposttime 
-        //or if all the elements in exactposttime and showposttime are exactly same
         public static string singleIndex(String exactPostTime, string showPostTime)
-        {
+        {//single handles the case when there is only one element in exactposttime 
+         //or if all the elements in exactposttime and showposttime are exactly same
             if (showPostTime.Contains("few"))
             {
                 return exactPostTime;
@@ -152,9 +150,8 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             }
             return null;
         }
-        //CheckIntervals simply checks if a given time is in between given interval
         public static int CheckIntervals(string LowerBound, string CurrentCheckTime, string UpperBound)
-        {
+        {//CheckIntervals simply checks if a given time is in between given interval
             String[] UpperBoundterms = UpperBound.Split(':');
             int UpperBoundHour = Int32.Parse(UpperBoundterms[0]);
             int UpperBoundMinute = Int32.Parse(UpperBoundterms[1]);
@@ -174,5 +171,6 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             }
             return 0;
         }
+        
     }
 }
