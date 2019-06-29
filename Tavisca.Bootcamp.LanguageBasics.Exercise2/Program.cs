@@ -29,9 +29,9 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             int hours = 0, minutes = 0, seconds = 0, temp = 0;
             for (int i = 0; i < n; i++)
             {
-                hours = Int32.Parse(exactPostTime[i].Substring(0, 2));
-                minutes = Int32.Parse(exactPostTime[i].Substring(3, 2));
-                seconds = Int32.Parse(exactPostTime[i].Substring(6, 2));
+                 Int32.TryParse(exactPostTime[i].Substring(0, 2),out hours);
+                 Int32.TryParse(exactPostTime[i].Substring(3, 2),out minutes);
+                 Int32.TryParse(exactPostTime[i].Substring(6, 2),out seconds);
                 var timeInterval = new TimeInterval(hours, minutes, seconds);
                 string postTime = showPostTime[i];
                 if(postTime[0] == 'f')
@@ -42,9 +42,9 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 else if (postTime[2] == 'm' || postTime[3] == 'm')
                 {
                     if (postTime[1] == ' ')
-                        temp = Int32.Parse(postTime.Substring(0, 1));
+                        Int32.TryParse(postTime.Substring(0, 1),out temp);
                     else
-                        temp = Int32.Parse(postTime.Substring(0, 2));
+                        Int32.TryParse(postTime.Substring(0, 2),out temp);
                     timeInterval.CalculateStartTime(0, temp, 0);
                     timeInterval.CalculateEndTime(0, 0, 59);
                    
@@ -52,9 +52,9 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 else if (postTime[2] == 'h' || postTime[3] == 'h')
                 {
                     if (postTime[1] == ' ')
-                        temp = Int32.Parse(postTime.Substring(0, 1));
+                         Int32.TryParse(postTime.Substring(0, 1),out temp);
                     else
-                        temp = Int32.Parse(postTime.Substring(0, 2));
+                        Int32.TryParse(postTime.Substring(0, 2),out temp);
                     timeInterval.CalculateStartTime(temp,0, 0);
                     timeInterval.CalculateEndTime(0, 59, 59);
                 }

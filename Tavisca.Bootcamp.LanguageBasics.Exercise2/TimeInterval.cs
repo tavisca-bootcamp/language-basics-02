@@ -69,7 +69,7 @@ public class TimeInterval
         tempTime[0] = (tempTime[0] + addedTime) % 24;
     }
     public static bool FindIntersection(int [,]start,int[,] end,int[] result,int n)
-    {
+    {  //converting into integers to find intersection
         
         int[] temp = new int[2];
         result[0] = start[0, 0] * 10000 + start[0, 1] * 100 + start[0, 2];
