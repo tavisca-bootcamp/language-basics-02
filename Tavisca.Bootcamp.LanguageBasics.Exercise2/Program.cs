@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
     public static class Program
@@ -48,19 +51,29 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             }
             string[] LowerBounds = findLowerBounds(exactPostTime, showPostTime);
             string[] UpperBounds = findUpperBounds(exactPostTime, showPostTime);
-            for (int j = 0; j < LowerBounds.Length; j++)
+            List<string> AllTimes = new List<string>();
+            for(int i=0;i<LowerBounds.Length;i++)
+            {
+                AllTimes.Add(exactPostTime[i]);
+                AllTimes.Add(UpperBounds[i]);
+                AllTimes.Add(LowerBounds[i]);
+
+            }
+            AllTimes = AllTimes.Distinct().ToList();
+            AllTimes.Sort();
+            foreach (var time in AllTimes)
             {
                 int IntervalsMatched = 0;
                 for (int i = 0; i < LowerBounds.Length; i++)
                 {
-                    if (CheckIntervals(LowerBounds[i], LowerBounds[j], UpperBounds[i]) == 1)
+                    if (CheckIntervals(LowerBounds[i], time, UpperBounds[i]) == 1)
                     {
                         IntervalsMatched++;
                     }
                 }
                 if (IntervalsMatched == LowerBounds.Length)//If the given time is falling in all intervals
                 {
-                    return LowerBounds[j];
+                    return time;
                 }
             }
             return "impossible";
@@ -80,7 +93,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                     String[] Minutes = showPostTime[i].Split(' ');
                     DateTime CurrentTime = Convert.ToDateTime(exactPostTime[i]);
                     CurrentTime = CurrentTime.AddMinutes(Int32.Parse(Minutes[0]));
-                    LowerBounds[i]=CurrentTime.ToString().Split(' ')[1];
+                    LowerBounds[i] = CurrentTime.ToString().Split(' ')[1];
                 }
                 if (showPostTime[i].Contains("hours"))
                 {
@@ -165,12 +178,11 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 UpperBoundSeconds = 60;
             }
             UpperBound = UpperBoundHour + ":" + UpperBoundMinute + ':' + UpperBoundSeconds;
-            if(String.Compare(LowerBound,CurrentCheckTime)<=0 && String.Compare(CurrentCheckTime,UpperBound)<=0)
+            if (String.Compare(LowerBound, CurrentCheckTime) <= 0 && String.Compare(CurrentCheckTime, UpperBound) <= 0)
             {
                 return 1;
             }
             return 0;
         }
-        
     }
 }
