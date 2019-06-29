@@ -11,6 +11,8 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             int lenghtOfExactPostTime=exactPostTime.Length;
             String[] currentTime = new String[lenghtOfExactPostTime];
             int k=0;
+            /* Two posts made in the same second cannot have two different human-readable strings.
+             This loop Check above mention condition.*/
             for (int z = 0; z < exactPostTime.Length; z++)
             {
                 for (int j = z + 1; j < exactPostTime.Length; j++)
