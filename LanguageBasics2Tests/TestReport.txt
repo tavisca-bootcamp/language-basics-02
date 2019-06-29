@@ -1,0 +1,40 @@
+Group Name: LanguageBasics2Tests
+Group By: Hierarchy
+Group Full Name: LanguageBasics2Tests
+Duration: 0:00:00.0335096
+0 test(s) failed
+0 test(s) skipped
+4 test(s) passed
+
+Result1 Name:	ShowPostTime_Contains_Hours
+Result1 Outcome:	Passed
+Result1 Duration:	0:00:00.0002644
+Result1 StackTrace:
+Result1 Message:
+Result1 StandardOutput:
+Result1 StandardError:
+
+Result2 Name:	ShowPostTime_Contains_Minutes
+Result2 Outcome:	Passed
+Result2 Duration:	0:00:00.0004377
+Result2 StackTrace:
+Result2 Message:
+Result2 StandardOutput:
+Result2 StandardError:
+
+Result3 Name:	ShowPostTime_Contains_Seconds
+Result3 Outcome:	Passed
+Result3 Duration:	0:00:00.0325739
+Result3 StackTrace:
+Result3 Message:
+Result3 StandardOutput:
+Result3 StandardError:
+
+Result4 Name:	When_NoSolution
+Result4 Outcome:	Passed
+Result4 Duration:	0:00:00.0002336
+Result4 StackTrace:
+Result4 Message:
+Result4 StandardOutput:
+Result4 StandardError:
+
