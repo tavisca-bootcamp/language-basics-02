@@ -51,10 +51,10 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         private static TimeSpan GetExactTime(string exactPost,string showPost)
         {
             Tuple<Time, int> correctionInfo = TimeCorrector.GetCorrectionInfo(showPost);
+            var postTime = TimeSpan.Parse(exactPost);
             switch(correctionInfo.Item1)
             {
                 case Time.Hour:
-                    var postTime = TimeSpan.Parse(exactPost);
                     postTime = postTime.Add(TimeSpan.FromHours(correctionInfo.Item2));
                     return new TimeSpan(postTime.Hours,postTime.Minutes,postTime.Seconds);
                 case Time.Minute:
