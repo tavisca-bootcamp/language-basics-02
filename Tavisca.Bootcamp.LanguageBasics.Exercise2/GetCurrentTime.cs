@@ -50,10 +50,9 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                i++;
                k++;
            }
-           Array.Sort(currentTime);
+            Array.Sort(currentTime);
             String finalCurrentTime = currentTime[lenghtOfExactPostTime-1].Split(" ")[0];
-            //Console.WriteLine(res);
-           return finalCurrentTime;
+            return finalCurrentTime;
             throw new NotImplementedException();
         }
     }
