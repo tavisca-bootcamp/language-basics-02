@@ -41,9 +41,11 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
          private static int GetValueToBeAddedToCurrentTime(string toBeAdded)
         {
-            int value;
-            if(int.TryParse(toBeAdded,out value))
-                return value;
+            if(string.IsNullOrEmpty(toBeAdded)==false)
+            {
+                if(int.TryParse(toBeAdded,out int value))
+                    return value;
+            }
             return 0;
         }
 
