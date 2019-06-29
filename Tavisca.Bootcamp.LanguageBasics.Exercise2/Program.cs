@@ -1,5 +1,6 @@
 ﻿using System;
-
+using System.Text.RegularExpressions;
+using System.Linq;
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
     public static class Program
@@ -23,8 +24,9 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
-            throw new NotImplementedException();
+            ForumPostEasy time = new ForumPostEasy();
+            String currentTime = time.GetCurrentTime(exactPostTime,showPostTime);
+            return currentTime;
         }
     }
 }
