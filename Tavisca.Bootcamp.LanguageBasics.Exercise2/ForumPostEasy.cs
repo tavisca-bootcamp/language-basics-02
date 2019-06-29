@@ -9,11 +9,9 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         {
             if(IsValid(exactPostTime,showPostTime)==false)
                 return "impossible";
-            
-            var length = exactPostTime.Length;
             var times = new List<TimeSpan>();
 
-            for(var i=0;i<length;i++){
+            for(var i=0;i<exactPostTime.Length;i++){
                 var exactPost = exactPostTime[i];
                 var showPost = showPostTime[i];
                 times.Add(GetExactTime(exactPost,showPost));
@@ -49,7 +47,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         private static TimeSpan GetExactTime(string exactPost,string showPost)
         {
-            Tuple<Time, int> correctionInfo = TimeCorrector.GetCorrectionInfo(showPost);
+            var correctionInfo = TimeCorrector.GetCorrectionInfo(showPost);
             var postTime = TimeSpan.Parse(exactPost);
             switch(correctionInfo.Item1)
             {
