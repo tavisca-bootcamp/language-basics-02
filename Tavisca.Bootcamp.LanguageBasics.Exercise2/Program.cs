@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ﻿using System;
+=======
+using System;
+>>>>>>> faf182d1454a8bdece00d53d9b3207bb6c520c9f
 using System.Collections.Generic;
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
@@ -23,6 +27,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
+<<<<<<< HEAD
            return ForumPostEasy.CurrentTime(exactPostTime,showPostTime);
             
 
@@ -35,6 +40,21 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             for(var i=0;i<length;i++)
             {
                 // Check whether for same exactPostTime we have different showPostTime;
+=======
+            var length = exactPostTime.Length;
+            var array = new List<string>();
+
+            for(var i=0;i<length;i++)
+            {
+                // Check whether for same exactPostTime we have different showPostTime
+
+                if(i!=length-1)
+                {
+                    if(exactPostTime[i]==exactPostTime[i+1] && showPostTime[i]!=showPostTime[i+1])
+                        return "impossible";
+                }
+
+>>>>>>> faf182d1454a8bdece00d53d9b3207bb6c520c9f
                  var postTime = TimeSpan.Parse(exactPostTime[i]);
 
                 // add seconds in exactPostTime
@@ -69,7 +89,11 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
             array.Sort();
             return array[array.Count-1];
+<<<<<<< HEAD
             */
+=======
+
+>>>>>>> faf182d1454a8bdece00d53d9b3207bb6c520c9f
             
         }
 
