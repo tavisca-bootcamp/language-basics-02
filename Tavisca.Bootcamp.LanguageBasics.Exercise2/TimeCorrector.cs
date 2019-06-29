@@ -9,9 +9,6 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         {
             var regex = new Regex(@"(\b\w*\b) (seconds|minutes|hours) (\b\w*\b)", RegexOptions.Compiled);
             var parts = regex.Matches(showPost);
-
- 
-
             if (parts != null && parts[0].Success)
             {
                 var groups = parts[0].Groups;
