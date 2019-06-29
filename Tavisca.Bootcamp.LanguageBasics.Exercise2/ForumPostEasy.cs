@@ -18,7 +18,6 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 var showPost = showPostTime[i];
                 times.Add(GetExactTime(exactPost,showPost));
             }
-
             times.Sort();
             return times[times.Count-1].ToString();
         }
