@@ -23,8 +23,68 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
-            throw new NotImplementedException();
+            int i, j, len = exactPostTime.Length;
+            int [ , ]time = new int[len, 3];
+            string []calculatedTimes = new string[len];
+            string hh, mm, ss;
+            for(i = 0; i < len; i++)
+            {
+                time[i, 0] = Int32.Parse(exactPostTime[i].Substring(0,2));
+                time[i, 1] = Int32.Parse(exactPostTime[i].Substring(3,2));
+                time[i, 2] = Int32.Parse(exactPostTime[i].Substring(6,2));
+            }
+            
+            for(i = 0; i < showPostTime.Length; i++)
+            {
+                string []s = showPostTime[i].Split(' ');
+                //Console.WriteLine(s.Length+" "+showPostTime[i]);
+                if(s[1].Equals("minutes"))
+                {
+                    time[i, 1] += Int32.Parse(s[0]);
+                    if(time[i, 1] >= 60)
+                    {
+                        time[i, 1] %= 60;
+                        time[i, 0]++;
+                        if(time[i, 0] >= 24)
+                        {
+                            time[i, 0] %= 24;
+                        }
+                    }
+                }
+                else if(s[1].Equals("hours"))
+                {
+                    time[i, 0] += Int32.Parse(s[0]);
+                    if(time[i, 0] >= 24)
+                    {
+                        time[i, 0] %= 24;
+                    }
+                }
+                hh = $"{time[i, 0]}".PadLeft(2, '0');
+                mm = $"{time[i, 1]}".PadLeft(2, '0');
+                ss = $"{time[i, 2]}".PadLeft(2, '0');
+                calculatedTimes[i] = $"{hh}:{mm}:{ss}";
+                //Console.WriteLine(calculatedTimes[i]);
+                //System.Console.WriteLine($"{time[i, 0]}:{time[i, 1]}:{time[i, 2]}");
+            }
+            for(i = 0; i < len; i++)
+            {
+                for(j = i + 1; j < len; j++)
+                {
+                    if(exactPostTime[i].Equals(exactPostTime[j]))
+                    {
+                        if(!showPostTime[i].Equals(showPostTime[j]))
+                        {
+                            return "impossible";
+                        }
+                    }
+                }
+            }
+            Array.Sort(calculatedTimes);
+            // for(i = 0; i < len; i++)
+            // {
+            //     Console.WriteLine(calculatedTimes[i]);
+            // }
+            return calculatedTimes[len -1];
         }
     }
 }
