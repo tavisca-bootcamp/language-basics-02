@@ -15,65 +15,71 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         private static void Test(string[] postTimes, string[] showTimes, string expected)
         {
-            var result = GetCurrentTime(postTimes, showTimes).Equals(expected) ? "PASS" : "FAIL";
+            var result = ForumPostEasy.GetCurrentTime(postTimes, showTimes).Equals(expected) ? "PASS" : "FAIL";
             var postTimesCsv = string.Join(", ", postTimes);
             var showTimesCsv = string.Join(", ", showTimes);
             Console.WriteLine($"[{postTimesCsv}], [{showTimesCsv}] => {result}");
         }
 
+        
+    }
+    class ForumPostEasy
+    {
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
             // Add your code here.
-            int totalPosts = exactPostTime.Length;
-            for (int i = 0; i < totalPosts; i++)
+
+            TimeSpan currentTime = TimeSpan.Parse("0");
+            for (int i = 0; i < exactPostTime.Length; i++)
             {
-                for (int j = i + 1; j < totalPosts; j++)
+                for (int j = i + 1; j < exactPostTime.Length; j++)
                 {
                     if (exactPostTime[i] == exactPostTime[j])
-                    {
                         if (showPostTime[i] != showPostTime[j])
-                        {
-                            Console.WriteLine("Impossible!");
                             return "impossible";
-                        }
-                    }
                 }
             }
-
-            string[] resultantCurrentTime = new string[totalPosts];
-            for (int i = 0; i < totalPosts; i++)
+            for (int i = 0; i < exactPostTime.Length; i++)
             {
-                string[] splittedTimeIntoHoursMinSec = exactPostTime[i].Split(":");
-                DateTime tempDateTimeObject = new DateTime(2019, 6, 21, Int32.Parse(splittedTimeIntoHoursMinSec[0]), Int32.Parse(splittedTimeIntoHoursMinSec[1]), Int32.Parse(splittedTimeIntoHoursMinSec[2]));
-
-                if (showPostTime[i].Contains("seconds"))
+                TimeSpan time = TimeSpan.Parse(exactPostTime[i]);
+                if (showPostTime[i].ToLower().Contains("second"))
                 {
-                    resultantCurrentTime[i] = exactPostTime[i];
-                }
-                else if (showPostTime[i].Contains("minutes"))
-                {
-                    string spanAfterPostInMinutes = showPostTime[i].Split(" ")[0];
-                    TimeSpan timeSpanObject = new TimeSpan(0, 0, Int32.Parse(spanAfterPostInMinutes), 0);
-                    resultantCurrentTime[i] = tempDateTimeObject.Add(timeSpanObject).ToString().Split(" ")[1];
+                    if (currentTime < time)
+                        currentTime = time;
                 }
                 else
                 {
-                    string spanAfterPostInHours = showPostTime[i].Split(" ")[0];
-                    TimeSpan timeSpanObject = new TimeSpan(0, Int32.Parse(spanAfterPostInHours), 0, 0);
-                    resultantCurrentTime[i] = tempDateTimeObject.Add(timeSpanObject).ToString().Split(" ")[1];
+                    int timeValue = int.Parse(showPostTime[i].Substring(0, showPostTime[i].IndexOf(" ")));
+                    if (showPostTime[i].ToLower().Contains("minute"))
+                    {
+                        TimeSpan span = TimeSpan.FromMinutes(timeValue);
+                        if (time + span > TimeSpan.Parse("1.00:00:00"))
+                        {
+                            time = time + span - TimeSpan.FromDays(1);
+                            if (currentTime < time)
+                                currentTime = time;
+                        }
+                        else
+                             if (currentTime < time + span)
+                            currentTime = time + span;
+                    }
+                    if (showPostTime[i].ToLower().Contains("hour"))
+                    {
+                        TimeSpan span = TimeSpan.FromHours(timeValue);
+                        if (time + span > TimeSpan.Parse("1.00:00:00"))
+                        {
+                            time = time + span - TimeSpan.FromDays(1);
+                            if (currentTime < time)
+                                currentTime = time;
+                        }
+                        else
+                            if (currentTime < time + span)
+                            currentTime = time + span;
+                    }
                 }
             }
+            return currentTime.ToString();
 
-            Array.Sort(resultantCurrentTime);
-            Console.WriteLine(resultantCurrentTime[totalPosts - 1]);
-            /*for (int i = 0; i < resultantCurrentTime.Length; i++)
-                Console.WriteLine("-{0}-", resultantCurrentTime[i]);*/
-            string[] temp = resultantCurrentTime[totalPosts - 1].Split(":");
-            string ans;
-            ans = Convert.ToString(Convert.ToInt32(temp[0]) % 24) + ":" + temp[1] + ":" + temp[2];
-            
-            return ans;
-            throw new NotImplementedException();
         }
     }
 }
