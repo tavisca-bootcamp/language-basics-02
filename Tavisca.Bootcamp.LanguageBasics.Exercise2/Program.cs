@@ -28,7 +28,18 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
             for (int i = 0; i < exactPostTime.Length; i++)
             {
-                var exactTime = DateTime.Parse(exactPostTime[i], System.Globalization.CultureInfo.InvariantCulture);
+                for (int j = i + 1; j < exactPostTime.Length; j++)
+                {
+                    if (exactPostTime[i] == exactPostTime[j])
+                    {
+                        if (showPostTime[i] != showPostTime[j])
+                        {
+                            return "impossible";
+                        }
+                    }
+                }
+
+                DateTime.TryParse(exactPostTime[i], out DateTime exactTime);
                 var currentTimeLowerBound = exactTime;
                 var currentTimeUpperBound = exactTime;
                 var displayedPostTimeComponents = showPostTime[i].Split(' ');
@@ -59,25 +70,10 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 currentTimeUpperBounds[i] = currentTimeUpperBound;
             }
 
-            for (int i = 0; i < exactPostTime.Length - 1; i++)
-            {
-                for (int j = i + 1; j < exactPostTime.Length; j++)
-                {
-                    if (exactPostTime[i] == exactPostTime[j])
-                    {
-                        if (showPostTime[i] != showPostTime[j])
-                        {
-                            return "impossible";
-                        }
-                    }
-                }
-            }
-
             //sorting upperbounds in ascending order and lower bounds in descending order
             Array.Sort(currentTimeUpperBounds);
-            Array.Sort(currentTimeLowerBounds);
-            Array.Reverse(currentTimeLowerBounds);
-
+            Array.Sort<DateTime>(currentTimeLowerBounds, new Comparison<DateTime>(
+                  (i1, i2) => i2.CompareTo(i1)));
 
             //comapring lowerbounds to actual upper bound to obtain the 
             //max possible value for the lowerbound that is smaller than upperbound.            
