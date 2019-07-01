@@ -16,10 +16,10 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         private static void Test(string[] postTimes, string[] showTimes, string expected)
         {
-            var result = GetCurrentTime(postTimes, showTimes).Equals(expected) ? "PASS" : "FAIL";
+            var resultTimeSpan = GetCurrentTime(postTimes, showTimes).Equals(expected) ? "PASS" : "FAIL";
             var postTimesCsv = string.Join(", ", postTimes);
             var showTimesCsv = string.Join(", ", showTimes);
-            Console.WriteLine($"[{postTimesCsv}], [{showTimesCsv}] => {result}");
+            Console.WriteLine($"[{postTimesCsv}], [{showTimesCsv}] => {resultTimeSpan}");
         }
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
@@ -39,54 +39,52 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             }
             
             
-            List<string> times = new List<string>();
-            TimeSpan result,ts1,ts;
-            string resultTime;
+            List<string> timesList = new List<string>();
+            TimeSpan resultTimeSpan,timeSpan1,timeSpan2;
+            string resultTimeSpanTime;
             for(int i=0;i<exactPostTime.Length;i++)
             {
                 string [] time = exactPostTime[i].Split(':');
                 int hour = int.Parse(time[0]);
                 int min = int.Parse(time[1]);
                 int sec = int.Parse(time[2]); 
-                ts = new TimeSpan(hour,min,sec);
+                timeSpan2 = new TimeSpan(hour,min,sec);
 
-                ts1 = GetTimeFromMessage(showPostTime[i]);
-                result = ts+ts1;
+                timeSpan1 = GetTimeFromMessage(showPostTime[i]);
+                resultTimeSpan = timeSpan2+timeSpan1;
 
-                resultTime = result.ToString();
+                resultTimeSpanTime = resultTimeSpan.ToString();
 
                
-                times.Add(resultTime);
+                timesList.Add(resultTimeSpanTime);
 
             }
 
-
-            return LexicographicallySmall(times);
-
+            return LexicographicallySmall(timesList);
             
         }
 
-        private static string LexicographicallySmall(List<string> times)
+        private static string LexicographicallySmall(List<string> timesList)
         {
-            // for(int i=0;i<times.Count;i++)
+            // for(int i=0;i<timesList.Count;i++)
             // {
-            //     for(int j=0;j<times.Count-1-i;j++)
+            //     for(int j=0;j<timesList.Count-1-i;j++)
             //     {
-            //         if((times[j].Length>times[j+1].Length) && string.Compare(times[j],times[j+1])>1)
+            //         if((timesList[j].Length>timesList[j+1].Length) && string.Compare(timesList[j],timesList[j+1])>1)
             //         {
-            //             string temp = times[j];
-            //             times[j] = times[j+1];
-            //             times[j+1] = temp;
+            //             string temp = timesList[j];
+            //             timesList[j] = timesList[j+1];
+            //             timesList[j+1] = temp;
             //         }
             //     }
             // }
-            String maxTime = times[0];
+            String maxTime = timesList[0];
 
-            for(int i=1;i<times.Count;i++)
+            for(int i=1;i<timesList.Count;i++)
             {   
-                if(string.Compare(maxTime,times[i]) == -1 && !times[i].Contains("1."))
+                if(string.Compare(maxTime,timesList[i]) == -1 && !timesList[i].Contains("1."))
                 {
-                    maxTime = times[i];
+                    maxTime = timesList[i];
                 }
 
             }
@@ -97,9 +95,9 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         }
 
         //Convert human readable string to TimeSpan object
-        private static TimeSpan GetTimeFromMessage(string t)
+        private static TimeSpan GetTimeFromMessage(string timeInString)
         {
-            String [] parseMessage = t.Split(' ');
+            String [] parseMessage = timeInString.Split(' ');
             if(parseMessage[1] == "seconds")
             {
                return new TimeSpan(0,0,0);
