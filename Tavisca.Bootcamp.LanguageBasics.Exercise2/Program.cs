@@ -1,5 +1,5 @@
-﻿using System;
-
+using System;
+using System.Globalization;
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
     public static class Program
@@ -23,68 +23,39 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-           string result= "";
-            //condition if only one exactPostTime is given
-            if(exactPostTime.Length == 1)
-            {
-                result = exactPostTime[0];
-                return result;
-            }
-            //
+            string[] currentTime=new string[exactPostTime.Length];
+            DateTime dateTime;
             for(int i = 0; i < exactPostTime.Length; i++)
             {
-                for(int j=0; j<exactPostTime.Length; j++)
+                // Checking of conflict in Time
+                for(int j = i+1; j < exactPostTime.Length; j++)
                 {
                     if((exactPostTime[i] == exactPostTime[j]) && (showPostTime[i] != showPostTime[j]))
                     {
                         return "impossible";
                     }
-
                 }
-                var exactHour = exactPostTime[i].Split(":")[0];
-                var HH = int.Parse(exactHour);
-                var exactMinute = exactPostTime[i].Split(":")[1];         
-                var MM = int.Parse(exactMinute);
-                var exactSecond = exactPostTime[i].Split(":")[2];
-                var SS = int.Parse(exactSecond);
-                // if showPostTime contain hour then the total number of hour ago is added to HH which shows current hour 
-                if(showPostTime[i].Contains("hours"))
+                if( showPostTime[i].Contains("seconds") )
                 {
-                    var shownHour = showPostTime[i].Split(" ")[0];
-                    HH += int.Parse(shownHour);
-                    if(HH > 24)
-                    {
-                        HH -= 24;
-                    }
+                    currentTime[i] = exactPostTime[i];
                 }
-                // if showPostTime contain minutes then the total number of minutes ago is added to MM which shows current minute 
-                if(showPostTime[i].Contains("minutes"))
+                else if( showPostTime[i].Contains("minutes") )
                 {
-                    var shownMinute = showPostTime[i].Split(" ")[0];
-                    MM += int.Parse(shownMinute);
-                    if(MM > 59)// if current minute is greater tha 59 then hour is increased buy one 
-                    {
-                        MM -= 60;
-                        HH++;
-                    }
-                    if(HH == 24)//value of HH cannot be 24
-                        HH = 0;
-
-                    HH.ToString();
-                    MM.ToString();
-                    SS.ToString();
-
-                    if(HH.Equals(0))
-                        result = "00" + ":" + MM + ":" + SS;
-                    else if(MM.Equals(0))
-                        result = HH + ":" + "00" + ":" + SS;
-                    else if(SS.Equals(0))
-                        result = HH + ":" + MM + ":" + "00";
-                    else
-                        result = HH + ":" + MM + ":" + SS;
+                    bool isTimeForamt = DateTime.TryParse(exactPostTime[i], out dateTime); 
+                    string minutes = showPostTime[i].Split(" ")[0]; //taking that x minute
+                    //adding the minutes to currentTime ans also covertingto a valid string
+                    currentTime[i]=dateTime.AddMinutes(Int32.Parse(minutes)).ToString("HH:mm:ss",CultureInfo.InvariantCulture);
                 }
+                else if(showPostTime[i].Contains("hours"))
+                {
+                    bool isTimeForamt = DateTime.TryParse(exactPostTime[i], out dateTime);
+                    string hour = showPostTime[i].Split(" ")[0]; //taking that x hour
+                    currentTime[i]=dateTime.AddHours(Int32.Parse(hour)).ToString("HH:mm:ss",CultureInfo.InvariantCulture);
+                }
+                
             }
-            return result;
+            Array.Sort(currentTime);
+            return currentTime[(exactPostTime.Length -1)]; //returning the subset time
         }
     }
 }
