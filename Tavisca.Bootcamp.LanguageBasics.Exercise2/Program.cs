@@ -1,5 +1,5 @@
-﻿using System;
-
+using System;
+using System.Globalization;
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
     public static class Program
@@ -23,8 +23,39 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
-            throw new NotImplementedException();
+            string[] currentTime=new string[exactPostTime.Length];
+            DateTime dateTime;
+            for(int i = 0; i < exactPostTime.Length; i++)
+            {
+                // Checking of conflict in Time
+                for(int j = i+1; j < exactPostTime.Length; j++)
+                {
+                    if((exactPostTime[i] == exactPostTime[j]) && (showPostTime[i] != showPostTime[j]))
+                    {
+                        return "impossible";
+                    }
+                }
+                if( showPostTime[i].Contains("seconds") )
+                {
+                    currentTime[i] = exactPostTime[i];
+                }
+                else if( showPostTime[i].Contains("minutes") )
+                {
+                    bool isTimeForamt = DateTime.TryParse(exactPostTime[i], out dateTime); 
+                    string minutes = showPostTime[i].Split(" ")[0]; //taking that x minute
+                    //adding the minutes to currentTime ans also covertingto a valid string
+                    currentTime[i]=dateTime.AddMinutes(Int32.Parse(minutes)).ToString("HH:mm:ss",CultureInfo.InvariantCulture);
+                }
+                else if(showPostTime[i].Contains("hours"))
+                {
+                    bool isTimeForamt = DateTime.TryParse(exactPostTime[i], out dateTime);
+                    string hour = showPostTime[i].Split(" ")[0]; //taking that x hour
+                    currentTime[i]=dateTime.AddHours(Int32.Parse(hour)).ToString("HH:mm:ss",CultureInfo.InvariantCulture);
+                }
+                
+            }
+            Array.Sort(currentTime);
+            return currentTime[(exactPostTime.Length -1)]; //returning the subset time
         }
     }
 }
