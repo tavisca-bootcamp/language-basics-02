@@ -28,11 +28,11 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             // Add your code here.
             string postTime = "impossible";
             string[] time = Regex.Split(exactPostTime[0], ":");//split the original time to obtain hr min and sec
-            if(exactPostTime.Count()==0||showPostTime.Count()==0)
+            if (exactPostTime.Count() == 0 || showPostTime.Count() == 0)
             {
                 return postTime;
             }
-            if (!(isSame(exactPostTime).Equals(isSame(showPostTime))))//will check if exactTime is same then PostTime should be same
+            if (!(IsSame(exactPostTime).Equals(IsSame(showPostTime))))//will check if exactTime is same then PostTime should be same
             {
                 return postTime;
             }
@@ -46,52 +46,63 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 }
                 else if (showPostTime[i].Contains("minutes"))
                 {
-                    postTime = isMinutes(time, showPostTime[i], postTime);
+                    postTime = GetMinutes(time, showPostTime[i], postTime);
 
                 }
                 else if (showPostTime[i].Contains("hours"))
                 {
-                    postTime = isHours(time, showPostTime[i], postTime);
+                    postTime = GetHours(time, showPostTime[i], postTime);
                 }
             }
             return postTime;
 
         }
 
-        public static string isMinutes(string[] time, string showPostTime, string postTime)
+        public static string GetMinutes(string[] time, string showPostTime, string postTime)
         {
+            int givenTime = 0;
+            int showTime = 0;
             String[] shownTime = Regex.Split(showPostTime, " ");//spliting the shown sentence to obtain mins
-            if (((int.Parse(time[1]) + int.Parse(shownTime[0])) % 60) != 0)
+            if (int.TryParse(time[1], out givenTime) && int.TryParse(shownTime[0], out showTime))
             {
-                time[0] = (((int.Parse(time[1])) + 1) % 24).ToString();//if by adding mins are converted to hours i.e min>60 the increase in hrs
-                time[1] = ((int.Parse(time[1]) + int.Parse(shownTime[0])) % 60).ToString();//add remaing mins to string
+                if (((int.Parse(time[1]) + int.Parse(shownTime[0])) % 60) != 0)
+                {
+                    time[0] = (((int.Parse(time[1])) + 1) % 24).ToString();//if by adding mins are converted to hours i.e min>60 the increase in hrs
+                    time[1] = ((int.Parse(time[1]) + int.Parse(shownTime[0])) % 60).ToString();//add remaing mins to string
+                }
+                else
+                {
+                    time[1] = ((int.Parse(time[1]) + int.Parse(shownTime[0])) % 60).ToString();
+                }
+                postTime = TimeFormat(time[0], time[1], time[2]);//timeformat convert time in proper format
             }
-            else
-            {
-                time[1] = ((int.Parse(time[1]) + int.Parse(shownTime[0])) % 60).ToString();
-            }
-            postTime = timeFormat(time[0], time[1], time[2]);//timeformat convert time in proper format
             return postTime;
+
         }
 
-        public static string isHours(string[] time, string showPostTime, string postTime)
+        public static string GetHours(string[] time, string showPostTime, string postTime)
         {
-            String[] shownTime = Regex.Split(showPostTime, " ");// to obtain hrs ago               
-            if (String.IsNullOrWhiteSpace(postTime) != true)//get the latest time so that to find lexicographically smaller time
+            int givenTime = 0;
+            int showTime = 0;
+            String[] shownTime = Regex.Split(showPostTime, " ");// to obtain hrs ago 
+            if (int.TryParse(time[0], out givenTime) && int.TryParse(shownTime[0], out showTime))
             {
-                String[] timeNow = Regex.Split(postTime, ":");
-                time[0] = (((int.Parse(time[0]) + int.Parse(shownTime[0])) % 24)).ToString();
-                postTime = timeFormat(time[0], timeNow[1], timeNow[2]);
-            }
-            else
-            {
-                time[0] = (((int.Parse(time[0]) + int.Parse(shownTime[0])) % 24)).ToString();
-                postTime = timeFormat(time[0], time[1], time[2]);
+                if (String.IsNullOrWhiteSpace(postTime) != true)//get the latest time so that to find lexicographically smaller time
+                {
+                    String[] timeNow = Regex.Split(postTime, ":");
+                    time[0] = (((int.Parse(time[0]) + int.Parse(shownTime[0])) % 24)).ToString();
+                    postTime = TimeFormat(time[0], timeNow[1], timeNow[2]);
+                }
+                else
+                {
+                    time[0] = (((int.Parse(time[0]) + int.Parse(shownTime[0])) % 24)).ToString();
+                    postTime = TimeFormat(time[0], time[1], time[2]);
+                }
             }
             return postTime;
         }
 
-        public static string timeFormat(string hr, string min, string sec)
+        public static string TimeFormat(string hr, string min, string sec)
         {
             if (hr.Length == 1)
             {
@@ -108,7 +119,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             return hr + ":" + min + ":" + sec;
         }
 
-        public static bool isSame(string[] timeArray)
+        public static bool IsSame(string[] timeArray)
         {
             for (int i = 0; i < timeArray.Count(); i++)
             {
