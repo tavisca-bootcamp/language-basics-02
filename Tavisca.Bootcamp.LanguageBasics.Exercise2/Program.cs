@@ -15,16 +15,10 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         private static void Test(string[] postTimes, string[] showTimes, string expected)
         {
-            var result = GetCurrentTime(postTimes, showTimes).Equals(expected) ? "PASS" : "FAIL";
+            var result = ForumPostEasy.GetCurrentTime(postTimes, showTimes).Equals(expected) ? "PASS" : "FAIL";
             var postTimesCsv = string.Join(", ", postTimes);
             var showTimesCsv = string.Join(", ", showTimes);
             Console.WriteLine($"[{postTimesCsv}], [{showTimesCsv}] => {result}");
-        }
-
-        public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
-        {
-            // Add your code here.
-            throw new NotImplementedException();
         }
     }
 }
