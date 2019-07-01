@@ -24,53 +24,74 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
+            //list for exact post time
             ArrayList exactPostTimeList = new ArrayList();
+
+            //list for time when post is made
             ArrayList showPostTimeList = new ArrayList();
-            ArrayList list1 = new ArrayList();
-            for (int i = 0; i < exactPostTime.Length; i++)
+
+            //list for current time
+            ArrayList currentTimeList = new ArrayList();
+            try
             {
-                string[] exactPostTimeSplit = exactPostTime[i].Split(':');
-                DateTime d = new DateTime(2001, 01, 01, int.Parse(exactPostTimeSplit[0]), int.Parse(exactPostTimeSplit[1]), int.Parse(exactPostTimeSplit[2]));
-                if ((exactPostTimeList.Contains(d) && showPostTimeList.Contains(showPostTime[i])) || (!exactPostTimeList.Contains(d)) && !showPostTimeList.Contains(showPostTime[i]))
+                //Iterating  and adding to post and show time to list
+                for (int i = 0; i < exactPostTime.Length; i++)
                 {
-                    showPostTimeList.Add(showPostTime[i]);
-                    exactPostTimeList.Add(d);
-                }
-                else
-                {
-                    return "impossible";
-                }
-            }
+                    string[] exactPostTimeSplit = exactPostTime[i].Split(':');
+                    DateTime d = new DateTime(2001, 01, 01, int.Parse(exactPostTimeSplit[0]), int.Parse(exactPostTimeSplit[1]), int.Parse(exactPostTimeSplit[2]));
 
-            for (int i = 0; i < showPostTime.Length; i++)
+                    //checking if post time is same then shown time must also be same
+                    if ((exactPostTimeList.Contains(d) && showPostTimeList.Contains(showPostTime[i])) || (!exactPostTimeList.Contains(d)) && !showPostTimeList.Contains(showPostTime[i]))
+                    {
+                        showPostTimeList.Add(showPostTime[i]);
+                        exactPostTimeList.Add(d);
+                    }
+                    else
+                    {
+                        return "impossible";
+                    }
+                }
+
+                //Iterating and calculating current time
+                for (int i = 0; i < showPostTime.Length; i++)
+                {
+                    string[] postTime = showPostTime[i].Split(' ');
+                    DateTime dt = (DateTime)exactPostTimeList[i];
+                    switch (postTime[1])
+                    {
+                        //adding hours
+                        case "hours":
+                            dt = dt.AddHours(double.Parse(postTime[0]));
+                            break;
+
+                        //adding minutes
+                        case "minutes":
+                            dt = dt.AddMinutes(double.Parse(postTime[0]));
+                            break;
+
+                        //adding seconds
+                        case "seconds":
+                            if (postTime[0].Equals("few"))
+                            {
+                                dt = dt.AddSeconds(0);
+                            }
+                            else
+                            {
+                                dt = dt.AddSeconds(double.Parse(postTime[0]));
+                            }
+                            break;
+                    }
+                    // converting date time to string
+                    currentTimeList.Add(dt.ToLongTimeString());
+                }
+                //sorting current time list
+                currentTimeList.Sort();
+            }
+            catch(Exception exception)
             {
-                string[] showPostTimeSplit = showPostTime[i].Split(' ');
-                DateTime dt = (DateTime)exactPostTimeList[i];
-                switch (showPostTimeSplit[1])
-                {
-                    case "hours":
-                        dt = dt.AddHours(double.Parse(showPostTimeSplit[0]));
-                        break;
-
-                    case "minutes":
-                        dt = dt.AddMinutes(double.Parse(showPostTimeSplit[0]));
-                        break;
-
-                    case "seconds":
-                        if (showPostTimeSplit[0].Equals("few"))
-                        {
-                            dt = dt.AddSeconds(0);
-                        }
-                        else
-                        {
-                            dt = dt.AddSeconds(double.Parse(showPostTimeSplit[0]));
-                        }
-                        break;
-                }
-                list1.Add(dt.ToLongTimeString());
+                Console.WriteLine(exception.GetType().Name);
             }
-            list1.Sort();
-            return list1[list1.Count-1].ToString();
+            return currentTimeList[currentTimeList.Count-1].ToString();
         }
     }
 }
