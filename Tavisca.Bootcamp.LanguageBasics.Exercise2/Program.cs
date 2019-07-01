@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
@@ -10,7 +12,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             Test(new[] { "23:23:23", "23:23:23" }, new[] { "59 minutes ago", "59 minutes ago" }, "00:22:23");
             Test(new[] { "00:10:10", "00:10:10" }, new[] { "59 minutes ago", "1 hours ago" }, "impossible");
             Test(new[] { "11:59:13", "11:13:23", "12:25:15" }, new[] { "few seconds ago", "46 minutes ago", "23 hours ago" }, "11:59:23");
-            Console.ReadKey(true);
+            //Console.ReadKey(true);
         }
 
         private static void Test(string[] postTimes, string[] showTimes, string expected)
@@ -24,7 +26,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         /* Main Idea of the solution : 
         1) calculate the lower bound time and upper bound time for each posttime and showtime
-        2) we will calculte this time in seconds.
+        2) we will calculate this time in seconds.
         3) now we have a list of mintimes and maxtimes ranges...
         4) we need to find a overlap between the time ranges. 
         5) a overlap occurs if we have the (maximun(mintimes array elements) < minimum(maxtime array elements)) as TRUE
@@ -32,126 +34,123 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         7) else we return "impossible"
         */
 
+        const int TotalSecondsInADay = 86400;
+        const int MaximumSeconds = 59;
+        const int MinimumSeconds = 0;
+        const int SecondsInAMinute = 60;
+        const int SecondsInAnHour = 3600;
+
         // User defined class for storing and processing time data !
-        public class TimeClass{
-            public string exactTime;
-            public string showTime;
+        public class TimeClass
+        {
+            public string ExactTime;
+            public string ShowTime;
             public int hh;
             public int mm;
             public int ss;
-            public int totalSeconds;
-            public int maxTime;
-            public int minTime;
+            public int TotalSeconds;
+            public int MaxTime;
+            public int MinTime;
 
-            // constructor to initialize objects with exactPostTime and showTimes
-            public TimeClass(string exactTime, string showTime){
-                this.exactTime = exactTime;
-                this.showTime = showTime;
+            
+            public TimeClass(string exactTime, string showTime)
+            {
+                // constructor to initialize objects with exactPostTime and showTimes
+                this.ExactTime = exactTime;
+                this.ShowTime = showTime;
             }
             
-            // Function to process and calculate mintime ad maxtime ranges for a time element
-            public void Process(){
-                string[] temp1 = exactTime.Split(':');
-                hh = Int32.Parse(temp1[0]);
-                mm = Int32.Parse(temp1[1]);
-                ss = Int32.Parse(temp1[2]);
+            
+            public void Process()
+            {
+                // Function to process and calculate mintime ad maxtime ranges for a time element
+                Regex pattern = new Regex(@"(?<num0>.*):(?<num1>.*):(?<num2>.*)");
+                Match match = pattern.Match(this.ExactTime);
+                this.hh = Int32.Parse(match.Groups["num0"].Value);
+                this.mm = Int32.Parse(match.Groups["num1"].Value);
+                this.ss = Int32.Parse(match.Groups["num2"].Value);
 
-                totalSeconds= ss + (60*mm) + (3600*hh);
+                /* 
+                string[] timeStringParse = this.ExactTime.Split(':');
+                this.hh = Int32.Parse(timeStringParse[0]);
+                this.mm = Int32.Parse(timeStringParse[1]);
+                this.ss = Int32.Parse(timeStringParse[2]);
+                */
 
-                if(showTime.Contains("seconds")){
-                    minTime = totalSeconds + 0;
-                    maxTime = minTime + 59;
-                }else if(showTime.Contains("minutes")){
-                    string[] temp = showTime.Split(' ');
-                    int tempMin = Int32.Parse(temp[0]);
-                    minTime = totalSeconds + 60*tempMin + 0;
-                    maxTime = minTime + 59;
-                }else if(showTime.Contains("hours")){
-                    string[] temp = showTime.Split(' ');
-                    int tempHr = Int32.Parse(temp[0]);
-                    minTime = totalSeconds + 3660*tempHr ;
-                    maxTime =  minTime + 59*60 + 59;
+                TotalSeconds= ss + (SecondsInAMinute * mm) + (SecondsInAnHour * hh);
+
+                if(this.ShowTime.Contains("seconds")){
+                    MinTime = TotalSeconds + MinimumSeconds;
+                    MaxTime = MinTime + MaximumSeconds;
+                }else if(this.ShowTime.Contains("minutes")){
+                    string[] stringParser = this.ShowTime.Split(' ');
+                    int minutes = Int32.Parse(stringParser[0]);
+                    MinTime = TotalSeconds + SecondsInAMinute*minutes + MinimumSeconds;
+                    MaxTime = MinTime + MaximumSeconds;
+                }else if(this.ShowTime.Contains("hours")){
+                    string[] stringParser = this.ShowTime.Split(' ');
+                    int hours = Int32.Parse(stringParser[0]);
+                    MinTime = TotalSeconds + SecondsInAnHour*hours ;
+                    MaxTime =  MinTime + 59*60 + MaximumSeconds;
                 }
                 // But a day can have only 86400 seconds, so we need to take mod for minTime and maxTime
-                minTime = minTime % 86400;
-                maxTime = maxTime % 86400;
+                MinTime = MinTime % TotalSecondsInADay;
+                MaxTime = MaxTime % TotalSecondsInADay;
             }
 
         }
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
-            int minmaxTime,maxminTime;
-            int hh,mm,ss; // resultant hour, minutes and seconds
-            string result = ""; // result string to be returned
-
+            int minMaxTime,maxMinTime;
             //Taking input and processing that input:
-            int len = exactPostTime.Length;
-            TimeClass[] TT = new TimeClass[len]; // TT stands for TestCase Time !
-            for (int i = 0; i < len; i++)
+            var TT = new TimeClass[exactPostTime.Length]; // TT stands for TestCase Time !
+            for (int i = 0; i < exactPostTime.Length; i++)
             {
                 TT[i] = new TimeClass(exactPostTime[i], showPostTime[i]);
                 TT[i].Process();   
             }
-            
             // Now lets find the overlapping time cases
-            maxminTime = TT[0].minTime;
-            for (int i = 0; i < len; i++)
+            maxMinTime = TT[0].MinTime;
+            for (int i = 0; i < exactPostTime.Length; i++)
             {
-                if(TT[i].minTime > maxminTime)
-                    maxminTime= TT[i].minTime;
+                if(TT[i].MinTime > maxMinTime)
+                    maxMinTime= TT[i].MinTime;
             }
-            minmaxTime = TT[0].maxTime;
-            for (int i = 0; i < len; i++)
+            minMaxTime = TT[0].MaxTime;
+            for (int i = 0; i < exactPostTime.Length; i++)
             {
-                if(TT[i].maxTime < minmaxTime)
-                    minmaxTime= TT[i].maxTime;
+                if(TT[i].MaxTime < minMaxTime)
+                    minMaxTime= TT[i].MaxTime;
             }
 
-            
             // Now we already have the boundary conditions.
-            if(maxminTime < minmaxTime){
-                
-                // we have a result to be returned in this case!
+            var result = MakeResultString(maxMinTime, minMaxTime);
+            return result;
+        }
+
+        private static String MakeResultString(int maxMinTime, int minMaxTime)
+        {
+            int hh,mm,ss; // resultant hour, minutes and seconds
+            var result = "impossible"; // result string to be returned
+
+            if(maxMinTime < minMaxTime)
+            {   // we have a result to be returned in this case!
                 // result to be considered is - maxmintime(seconds)
                 // so, now we will convert maxmintime to hh:mm:ss format
-                hh = maxminTime / 3600;
+                hh = maxMinTime / SecondsInAnHour;
                 hh = hh % 24;
-                maxminTime = maxminTime % 3600;
-                mm = maxminTime / 60;
-                maxminTime = maxminTime % 60;
-                ss = maxminTime;
+                maxMinTime = maxMinTime % SecondsInAnHour;
+                mm = maxMinTime / SecondsInAMinute;
+                maxMinTime = maxMinTime % SecondsInAMinute;
+                ss = maxMinTime;
 
-
-                // Returning result in format HH:MM:SS, we need to convert single digit(9:7:5) numbers to double digit(09:07:05)
-                // adding hours to result
-                if(hh>9){
-                     result = result + $"{hh}:";
-                }else{
-                    result = result + $"0{hh}:";
-                }
-                // adding minutes to result
-                if(mm>9){
-                     result = result + $"{mm}:";
-                }else{
-                    result = result + $"0{mm}:";
-                }
-                // adding seconds to result
-                if(ss>9){
-                     result = result + $"{ss}";
-                }else{
-                    result = result + $"0{ss}";
-                }
-                
-                return result;
-
-            }else{
-                // if there is no overlapping between the mintime and maxtime time ranges
-                // then there is no possible current time for the problem - hence return "impossible"
-                return "impossible";
+                // Returning result in format HH:MM:SS        
+                DateTime date1 = new DateTime(2019,07,01,hh,mm,ss);
+                CultureInfo ci = CultureInfo.InvariantCulture;
+                result = date1.ToString("HH:mm:ss",ci);
             }
+            return result;
 
-            throw new NotImplementedException();
         }
     }
 }
