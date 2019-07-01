@@ -69,8 +69,6 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             }
 
             return currentTime;
-
-            throw new NotImplementedException();
-        }
+	 }
     }
 }
