@@ -8,7 +8,7 @@
 *.user
 *.userosscache
 *.sln.docstates
-
+Tavisca.Bootcamp.LanguageBasics.Exercise2/.vscode/
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
