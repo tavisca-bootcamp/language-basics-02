@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
@@ -38,7 +38,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 }
 			}
 			
-            string resulttime="";
+            string resultTime="";
 
             for(int i = 0; i<exactPostTime.Length; i++) 
             {
@@ -61,10 +61,10 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                     currentDateTime = postedDateTime.AddHours(Convert.ToDouble(showPostTime[i].Substring(0,2)));
                 }
             //convert time to 24 hour format and check for  lexicographical order
-            if(string.Compare(resulttime,currentDateTime.ToString("HH:mm:ss")) < 1)
-                 resulttime = currentDateTime.ToString("HH:mm:ss");
+            if(string.Compare(resultTime,currentDateTime.ToString("HH:mm:ss")) < 1)
+                 resultTime = currentDateTime.ToString("HH:mm:ss");
             }
-            return resulttime;
+            return resultTime;
         }
     }
 }
