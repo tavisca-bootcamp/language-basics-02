@@ -45,6 +45,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 DateTime postedDateTime, currentDateTime;
             	postedDateTime = DateTime.Parse(exactPostTime[i]);
                 currentDateTime = postedDateTime;
+		string timeToAdjust =showPostTime[i].Substring(0,2);
 
                 // cases for second, minute and hour
                 if(showPostTime[i].Contains("seconds"))
@@ -53,12 +54,12 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 }
                 else if(showPostTime[i].Contains("minutes"))
                 { 
-                  currentDateTime = postedDateTime.AddMinutes(Convert.ToDouble(showPostTime[i].Substring(0,2)));
+                  currentDateTime = postedDateTime.AddMinutes(Convert.ToDouble(timeToAdjust));
 
                 }
                 else if(showPostTime[i].Contains("hours"))
                 {
-                    currentDateTime = postedDateTime.AddHours(Convert.ToDouble(showPostTime[i].Substring(0,2)));
+                    currentDateTime = postedDateTime.AddHours(Convert.ToDouble(timeToAdjust));
                 }
             //convert time to 24 hour format and check for  lexicographical order
             if(string.Compare(resultTime,currentDateTime.ToString("HH:mm:ss")) < 1)
