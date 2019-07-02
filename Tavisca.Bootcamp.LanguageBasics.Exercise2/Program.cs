@@ -20,23 +20,32 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             var showTimesCsv = string.Join(", ", showTimes);
             Console.WriteLine($"[{postTimesCsv}], [{showTimesCsv}] => {result}");
         }
-
-        public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
+	// Method to check selfcontradiction of input time
+	private static bool IsValidInput(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
-            //check for self-contradiction
             for(int i=0; i<exactPostTime.Length-1; i++)
             {
                 for(int j=i+1; j<exactPostTime.Length; j++)
                 {
-                    if(exactPostTime[i].Equals(exactPostTime[j]))
-                    {if(!(showPostTime[i].Equals(showPostTime[j])))
+                    if(exactPostTime[i].Equals(exactPostTime[j])==true)
+                    {if((showPostTime[i].Equals(showPostTime[j]))==false)
                         {
-                            return "impossible";
+                            return false;
                         }
                     }
                 }
 			}
+			return true;
+        }
+	    
+        public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
+        {
+            // Add your code here.
+            //check for self-contradiction
+             if(IsValidInput(exactPostTime, showPostTime)==false)
+            {
+                return "impossible";
+            }
 			
             string resultTime="";
 
