@@ -51,7 +51,6 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             currTime.Sort();
             //return last value from currTime list.
             return currTime[currTime.Count - 1].ToString();
-            throw new NotImplementedException();
         }
     }
 }
