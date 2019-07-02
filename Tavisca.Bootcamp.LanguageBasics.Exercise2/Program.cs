@@ -17,38 +17,38 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         private static void Test(string[] postTimes, string[] showTimes, string expected)
         {
-            var postTimesCsv = string.Join(", ", postTimes);
-            var showTimesCsv = string.Join(", ", showTimes);
+            
             List<string> timeOfPosting = new List<string>();
             List<string> timeOfShowing = new List<string>();
-            Dictionary<string, string> hs = new Dictionary<string, string>();
-            string s="possible";
+            Dictionary<string, string> postShowTimeRelation = new Dictionary<string, string>();
+            string result="PASS";
             for (int i=0; i<postTimes.Length; i++){
-                if (!hs.ContainsKey(postTimes[i])){
+                if (!postShowTimeRelation.ContainsKey(postTimes[i])){
                     timeOfPosting.Add(postTimes[i]);
                     timeOfShowing.Add(showTimes[i]);
-                    hs.Add(postTimes[i], showTimes[i]);
+                    postShowTimeRelation.Add(postTimes[i], showTimes[i]);
                 }
-                else if (!hs.GetValueOrDefault(postTimes[i]).Equals(showTimes[i])){
-                    s="impossible";
+                else if (!postShowTimeRelation.GetValueOrDefault(postTimes[i]).Equals(showTimes[i])){
+                    result="FAIL";
                     break;
                 }
             }
 
-            if (s.Equals("impossible")){
-                Console.WriteLine($"[{postTimesCsv}], [{showTimesCsv}] => FAIL"); 
-                return;   
+
+            if (!result.Equals("FAIL"))
+            {
+                /*Now sort {timeOfPosting, timeOfShowing} on the basis of timeOfShowing in decreasing oder.
+                 For example 1.-> {01:00:00, few seconds ago}, 2.-> {11:00:00, 2 hours ago}
+                 It will arrange in following order
+                 1.-> {11:00:00, 2 hours ago}, 2.-> {01:00:00, few seconds ago}
+                 */
+                Sorting.MergeSort(timeOfPosting, timeOfShowing, 0, timeOfPosting.Count - 1);
+
+                result = Time.GetCurrentTime(timeOfPosting, timeOfShowing, result).Equals(expected) ? "PASS" : "FAIL";
             }
 
-            Sorting.MergeSort(timeOfPosting, timeOfShowing, 0, timeOfPosting.Count - 1);
-           /*for (int w=0; w<pt.Count; w++){
-                Console.WriteLine(pt[w]+"    "+st[w]);
-           }*/
-            
-
-
-            var result = Time.GetCurrentTime(timeOfPosting, timeOfShowing, ref s).Equals(expected) ? "PASS" : "FAIL";
-           
+            var postTimesCsv = string.Join(", ", postTimes);
+            var showTimesCsv = string.Join(", ", showTimes);
             Console.WriteLine($"[{postTimesCsv}], [{showTimesCsv}] => {result}");
         }
 

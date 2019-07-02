@@ -6,14 +6,14 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
     class TimeAdd
     {
-        public static void Hours(int[] time, int h)
+        public static void Hours(int[] time, int hour)
         {
-            time[0] += h;
+            time[0] += hour;
         }
 
-        public static void Minute(int[] time, int m)
+        public static void Minute(int[] time, int minute)
         {
-            time[1] += m;
+            time[1] += minute;
             if (time[1] >= 60)
             {
                 time[1] %= 60;

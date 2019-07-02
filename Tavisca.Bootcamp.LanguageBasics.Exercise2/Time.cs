@@ -6,26 +6,32 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
     class Time
     {
-        public static string GetCurrentTime(List<string> timeOfPosting, List<string> timeOfShowing, ref string s)
+        public static string GetCurrentTime(List<string> timeOfPosting, List<string> timeOfShowing, string result)
         {
-            //Console.WriteLine("1");
-            int x = 0;
+            
+            int location = 0;
             int[] startOfFirst = new int[3];
             int[] endOfFirst = new int[3];
             foreach (string sp in timeOfPosting[0].Split(":"))
             {
-                startOfFirst[x] = Convert.ToInt32(sp);
-                endOfFirst[x] = Convert.ToInt32(sp);
-                x++;
+                startOfFirst[location] = Convert.ToInt32(sp);
+                endOfFirst[location] = startOfFirst[location];
+                location++;
             }
             int f = startOfFirst[0];
-            if (timeOfShowing[0].Substring(0, 1).Equals("f"))
+
+            // if timeOfShowing is "few seconds ago"
+            if (timeOfShowing[0][0]=='f')
                 TimeAdd.Seconds(endOfFirst);
+
             else
             {
+                //index of first space in timeOfShowing[0]
                 int index = timeOfShowing[0].IndexOf(' ');
                 int v = Convert.ToInt32(timeOfShowing[0].Substring(0, index));
-                if (timeOfShowing[0].Substring(index + 1, 1).Equals("h"))
+
+                // if timeOfShowing is "y hours ago" where y is any number
+                if (timeOfShowing[0][index + 1]=='h')
                 {
                     TimeAdd.Hours(startOfFirst, v);
                     endOfFirst[0] = startOfFirst[0];
@@ -33,6 +39,8 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                     endOfFirst[2] = startOfFirst[2];
                     TimeAdd.Minute(endOfFirst, 59);
                 }
+
+                // if timeOfShowing is "y minutes ago" where y is any number
                 else
                 {
                     TimeAdd.Minute(startOfFirst, v);
@@ -41,18 +49,18 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 }
                 TimeAdd.Seconds(endOfFirst);
             }
-            //Console.WriteLine("2 "+s+", "+c[0]+", "+c[1]+", "+c[2]+", count="+pt.Count);
+            
             for (int j = 1; j < timeOfPosting.Count; j++)
             {
 
-                x = 0;
+                location = 0;
                 int[] startOfSecond = new int[3];
                 int[] endOfSecond = new int[3];
                 foreach (string sp in timeOfPosting[j].Split(":"))
                 {
-                    startOfSecond[x] = Convert.ToInt32(sp);
-                    endOfSecond[x] = Convert.ToInt32(sp);
-                    x++;
+                    startOfSecond[location] = Convert.ToInt32(sp);
+                    endOfSecond[location] = Convert.ToInt32(sp);
+                    location++;
                 }
 
                 if (startOfSecond[0] < f)
@@ -84,34 +92,34 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                     TimeAdd.Seconds(endOfSecond);
                 }
 
-                intersection(startOfFirst, endOfFirst, startOfSecond, endOfSecond, ref s);
+                intersection(startOfFirst, endOfFirst, startOfSecond, endOfSecond, ref result);
 
-                if (s.Equals("impossible"))
-                    return s;
+                if (result.Equals("impossible"))
+                    return result;
 
             }
             startOfFirst[0] %= 24;
 
-            string h = Convert.ToString(startOfFirst[0]);
-            if (h.Length == 1)
-                h = "0" + h;
+            string hour = Convert.ToString(startOfFirst[0]);
+            if (hour.Length == 1)
+                hour = "0" + hour;
 
-            string m = Convert.ToString(startOfFirst[1]);
-            if (m.Length == 1)
-                m = "0" + m;
+            string min = Convert.ToString(startOfFirst[1]);
+            if (min.Length == 1)
+                min = "0" + min;
 
             string sec = Convert.ToString(startOfFirst[2]);
             if (sec.Length == 1)
                 sec = "0" + sec;
 
-            s = h + ":" + m + ":" + sec;
+            result = hour + ":" + min + ":" + sec;
 
-            return s;
+            return result;
 
 
         }
 
-        public static void intersection(int[] startOfFirst, int[] endOfFirst, int[] startOfSecond, int[] endOfSecond, ref string s)
+        public static void intersection(int[] startOfFirst, int[] endOfFirst, int[] startOfSecond, int[] endOfSecond, ref string result)
         {
             if (startOfFirst[0] < startOfSecond[0])
             {
@@ -149,21 +157,21 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
             if (startOfFirst[0] > endOfFirst[0])
             {
-                s = "impossible";
+                result = "impossible";
                 return;
             }
             if (startOfFirst[0] == endOfFirst[0])
             {
                 if (startOfFirst[1] > endOfFirst[1])
                 {
-                    s = "impossible";
+                    result = "impossible";
                     return;
                 }
                 else if (startOfFirst[1] == endOfFirst[1])
                 {
                     if (startOfFirst[2] > endOfFirst[2])
                     {
-                        s = "impossible";
+                        result = "impossible";
                         return;
                     }
                 }
