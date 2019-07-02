@@ -24,33 +24,55 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
             int len = exactPostTime.Length;
-            int[,] times = new int[len, 2];
+            int[,] time_range = new int[len, 2];    //stores the range of seconds
             string result = "";
             for (int i = 0; i < len; i++)
             {
-                int exact_seconds = ToSeconds(exactPostTime[i]);
-                int[] show_seconds = SecondsElapsed(showPostTime[i]);
-                times[i, 0] = exact_seconds + show_seconds[0];
-                times[i, 0] = times[i, 0] % 86400;
-                times[i, 1] = exact_seconds + show_seconds[1];
-                times[i, 1] = times[i, 1] % 86400;
+                int exact_seconds = ToSeconds(exactPostTime[i]); 
+                int[] show_seconds = ShowTimeRange(showPostTime[i]); 
+                time_range[i, 0] = exact_seconds + show_seconds[0];
+                time_range[i, 0] = time_range[i, 0] % 86400;
+                time_range[i, 1] = exact_seconds + show_seconds[1];
+                time_range[i, 1] = time_range[i, 1] % 86400;
             }
-            result = GetFinalDate(times, len);
-            Console.WriteLine(result);
+            result = FinalTime(time_range, len);
+            //Console.WriteLine(result);
             return result;
         }
 
-        public static int ToSeconds(string time)
+        private static int ToSeconds(string time)
         {
-            String[] times = time.Split(":");
+            string[] times = time.Split(":");
             int seconds = 0;
             seconds = int.Parse(times[0]) * 3600 + int.Parse(times[1]) * 60 + int.Parse(times[2]);
             return seconds;
         }
 
-        public static string ToDate(int seconds)
+        private static int[] ShowTimeRange(string showtime)
         {
-            String date = "";
+            string[] arr = showtime.Split(' ');
+            int[] seconds_range = new int[2];
+            if (arr[1] == "seconds")
+            {
+                seconds_range[0] = 0;
+                seconds_range[1] = 59;
+            }
+            else if (arr[1] == "minutes")
+            {
+                seconds_range[0] = int.Parse(arr[0]) * 60;
+                seconds_range[1] = seconds_range[0] + 59;
+            }
+            else
+            {
+                seconds_range[0] = int.Parse(arr[0]) * 3600;
+                seconds_range[1] = seconds_range[0] + 3599;
+            }
+            return seconds_range;
+        }
+
+        private static string ToDate(int seconds)
+        {
+            String time = "";
             string hr = ((seconds / 3600) % 24).ToString();
             if (hr.Length < 2)
             {
@@ -58,48 +80,29 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             }
 
             seconds = seconds % 3600;
-            string min = date + (seconds / 60).ToString();
+            string min = (seconds / 60).ToString();
             if (min.Length < 2)
             {
                 min = "0" + min;
             }
 
             seconds = seconds % 60;
-            string sec = date + seconds.ToString();
+            string sec = seconds.ToString();
             if (sec.Length < 2)
             {
                 sec = "0" + sec;
             }
-            date = hr + ":" + min + ":" + sec;
-            return date;
+
+            time = hr + ":" + min + ":" + sec;
+            return time;
         }
 
-        public static int[] SecondsElapsed(string showtime)
-        {
-            string[] arr = showtime.Split(' ');
-            int[] seconds = new int[2];
-            if (arr[1] == "seconds")
-            {
-                seconds[0] = 0;
-                seconds[1] = 59;
-            }
-            else if (arr[1] == "minutes")
-            {
-                seconds[0] = int.Parse(arr[0]) * 60;
-                seconds[1] = seconds[0] + 59;
-            }
-            else
-            {
-                seconds[0] = int.Parse(arr[0]) * 3600;
-                seconds[1] = seconds[0] + 3599;
-            }
-            return seconds;
-        }
+        
 
-        public static string GetFinalDate(int[,] times, int len)
+        private static string FinalTime(int[,] times, int len)
         {
             int min = times[0, 0], max = times[0, 1];
-            for (int i = 0; i < len; i++)
+            for (int i = 1; i < len; i++)
             {
                 if (times[i, 0] <= max)
                 {
