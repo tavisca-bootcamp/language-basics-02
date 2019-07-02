@@ -25,16 +25,16 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
             int exactPostTimeLength = exactPostTime.Length;
-            DateTime[] mintime = new DateTime[exactPostTimeLength];
-            DateTime[] maxtime = new DateTime[exactPostTimeLength];
+            DateTime[] mintime = new DateTime[exactPostTime.Length];
+            DateTime[] maxtime = new DateTime[exactPostTime.Length];
             DateTime currentTime = Convert.ToDateTime(exactPostTime[0]); 
 
             if (isValid(exactPostTime, showPostTime) == 1)
             {
-                for (int i = 0; i < exactPostTimeLength; i++)
+                for (int i = 0; i < exactPostTime.Length; i++)
                 {
                     DateTime exactPostTime_dt= Convert.ToDateTime(exactPostTime[i]);
-                    String[] showPostTime_str = showPostTime[i].Split();
+                    String[] showPostTime_str = showPostTime[i].Split(' ');
                     switch (showPostTime_str[1])
                     {
                         case "seconds":
@@ -53,7 +53,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                     }
                 }
                 currentTime = mintime[0];
-                for (int i = 0; i < exactPostTimeLength; i++)
+                for (int i = 0; i < exactPostTime.Length; i++)
                 {
                     if (mintime[i].TimeOfDay > currentTime.TimeOfDay)
                         currentTime = mintime[i];
@@ -67,15 +67,18 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             }
         }
 
+
+        //Below method is to check if the given input is valid or not.
+        //For instance, if two exactPostTime are equal but their corresponding messages(showPostTime) are not the same, 
+        //the given input is not valid and the method returns "impossible".
         public static int isValid(string[] exactPostTime, string[] showPostTime)
         {
-            int len = exactPostTime.Length;
-            for (int i = 0; i < len; i++)
+            for (int current = 0; current < exactPostTime.Length; current++)
             {
-                for (int j = i; j < len; j++)
+                for (int next = current; next < exactPostTime.Length; next++)
                 {
-                    if (exactPostTime[i].Equals(exactPostTime[j]))
-                        if (!showPostTime[i].Equals(showPostTime[j]))
+                    if (exactPostTime[current].Equals(exactPostTime[next]))
+                        if (!showPostTime[current].Equals(showPostTime[next]))
                             return 0;
 
                 }
