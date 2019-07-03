@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections.Generic;
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
     public static class Program
@@ -23,8 +23,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
-            throw new NotImplementedException();
+            return new ForumPostEasy().GetCurrentTime(exactPostTime, showPostTime);
         }
     }
 }
