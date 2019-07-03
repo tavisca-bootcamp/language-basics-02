@@ -96,7 +96,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         public static string AddTime(string timeVariable, int hour, int minutes, int seconds, int showTime)
         {
             
-            if(timeVariable.Equals("seonds"))
+            if(timeVariable.Equals("seconds"))
             {
                 seconds= seconds + showTime;
             }
