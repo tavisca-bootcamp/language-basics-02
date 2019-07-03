@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
@@ -20,11 +20,61 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             var showTimesCsv = string.Join(", ", showTimes);
             Console.WriteLine($"[{postTimesCsv}], [{showTimesCsv}] => {result}");
         }
-
+	// Method to check selfcontradiction of input time
+	private static bool IsValidInput(string[] exactPostTime, string[] showPostTime)
+        {
+            for(int i=0; i<exactPostTime.Length-1; i++)
+            {
+                for(int j=i+1; j<exactPostTime.Length; j++)
+                {
+                    if(exactPostTime[i].Equals(exactPostTime[j])==true)
+                    {if((showPostTime[i].Equals(showPostTime[j]))==false)
+                        {
+                            return false;
+                        }
+                    }
+                }
+			}
+			return true;
+        }
+	    
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
             // Add your code here.
-            throw new NotImplementedException();
+            //check for self-contradiction
+             if(IsValidInput(exactPostTime, showPostTime)==false)
+            {
+                return "impossible";
+            }
+			
+            string resultTime="";
+
+            for(int i = 0; i<exactPostTime.Length; i++) 
+            {
+                DateTime postedDateTime, currentDateTime;
+            	postedDateTime = DateTime.Parse(exactPostTime[i]);
+                currentDateTime = postedDateTime;
+		string timeToAdjust =showPostTime[i].Substring(0,2);
+
+                // cases for second, minute and hour
+                if(showPostTime[i].Contains("seconds"))
+                {
+                    currentDateTime = postedDateTime;
+                }
+                else if(showPostTime[i].Contains("minutes"))
+                { 
+                  currentDateTime = postedDateTime.AddMinutes(Convert.ToDouble(timeToAdjust));
+
+                }
+                else if(showPostTime[i].Contains("hours"))
+                {
+                    currentDateTime = postedDateTime.AddHours(Convert.ToDouble(timeToAdjust));
+                }
+            //convert time to 24 hour format and check for  lexicographical order
+            if(string.Compare(resultTime,currentDateTime.ToString("HH:mm:ss")) < 1)
+                 resultTime = currentDateTime.ToString("HH:mm:ss");
+            }
+            return resultTime;
         }
     }
 }
