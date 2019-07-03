@@ -1,27 +1,15 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
+namespace SecondProblem
 {
-    public static class Program
+    public static class ForumPostEasy
     {
-        static void Main(string[] args)
-        {
-            Test(new[] {"12:12:12"}, new [] { "few seconds ago" }, "12:12:12");
-            Test(new[] { "23:23:23", "23:23:23" }, new[] { "59 minutes ago", "59 minutes ago" }, "00:22:23");
-            Test(new[] { "00:10:10", "00:10:10" }, new[] { "59 minutes ago", "1 hours ago" }, "impossible");
-            Test(new[] { "11:59:13", "11:13:23", "12:25:15" }, new[] { "few seconds ago", "46 minutes ago", "23 hours ago" }, "11:59:23");
-            Console.ReadKey(true);
-        }
-
-        private static void Test(string[] postTimes, string[] showTimes, string expected)
-        {
-            var result = GetCurrentTime(postTimes, showTimes).Equals(expected) ? "PASS" : "FAIL";
-            var postTimesCsv = string.Join(", ", postTimes);
-            var showTimesCsv = string.Join(", ", showTimes);
-            Console.WriteLine($"[{postTimesCsv}], [{showTimesCsv}] => {result}");
-        }
-
-       static int[] sumTime;
+       
+        static int[] sumTime;
         static int index = 0;
 
 
@@ -96,7 +84,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         public static string AddTime(string timeVariable, int hour, int minutes, int seconds, int showTime)
         {
             
-            if(timeVariable.Equals("seconds"))
+            if(timeVariable.Equals("seonds"))
             {
                 seconds= seconds + showTime;
             }
@@ -133,6 +121,37 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
 
             return hour + ":" + minutes + ":" + seconds;
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Enter the Array Limits");
+            string arraySize = Console.ReadLine();
+            int length = int.Parse(arraySize);
+            string[] exactPostTime = new string[length];
+            string[] showPostTime = new string[length];
+
+            Console.WriteLine("Enter the exact post time");
+
+            for(int i=0; i<length; i++)
+            {
+                exactPostTime[i] = Console.ReadLine();
+                
+            }
+
+            Console.WriteLine("Enter the Show time");
+
+            for(int i=0; i<length; i++)
+            {
+                showPostTime[i] = Console.ReadLine();
+            }
+
+            
+            Console.WriteLine(ForumPostEasy.GetCurrentTime(exactPostTime, showPostTime));
+
+
         }
     }
 }
