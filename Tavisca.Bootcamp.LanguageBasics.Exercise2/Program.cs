@@ -107,7 +107,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 return abc;
             }
         
-            throw new NotImplementedException();
+          
         }
     }
 }
