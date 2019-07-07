@@ -23,165 +23,138 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            int flag = 0;
             String ans = "";
-            for (int i = 0; i < exactPostTime.Length; i++)
+            Boolean check = isImpossible(exactPostTime, showPostTime);
+            if (check == true)
             {
-                flag = 0;
-                for (int j = i + 1; j < exactPostTime.Length; j++)
-                {
-                    if (exactPostTime[i] == exactPostTime[j])
-                    {
-                        if (showPostTime[i] == showPostTime[j])
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            flag = 1;
-                            break;
-                        }
-
-                    }
-                }
-                if (flag == 1)
-                {
-                    ans = "impossible";
-                    return ans;
-                }
+                ans = "impossible";
             }
-            if (flag == 0)
+            else
             {
 
                 String[] min = new String[exactPostTime.Length];
                 String[] max = new String[exactPostTime.Length];
                 for (int i = 0; i < exactPostTime.Length; i++)
                 {
-
                     String[] postArray = exactPostTime[i].Split(":");
                     String[] showArray = showPostTime[i].Split(" ");
                     if (showArray[1].Equals("seconds"))
                     {
                         // System.out.println("*");
                         min[i] = exactPostTime[i];
-                        int sec = Int32.Parse(postArray[2]);
-                        int minute = Int32.Parse(postArray[1]);
-                        int hour = Int32.Parse(postArray[0]);
-                        sec = sec + 59;
-                        if (sec >= 60)
-                        {
-                            //System.out.println(sec);
-                            sec = sec - 60;
-                            minute = minute + 1;
-                        }
-                        if (minute >= 60)
-                        {
-                            minute = minute - 60;
-                            hour = hour + 1;
-                        }
-                        if (hour >= 24)
-                        {
-                            hour = hour - 24;
-                        }
-                        max[i] = Convert.ToString(hour) + ":" + Convert.ToString(minute) + ":" + Convert.ToString(sec);
+                        max[i] = maximum1(postArray);
                     }
                     else if (showArray[1].Equals("minutes"))
                     {
-                        String maxHour1 = "";
-                        String minHour1 = "";
-                        //System.out.println("**");
-                        int minSec = Int32.Parse(postArray[2]);
-                        int minMinute = Int32.Parse(postArray[1]);
-                        int minHour = Int32.Parse(postArray[0]);
-                        minMinute = minMinute + Int32.Parse(showArray[0]);
-                        if (minMinute >= 60)
-                        {
-                            minMinute = minMinute - 60;
-                            minHour = minHour + 1;
-                        }
-                        if (minHour >= 24)
-                        {
-                            minHour = minHour - 24;
-                        }
-                        if (minHour < 10)
-                        {
-                            minHour1 = "0" + Convert.ToString(minHour);
-                        }
-                        else
-                        {
-                            minHour1 = Convert.ToString(minHour);
-                        }
-                        min[i] = (minHour1) + ":" + Convert.ToString(minMinute) + ":" + Convert.ToString(minSec);
-                        int maxSec = minSec;
-                        int maxMinute = minMinute;
-                        int maxHour = minHour;
-                        maxSec = maxSec + 59;
-                        if (maxSec >= 60)
-                        {
-                            maxSec = maxSec - 60;
-                            maxMinute = maxMinute + 1;
-                        }
-                        if (maxMinute >= 60)
-                        {
-                            maxMinute = maxMinute - 60;
-                            maxHour = maxHour + 1;
-                        }
-                        if (maxHour >= 24)
-                        {
-                            maxHour = maxHour - 24;
-                        }
-                        if (maxHour < 10)
-                        {
-                            maxHour1 = "0" + Convert.ToString(maxHour);
-                        }
-                        else
-                        {
-                            maxHour1 = Convert.ToString(maxHour);
-
-                        }
-                        max[i] = (maxHour1) + ":" + Convert.ToString(maxMinute) + ":" + Convert.ToString(maxSec);
+                        min[i] = minimum1(postArray, showArray, "minutes");
+                        String[] minSplit = min[i].Split(":");
+                        max[i] = maximum1(minSplit);
                     }
                     else if (showArray[1].Equals("hours"))
                     {
-                        //System.out.println("***");
-                        int minSec = Int32.Parse(postArray[2]);
-                        int minMinute = Int32.Parse(postArray[1]);
-                        int minHour = Int32.Parse(postArray[0]);
-                        minHour = minHour + Int32.Parse(showArray[0]);
-                        if (minHour >= 24)
-                        {
-                            minHour = minHour - 24;
-                        }
-                        min[i] = Convert.ToString(minHour) + ":" + Convert.ToString(minMinute) + ":" + Convert.ToString(minSec);
-
-
-                        int maxSec = minSec;
-                        int maxMinute = minMinute;
-                        int maxHour = minHour;
-                        maxSec = maxSec + 59;
-                        if (maxSec >= 60)
-                        {
-                            maxSec = maxSec - 60;
-                            maxMinute = maxMinute + 1;
-                        }
-                        if (maxMinute >= 60)
-                        {
-                            maxMinute = maxMinute - 60;
-                            maxHour = maxHour + 1;
-                        }
-                        if (maxHour >= 24)
-                        {
-                            maxHour = maxHour - 24;
-                        }
-                        max[i] = Convert.ToString(maxHour) + ":" + Convert.ToString(maxMinute) + ":" + Convert.ToString(maxSec);
+                        min[i] = minimum1(postArray, showArray, "hours");
+                        String[] minSplit = min[i].Split(":");
+                        max[i] = maximum1(minSplit);
                     }
-                    //System.out.println(min[i]+" "+max[i]);
                 }
                 Array.Sort(min);
                 ans = (min[min.Length - 1]);
             }
             return ans;
-            throw new NotImplementedException();
+        }
+        public static Boolean isImpossible(String[] postTimes, String[] showTimes)
+        {
+            for (int i = 0; i < postTimes.Length; i++)
+            {
+                for (int j = i + 1; j < postTimes.Length; j++)
+                {
+                    if (postTimes[i] == postTimes[j])
+                    {
+                        if (showTimes[i] == showTimes[j])
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+        public static String minimum1(String[] postArray, String[] showArray, String time)
+        {
+            String result = "";
+            String minHour1 = "";
+            int minSec = Int32.Parse(postArray[2]);
+            int minMinute = Int32.Parse(postArray[1]);
+            int minHour = Int32.Parse(postArray[0]);
+            if (time == "minutes")
+            {
+                minMinute = minMinute + Int32.Parse(showArray[0]);
+                if (minMinute >= 60)
+                {
+                    minMinute = minMinute - 60;
+                    minHour = minHour + 1;
+                }
+                if (minHour >= 24)
+                {
+                    minHour = minHour - 24;
+                }
+                if (minHour < 10)
+                {
+                    minHour1 = "0" + Convert.ToString(minHour);
+                }
+                else
+                {
+                    minHour1 = Convert.ToString(minHour);
+                }
+                result = (minHour1) + ":" + Convert.ToString(minMinute) + ":" + Convert.ToString(minSec);
+            }
+            else if (time == "hours")
+            {
+                minHour = minHour + Int32.Parse(showArray[0]);
+                if (minHour >= 24)
+                {
+                    minHour = minHour - 24;
+                }
+                result = Convert.ToString(minHour) + ":" + Convert.ToString(minMinute) + ":" + Convert.ToString(minSec);
+            }
+            return result;
+        }
+        public static String maximum1(String[] postArray)
+        {
+            String result = "";
+            String maxHour1 = "";
+            int maxSec = Int32.Parse(postArray[2]);
+            int maxMinute = Int32.Parse(postArray[1]);
+            int maxHour = Int32.Parse(postArray[0]);
+            maxSec = maxSec + 59;
+            if (maxSec >= 60)
+            {
+                maxSec = maxSec - 60;
+                maxMinute = maxMinute + 1;
+            }
+            if (maxMinute >= 60)
+            {
+                maxMinute = maxMinute - 60;
+                maxHour = maxHour + 1;
+            }
+            if (maxHour >= 24)
+            {
+                maxHour = maxHour - 24;
+            }
+            if (maxHour < 10)
+            {
+                maxHour1 = "0" + Convert.ToString(maxHour);
+            }
+            else
+            {
+                maxHour1 = Convert.ToString(maxHour);
+            }
+            result = Convert.ToString(maxHour) + ":" + Convert.ToString(maxMinute) + ":" + Convert.ToString(maxSec);
+            return result;
         }
     }
 }
