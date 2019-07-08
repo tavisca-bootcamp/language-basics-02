@@ -6,15 +6,15 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise2
 {
     class CustomTime
     {
-        public TimeSpan t_span;
+        public TimeSpan timeSpan;
         public string time;
-        public string read_as;
+        public string readAs;
 
         public CustomTime(string time, string read_as)
         {
             this.time = time;
-            this.read_as = read_as;
-            TimeSpan.TryParse(time, out this.t_span);
+            this.readAs = read_as;
+            TimeSpan.TryParse(time, out this.timeSpan);
             
         }
     }

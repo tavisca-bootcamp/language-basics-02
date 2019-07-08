@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise2
 {
@@ -11,7 +12,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise2
             Test(new[] { "23:23:23", "23:23:23" }, new[] { "59 minutes ago", "59 minutes ago" }, "00:22:23");
             Test(new[] { "00:10:10", "00:10:10" }, new[] { "59 minutes ago", "1 hours ago" }, "impossible");
             Test(new[] { "11:59:13", "11:13:23", "12:25:15" }, new[] { "few seconds ago", "46 minutes ago", "23 hours ago" }, "11:59:23");
-            //Console.ReadKey(true);
+            `Console.ReadKey(true);
         }
 
         private static void Test(string[] postTimes, string[] showTimes, string expected)
@@ -22,60 +23,100 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise2
             var showTimesCsv = string.Join(", ", showTimes);
             Console.WriteLine($"[{postTimesCsv}], [{showTimesCsv}] => {result}");
         }
-        
+
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
             var result = new TimeSpan();
-            var result_prev = new TimeSpan();
+            var resultPrevious = new TimeSpan();
 
-            var t = new CustomTime[exactPostTime.Length];
+            var cTime = new CustomTime[exactPostTime.Length];
 
             for (int i = 0; i < exactPostTime.Length; i++)
             {
-                t[i] = new CustomTime(exactPostTime[i], showPostTime[i]);
+                cTime[i] = new CustomTime(exactPostTime[i], showPostTime[i]);
 
                 if (i > 0)
-                    if (t[i].t_span.Equals(t[i - 1].t_span) && !t[i].read_as.Equals(t[i - 1].read_as))
+                {
+                    if (DifferentReadingsForSameTime(exactPostTime, showPostTime))
+                    {
                         return "impossible";
-
-                // Seconds 
-                if (t[i].read_as.Contains("seconds"))
-                {
-                    result = t[i].t_span;
-                }
-                //mins
-                else if (t[i].read_as.Contains("minutes"))
-                {
-                    var min = new TimeSpan(0, Int32.Parse(Regex.Split(t[i].read_as, @"\s")[0]), 0);
-                    result = t[i].t_span.Add(min);
-                }
-                //Hours
-                else
-                {
-                    var hr = new TimeSpan(Int32.Parse(Regex.Split(t[i].read_as, @"\s")[0]), 0, 0);
-                    result = t[i].t_span.Add(hr);
+                    }
                 }
 
-                // More than a Day
-                if (result > TimeSpan.Parse("1.00:00:00"))
-                {
-                    result = (result - TimeSpan.FromDays(1)).Duration();
-                }
+                result = CalculateTime(cTime, i);
+                result = MoreThanDay(result);
 
-                // Getting the Lowest
-                if (result < result_prev)
-                {
-                    result = result_prev;
-                }
-                else
-                {
-                    result_prev = result;
-                }
-
+                GetLowestTime(ref result, ref resultPrevious);
 
             }
             return result.ToString();
         }
 
+        private static TimeSpan CalculateTime(CustomTime[] t, int i)
+        {
+            TimeSpan result;
+            if (t[i].readAs.Contains("seconds"))
+            {
+                result = CalculateForSeconds(t, i);
+            }
+            else if (t[i].readAs.Contains("minutes"))
+            {
+                result = CalculateForMinutes(t, i);
+            }
+            else
+            {
+                result = CalculateForHours(t, i);
+            }
+
+            return result;
+        }
+
+        private static bool DifferentReadingsForSameTime(string[] exactPostTime, string[] showPostTime)
+        {
+            return !int.Equals(exactPostTime.Distinct().Count(), showPostTime.Distinct().Count());
+        }
+
+        private static void GetLowestTime(ref TimeSpan result, ref TimeSpan resultPrevious)
+        {
+            if (result < resultPrevious)
+            {
+                result = resultPrevious;
+            }
+            else
+            {
+                resultPrevious = result;
+            }
+        }
+
+        private static TimeSpan MoreThanDay(TimeSpan result)
+        {
+            if (result > TimeSpan.Parse("1.00:00:00"))
+            {
+                result = (result - TimeSpan.FromDays(1)).Duration();
+            }
+
+            return result;
+        }
+
+        private static TimeSpan CalculateForHours(CustomTime[] cTime, int index)
+        {
+            TimeSpan result;
+            var hr = new TimeSpan(Int32.Parse(Regex.Split(cTime[index].readAs, @"\s")[0]), 0, 0);
+            result = cTime[index].timeSpan.Add(hr);
+            return result;
+        }
+
+        private static TimeSpan CalculateForMinutes(CustomTime[] cTime, int index)
+        {
+            TimeSpan result;
+            var min = new TimeSpan(0, Int32.Parse(Regex.Split(cTime[index].readAs, @"\s")[0]), 0);
+            result = cTime[index].timeSpan.Add(min);
+            return result;
+        }
+
+        private static TimeSpan CalculateForSeconds(CustomTime[] cTime, int index)
+        {
+            return cTime[index].timeSpan;
+        }
     }
 }
