@@ -6,7 +6,7 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
     class Time
     {
-        public static string GetCurrentTime(List<string> timeOfPosting, List<string> timeOfShowing, string result)
+        public static string CurrentTime(List<string> timeOfPosting, List<string> timeOfShowing, string result)
         {
             
             int location = 0;

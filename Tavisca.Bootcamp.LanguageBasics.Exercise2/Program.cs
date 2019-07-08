@@ -18,24 +18,35 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         private static void Test(string[] postTimes, string[] showTimes, string expected)
         {
             
+            var result = GetCurrentTime(postTimes, showTimes).Equals(expected) ? "PASS" : "FAIL";
+            var postTimesCsv = string.Join(", ", postTimes);
+            var showTimesCsv = string.Join(", ", showTimes);
+            Console.WriteLine($"[{postTimesCsv}], [{showTimesCsv}] => {result}");
+        }
+
+        public static string GetCurrentTime(string[] postTimes, string[] showTimes)
+        {
             List<string> timeOfPosting = new List<string>();
             List<string> timeOfShowing = new List<string>();
             Dictionary<string, string> postShowTimeRelation = new Dictionary<string, string>();
-            string result="PASS";
-            for (int i=0; i<postTimes.Length; i++){
-                if (!postShowTimeRelation.ContainsKey(postTimes[i])){
+            string result = "possible";
+            for (int i = 0; i < postTimes.Length; i++)
+            {
+                if (!postShowTimeRelation.ContainsKey(postTimes[i]))
+                {
                     timeOfPosting.Add(postTimes[i]);
                     timeOfShowing.Add(showTimes[i]);
                     postShowTimeRelation.Add(postTimes[i], showTimes[i]);
                 }
-                else if (!postShowTimeRelation.GetValueOrDefault(postTimes[i]).Equals(showTimes[i])){
-                    result="FAIL";
+                else if (!postShowTimeRelation.GetValueOrDefault(postTimes[i]).Equals(showTimes[i]))
+                {
+                    result = "impossible";
                     break;
                 }
             }
 
 
-            if (!result.Equals("FAIL"))
+            if (!result.Equals("impossible"))
             {
                 /*Now sort {timeOfPosting, timeOfShowing} on the basis of timeOfShowing in decreasing oder.
                  For example 1.-> {01:00:00, few seconds ago}, 2.-> {11:00:00, 2 hours ago}
@@ -44,15 +55,10 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                  */
                 Sorting.MergeSort(timeOfPosting, timeOfShowing, 0, timeOfPosting.Count - 1);
 
-                result = Time.GetCurrentTime(timeOfPosting, timeOfShowing, result).Equals(expected) ? "PASS" : "FAIL";
+                result = Time.CurrentTime(timeOfPosting, timeOfShowing, result);
             }
-
-            var postTimesCsv = string.Join(", ", postTimes);
-            var showTimesCsv = string.Join(", ", showTimes);
-            Console.WriteLine($"[{postTimesCsv}], [{showTimesCsv}] => {result}");
+            return result;
         }
-
-        
 
         
     }
