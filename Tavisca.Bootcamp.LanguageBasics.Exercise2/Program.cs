@@ -33,6 +33,11 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
                 rangeOfTime[i] = getRangeOfTime(start,stop,exactPostTime[i]);
             }
+            return computeCurrentTime(rangeOfTime, l);
+        }
+
+        private static string computeCurrentTime(string[][] rangeOfTime, int l)
+        {
             int cnt = 0;
             for (int i = 0; i < rangeOfTime[0].Length; i++)
             {
