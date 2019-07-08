@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
@@ -27,33 +28,10 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             string[][] rangeOfTime = new string[l][];
             for (int i = 0; i < l; i++)
             {
-                string showPT = showPostTime[i];
-                int start = 0, stop = 0;
-                if (showPT.Contains("seconds"))
-                {
-                    start = 0;
-                    stop = 60;
-                }
-                else if (showPT.Contains("minutes"))
-                {
-                    int min = Convert.ToInt32(showPT.Substring(0, showPT.IndexOf('m') - 1));
-                    start = min * 60;
-                    stop = start + 60;
-                }
-                else if (showPT.Contains("hours"))
-                {
-                    int hr = Convert.ToInt32(showPT.Substring(0, showPT.IndexOf('h') - 1));
-                    start = hr * 60 * 60;
-                    stop = start + (60 * 60);
-                }
-                string[] rot = new string[stop - start];
-                DateTime dt = DateTime.Parse(exactPostTime[i]);
-                int k = 0;
-                for (int j = start; j < stop; j++)
-                {
-                    rot[k++] = dt.AddSeconds(j).ToString("HH:mm:ss");
-                }
-                rangeOfTime[i] = rot;
+                int start, stop;
+                (start, stop) = getStartStopValues(showPostTime[i]);
+
+                rangeOfTime[i] = getRangeOfTime(start,stop,exactPostTime[i]);
             }
             int cnt = 0;
             for (int i = 0; i < rangeOfTime[0].Length; i++)
@@ -71,7 +49,6 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                     }
                     if (cnt != j + 1)
                     {
-                        Console.WriteLine(cnt);
                         break;
                     }
                 }
@@ -81,6 +58,40 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 }
             }
             return "impossible";
+        }
+
+        private static string[] getRangeOfTime(int start, int stop, string exactPostTime)
+        {
+            List<string> rot = new List<string>();
+            DateTime dt = DateTime.Parse(exactPostTime);
+            for (int j = start; j < stop; j++)
+            {
+                rot.Add(dt.AddSeconds(j).ToString("HH:mm:ss"));
+            }
+            return rot.ToArray();
+        }
+
+        public static (int start, int stop) getStartStopValues(string showPT)
+        {
+            int start=0, stop=0;
+            if (showPT.Contains("seconds"))
+            {
+                start = 0;
+                stop = 60;
+            }
+            else if (showPT.Contains("minutes"))
+            {
+                int min = Convert.ToInt32(showPT.Substring(0, showPT.IndexOf('m') - 1));
+                start = min * 60;
+                stop = start + 60;
+            }
+            else if (showPT.Contains("hours"))
+            {
+                int hr = Convert.ToInt32(showPT.Substring(0, showPT.IndexOf('h') - 1));
+                start = hr * 60 * 60;
+                stop = start + (60 * 60);
+            }
+            return (start, stop); 
         }
     }
 }
