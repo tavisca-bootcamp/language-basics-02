@@ -25,78 +25,70 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
             int l = exactPostTime.Length;
-            string[][] rangeOfTime = new string[l][];
+            DateTime[][] currentTimeRange = new DateTime[l][];
             for (int i = 0; i < l; i++)
             {
-                int start, stop;
-                (start, stop) = getStartStopValues(showPostTime[i]);
-
-                rangeOfTime[i] = getRangeOfTime(start,stop,exactPostTime[i]);
+                DateTime lower, upper;
+                (lower, upper) = getCurrentTimeRange(showPostTime[i],exactPostTime[i]);
+                currentTimeRange[i] =new DateTime[] { lower,upper };
             }
-            return computeCurrentTime(rangeOfTime, l);
+            return findCurrentTime(currentTimeRange,l);
         }
 
-        private static string computeCurrentTime(string[][] rangeOfTime, int l)
+        private static string findCurrentTime(DateTime[][] currentTimeRange, int l)
         {
-            int cnt = 0;
-            for (int i = 0; i < rangeOfTime[0].Length; i++)
+            foreach(DateTime[] selectedRange in currentTimeRange)
             {
-                cnt = 0;
-                for (int j = 0; j < l; j++)
+                int cnt = 0;
+                foreach (DateTime[] selectedRange2 in currentTimeRange)
                 {
-                    for (int k = 0; k < rangeOfTime[j].Length; k++)
+                    if (IsSelectedRangeValid(selectedRange,selectedRange2))
                     {
-                        if (rangeOfTime[0][i].Equals(rangeOfTime[j][k]))
-                        {
-                            cnt++;
-                            break;
-                        }
+                        cnt++;
                     }
-                    if (cnt != j + 1)
+                    else
                     {
                         break;
                     }
                 }
                 if (cnt == l)
                 {
-                    return rangeOfTime[0][i];
+                    return selectedRange[0].ToString("HH:mm:ss");
                 }
             }
             return "impossible";
         }
 
-        private static string[] getRangeOfTime(int start, int stop, string exactPostTime)
+        private static bool IsSelectedRangeValid(DateTime[] selectedRange, DateTime[] selectedRange2)
         {
-            List<string> rot = new List<string>();
-            DateTime dt = DateTime.Parse(exactPostTime);
-            for (int j = start; j < stop; j++)
+            if (selectedRange[0] >= selectedRange2[0] && selectedRange[0] <= selectedRange2[1])
             {
-                rot.Add(dt.AddSeconds(j).ToString("HH:mm:ss"));
+                return true;
             }
-            return rot.ToArray();
+            return false;
         }
 
-        public static (int start, int stop) getStartStopValues(string showPT)
+        public static (DateTime lower, DateTime upper) getCurrentTimeRange(string showPostTime, string exactPostTime)
         {
-            int start=0, stop=0;
-            if (showPT.Contains("seconds"))
+            DateTime lower, upper;
+            lower = DateTime.Parse(exactPostTime);
+            upper = lower.AddSeconds(59);
+            if (showPostTime.Contains("minutes"))
             {
-                start = 0;
-                stop = 60;
+                int min = Convert.ToInt32(showPostTime.Substring(0, showPostTime.IndexOf('m') - 1));
+                lower = lower.AddMinutes(min);
+                upper = lower.AddSeconds(59);
             }
-            else if (showPT.Contains("minutes"))
+            else if (showPostTime.Contains("hours"))
             {
-                int min = Convert.ToInt32(showPT.Substring(0, showPT.IndexOf('m') - 1));
-                start = min * 60;
-                stop = start + 60;
+                int hr = Convert.ToInt32(showPostTime.Substring(0, showPostTime.IndexOf('h') - 1));
+                lower = lower.AddHours(hr);
+                upper = lower.AddMinutes(59);
+                upper = upper.AddSeconds(59);
             }
-            else if (showPT.Contains("hours"))
-            {
-                int hr = Convert.ToInt32(showPT.Substring(0, showPT.IndexOf('h') - 1));
-                start = hr * 60 * 60;
-                stop = start + (60 * 60);
-            }
-            return (start, stop); 
+            lower = DateTime.Parse(lower.ToString("HH:mm:ss"));
+            upper = DateTime.Parse(upper.ToString("HH:mm:ss"));
+            return (lower, upper); 
         }
     }
 }
