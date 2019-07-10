@@ -21,10 +21,51 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             Console.WriteLine($"[{postTimesCsv}], [{showTimesCsv}] => {result}");
         }
 
-        public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
-        {
-            // Add your code here.
-            throw new NotImplementedException();
+        public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime){
+            const string IMPOSSIBLE = "impossible";
+            int totaltime = exactPostTime.Length;
+
+            for(var i=0; i<totaltime; i++){
+                for(var j=0; j<totaltime; j++){
+                    if(i==j) continue;
+                    if(exactPostTime[i] == exactPostTime[j] && showPostTime[i] != showPostTime[j])
+                        return IMPOSSIBLE;
+                }
+            }
+
+            string[] currentTime = new string[totaltime];
+
+            for(var i=0; i<totaltime; i++){
+                int hours = Convert.ToInt32(exactPostTime[i].Split(":")[0]);
+                int minutes = Convert.ToInt32(exactPostTime[i].Split(":")[1]);
+                int seconds = Convert.ToInt32(exactPostTime[i].Split(":")[2]);
+
+                DateTime timeAndDate = new DateTime(1900, 1, 1, hours, minutes, seconds);
+
+                if(showPostTime[i].Contains("seconds"))
+                    currentTime[i] = exactPostTime[i];
+                else if(showPostTime[i].Contains("minutes")){
+                    int showPostTimeMinutes = Convert.ToInt32(showPostTime[i].Split(" ")[0]);
+                    TimeSpan timeSpan = new TimeSpan(0, showPostTimeMinutes, 0);
+                    currentTime[i] = timeAndDate.Add(timeSpan).ToString().Split(" ")[1];
+                }
+                else if(showPostTime[i].Contains("hours")){
+                    int showPostTimeHours = Convert.ToInt32(showPostTime[i].Split(" ")[0]);
+                    TimeSpan timeSpan = new TimeSpan(showPostTimeHours ,0, 0);
+                    currentTime[i] = timeAndDate.Add(timeSpan).ToString().Split(" ")[1];
+                }
+            }
+
+            Array.Sort(currentTime);
+            
+            try{
+                return currentTime[totaltime-1];
+            }
+            catch(Exception e){
+                Console.WriteLine(e.ToString());
+                Console.WriteLine("Input of length : 0");
+                return IMPOSSIBLE;
+            }
         }
     }
 }
