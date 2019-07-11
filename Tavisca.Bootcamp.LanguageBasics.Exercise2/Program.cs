@@ -23,8 +23,52 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
-            throw new NotImplementedException();
-        }
+            int n = exactPostTime.Length;
+
+            for(int i=0;i<n;i++)  {
+                for(int j=i+1;j<n;j++)  {
+                    if(exactPostTime[i] == exactPostTime[j])  {
+                        if(showPostTime[i] != showPostTime[j])
+                            return "impossible";
+                    }
+                }
+            }
+
+            String currentTime = null;
+
+    	    for(int i=0;i<n;i++)  {
+                String tempCurrentTime = null;
+                String[] timeSplit = exactPostTime[i].Split(":");
+
+                DateTime date = new DateTime(2019, 6, 24, int.Parse(timeSplit[0]), int.Parse(timeSplit[1]), int.Parse(timeSplit[2]), 24);
+
+                if(showPostTime[i].Contains("seconds"))  {
+                    tempCurrentTime = date.ToString("HH:mm:ss");
+                }
+
+                else if(showPostTime[i].Contains("minutes"))  {
+                    int mins  = int.Parse(showPostTime[i].Split(" ")[0]);
+                    date = date.AddMinutes(mins);
+                    tempCurrentTime = date.ToString("HH:mm:ss");
+                }
+
+                else  {
+                    int hour = int.Parse(showPostTime[i].Split(" " )[0]);
+                    date = date.AddHours(hour);
+                    tempCurrentTime = date.ToString("HH:mm:ss");
+                }
+                
+                if(currentTime != null)  {
+                    if(currentTime.CompareTo(tempCurrentTime) < 0)  {
+                        currentTime = tempCurrentTime;
+                    }
+                }
+                else  {
+                    currentTime = tempCurrentTime;
+                }
+            }
+
+            return currentTime;
+	 }
     }
 }
