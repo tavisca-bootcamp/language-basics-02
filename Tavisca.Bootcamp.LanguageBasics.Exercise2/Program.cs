@@ -23,8 +23,16 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
-            throw new NotImplementedException();
+
+            //should contain same number of elements
+            if(exactPostTime.Length != showPostTime.Length) return "impossible"; 
+            for(int i = 0; i < exactPostTime.Length - 1; i++){
+                //cannot have two different human readable messages for same time
+                if(exactPostTime[i].Equals(exactPostTime[i+1]) && !(showPostTime[i].Equals(showPostTime[i+1])))
+                    return "impossible";
+            }
+                return ForumPostEasy.GetCurrentTime(exactPostTime, showPostTime);
+            } 
         }
     }
-}
+
