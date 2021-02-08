@@ -21,10 +21,109 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             Console.WriteLine($"[{postTimesCsv}], [{showTimesCsv}] => {result}");
         }
 
+        public static string[] ShowTime(string status)
+        {
+            Int32 count = 2;
+            if (status.Equals("few seconds ago"))
+            {
+                return new[] { "00:00:00", "00:00:59" };
+            }
+            if (status.EndsWith("minutes ago"))
+            {
+
+                string[] temp = status.Split(new[] { ' ' }, count);
+                string t = "00:" + temp[0] + ":";
+                return new[] { t + "00", t + "59" };
+            }
+            if (status.EndsWith("hours ago"))
+            {
+                string[] temp = status.Split(new[] { ' ' }, count);
+                string t = temp[0] + ":";
+                return new[] { t + "00:00", t + "59:59" };
+
+            }
+            return new[] { "", "" };
+
+        }
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
             // Add your code here.
-            throw new NotImplementedException();
+            if (!Validate(exactPostTime, showPostTime)) 
+            return "impossible";
+            int k = 0;
+            string[] result = new string[exactPostTime.Length * 2];
+            string min=string.Empty, max=string.Empty;
+            for (int i = 0; i < exactPostTime.Length; i++)
+            {
+                Int32 count = 3;
+                char[] seprate = new[] { ':' };
+                string[] exactPostTimeList = exactPostTime[i].Split(seprate, count);
+                string[] _showPostTime = ShowTime(showPostTime[i]);
+
+                string curr_min= string.Empty, curr_max=string.Empty;
+                for (int j = 0; j < 2; j++)
+                {
+                    string[] showPostTimeList = _showPostTime[j].Split(seprate, count);
+                    int sec = Int32.Parse(exactPostTimeList[2]) + Int32.Parse(showPostTimeList[2]);
+                    int carry = 0;
+                    string h = String.Empty, m = String.Empty, s = string.Empty;
+                    if (sec >= 60)
+                    {
+                        carry = sec / 60;
+                        sec = sec % 60;
+
+                    }
+                    int minute = Int32.Parse(exactPostTimeList[1]) + Int32.Parse(showPostTimeList[1]) + carry;
+                    carry = 0;
+                    if (minute >= 60)
+                    {
+                        carry = minute / 60;
+                        minute = minute % 60;
+                    }
+                    int hour = Int32.Parse(exactPostTimeList[0]) + Int32.Parse(showPostTimeList[0]) + carry;
+                    carry = 0;
+                    if (hour >= 24)
+                    {
+                        carry = hour / 24;
+                        hour = hour % 24;
+                    }
+                    h += hour; m += minute;s += sec;
+                    if (h.Length == 1) h = "0" + h;
+                    if (m.Length == 1) m = "0" + m;
+                    if (h.Length == 1) s = "0" + s;
+                    if (j==0) curr_min = carry+";"+h + ":" + minute + ":" + sec;
+                    if (j == 1) curr_max = carry + ";" + h + ":" + minute + ":" + sec;
+                }
+                if (i == 0) { min = curr_min; max = curr_max; }
+                else
+                {
+                    
+                    if(string.Compare(min,curr_min) <0)
+                    {
+                        if(string.Compare(max,curr_min)>0)
+                        {
+                            min = curr_min;
+                        }
+
+                    }
+                    if (string.Compare(min, curr_max) < 0)
+                    {
+                       
+                        if (string.Compare(max, curr_max) > 0)
+                        {
+                            max = curr_max;
+                        }
+
+                    }
+
+                }
+
+               
+
+            }
+
+            string[] TimeRange = min.Split(new[] { ';' });
+            return TimeRange[1];
         }
     }
 }
