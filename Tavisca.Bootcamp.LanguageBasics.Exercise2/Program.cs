@@ -23,8 +23,97 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
         public static string GetCurrentTime(string[] exactPostTime, string[] showPostTime)
         {
-            // Add your code here.
-            throw new NotImplementedException();
+            List<TimeSpan> listOfTime = new List<TimeSpan>();
+            TimeSpan[] time = new TimeSpan[exactPostTime.Length];
+            TimeSpan currentTime = TimeSpan.Parse("23:59:59");
+
+            for (int i = 0; i < exactPostTime.Length; i++)
+            {
+                time[i] = TimeSpan.Parse(exactPostTime[i]);
+            }
+
+            for (int i = 0; i < showPostTime.Length; i++)
+            {
+                if (showPostTime[i] == "few seconds ago")
+                {
+                    TimeSpan time1 = time[i].Add(new TimeSpan(00, 00, 00));
+                    TimeSpan time2 = time[i].Add(new TimeSpan(00, 00, 59));
+
+                    listOfTime.Add(new TimeSpan(time2.Hours, time2.Minutes, time2.Seconds));
+                    listOfTime.Add(new TimeSpan(time2.Hours, time2.Minutes, time2.Seconds));
+
+                }
+                if (showPostTime[i].Split(" ")[1] == "minutes")
+                {
+                    int X = int.Parse(showPostTime[i].Split(" ")[0]);
+
+                    TimeSpan time1 = time[i].Add(new TimeSpan(00, X, 00));
+                    TimeSpan time2 = time[i].Add(new TimeSpan(00, X, 59));
+
+                    listOfTime.Add(new TimeSpan(time1.Hours, time1.Minutes, time1.Seconds));
+                    listOfTime.Add(new TimeSpan(time2.Hours, time2.Minutes, time2.Seconds));
+
+                }
+                if (showPostTime[i].Split(" ")[1] == "hours")
+                {
+                    int X = int.Parse(showPostTime[i].Split(" ")[0]);
+
+                    TimeSpan time1 = time[i].Add(new TimeSpan(X, 00, 00));
+                    TimeSpan time2 = time[i].Add(new TimeSpan(X, 59, 59));
+
+                    listOfTime.Add(new TimeSpan(time1.Hours, time1.Minutes, time1.Seconds));
+                    listOfTime.Add(new TimeSpan(time2.Hours, time2.Minutes, time2.Seconds));
+                }
+            }
+            for (int index = 0; index < listOfTime.Count; index += 2)
+            {
+                TimeSpan arivalTime = listOfTime[index];
+                TimeSpan endTime = listOfTime[index + 1];
+                bool isValidArrival = true;
+                bool isValidEnd = true;
+                for (int i = 0; i < listOfTime.Count; i += 2)
+                {
+                    if (isValidArrival == true && arivalTime.CompareTo(listOfTime[i]) >= 0
+                        && arivalTime.CompareTo(listOfTime[i + 1]) <= 0)
+                    {
+
+                    }
+                    else
+                    {
+                        isValidArrival = false;
+                    }
+                    if (isValidEnd == true && endTime.CompareTo(listOfTime[i]) >= 0
+                        && endTime.CompareTo(listOfTime[i + 1]) <= 0)
+                    {
+
+                    }
+                    else
+                    {
+
+                        isValidEnd = false;
+                    }
+                }
+                if (isValidArrival == true && arivalTime.CompareTo(currentTime) == -1)
+                {
+                    currentTime = arivalTime;
+                }
+                if (isValidEnd == true && endTime.CompareTo(currentTime) == -1)
+                {
+                    currentTime = endTime;
+                }
+            }
+            string result = "";
+            if (currentTime == new TimeSpan(23, 59, 59))
+            {
+                result = "impossible";
+            }
+            else
+            {
+                result = currentTime.ToString();
+            }
+
+
+            return result;
         }
     }
 }
